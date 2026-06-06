@@ -812,7 +812,7 @@ nav {
       <img src="images/asph2.png">
     </div>
 
-    <div class="c1 cell"></div>
+    <div class="c1 cell" id="anchor-casiroli"></div>
     <div class="c1 cell"></div>
     <div class="c1 cell"></div>
     <div class="c1 cell"></div>
@@ -886,7 +886,7 @@ nav {
     <div class="c1 cell legend-num top-right">
       <span style="top:-54px; left:px;">8.</span>
     </div>
-    <div class="c1 cell"></div>
+    <div class="c1 cell" id="anchor-progetto"></div>
     <div class="c1 cell"></div>
     <div class="c1 cell"></div>
     <div class="c1 cell"></div>
@@ -1054,7 +1054,7 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
       </p>
     </div>
 
-    <div class="c1 cell"></div>
+    <div class="c1 cell" id="anchor-visione"></div>
     <div class="c1 cell"></div>
     <div class="c1 cell"></div>
     <div class="c1 cell"></div>
@@ -1154,7 +1154,7 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
 
 
 
-<div class="c1 cell legend-num bottom-right span">
+<div class="c1 cell legend-num bottom-right span" id="anchor-scorci2">
       <span style="top:207px; left:212px;">19.</span>
     </div>
 
@@ -1219,7 +1219,7 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
     </div>
 
 
-<div class="c1 cell legend-num bottom-right span">
+<div class="c1 cell legend-num bottom-right span" id="anchor-scorci3">
       <span style="top:0px; left:237px;">24.</span>
     </div>
 
@@ -1404,6 +1404,33 @@ window.addEventListener('resize', checkRotate);
 checkRotate();
 
 
+// ── ANCHOR CHAPTER TAGS ──
+function anchorChapterTags() {
+  var anchors = [
+    { tag: '.chapter-tag-casiroli', ref: '#anchor-casiroli' },
+    { tag: '.chapter-tag-progetto', ref: '#anchor-progetto' },
+    { tag: '.chapter-tag-visione',  ref: '#anchor-visione'  },
+    { tag: '.chapter-tag-scorci',   ref: '#anchor-scorci'   },
+    { tag: '.chapter-tag-scorci2',  ref: '#anchor-scorci2'  },
+    { tag: '.chapter-tag-scorci3',  ref: '#anchor-scorci3'  }
+  ];
+
+  var container = document.querySelector('.container');
+  var containerTop = container.getBoundingClientRect().top + window.scrollY;
+
+  anchors.forEach(function(pair) {
+    var tag = document.querySelector(pair.tag);
+    var ref = document.querySelector(pair.ref);
+    if (!tag || !ref) return;
+    var refTop = ref.getBoundingClientRect().top + window.scrollY;
+    tag.style.top = (refTop - containerTop) + 'px';
+  });
+}
+
+window.addEventListener('load', anchorChapterTags);
+window.addEventListener('resize', function() { setTimeout(anchorChapterTags, 100); });
+window.addEventListener('orientationchange', function() { setTimeout(anchorChapterTags, 350); });
+  
 </script>
 
 </body>
