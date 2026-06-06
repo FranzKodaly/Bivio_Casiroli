@@ -409,14 +409,21 @@ h1 {
   left: 0;
   right: auto;
   width: 400px;
-  transform: translateX(-100%);
 }
 
 .chapter-tag-right {
   left: auto;
   right: 0;
   width: 400px;
-  transform: translateX(100%);
+}
+
+@media (max-width: 932px) and (orientation: landscape) {
+  .chapter-tag-left {
+    left: -60px;
+  }
+  .chapter-tag-right {
+    right: -60px;
+  }
 }
 
 :root {
