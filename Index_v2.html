@@ -1305,7 +1305,7 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
 
 
 
-<div class="c1 cell legend-num bottom-right id="anchor-scorci3"">
+<div class="c1 cell legend-num bottom-right id="anchor-scorci3">
   <span style="top:207px; left:212px;">31.</span>
 </div>
 
@@ -1394,21 +1394,21 @@ window.addEventListener('orientationchange', function() {
   setTimeout(function() {
     updateViewport();
     checkRotate();
-   anchorChapterTags();
+    anchorChapterTags();
+
+    var scale = screen.width / 1400;
+    var isMobile = scale <= 0.7;
+    var isPortrait = window.outerHeight > window.outerWidth;
 
     if (!isPortrait && isMobile) {
-  // switcha ruota2 con ruota3
-  document.getElementById('ruota2').style.display = 'none';
-  document.getElementById('ruota3').style.display = 'block';
-  
-  setTimeout(function() {
-    // nasconde tutto l'overlay dopo 2 secondi
-    document.querySelector('.rotate-overlay').style.display = 'none';
-    document.getElementById('ruota2').style.display = 'block';
-    document.getElementById('ruota3').style.display = 'none';
-    // ripristina per eventuale ritorno in portrait
-  }, 2000);
-
+      document.getElementById('ruota2').style.display = 'none';
+      document.getElementById('ruota3').style.display = 'block';
+      
+      setTimeout(function() {
+        document.querySelector('.rotate-overlay').style.display = 'none';
+        document.getElementById('ruota2').style.display = 'block';
+        document.getElementById('ruota3').style.display = 'none';
+      }, 2000);
     }
   }, 300);
 });
