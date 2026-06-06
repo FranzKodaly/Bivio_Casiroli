@@ -557,7 +557,7 @@ nav {
   width: 48px;
   height: 48px;
   opacity: 0.4;
-  animation: rotate-hint 2.5s ease-in-out infinite;
+  animation: rotate-hint 5s ease-in-out infinite;
 }
 
 .rotate-overlay p {
@@ -569,8 +569,8 @@ nav {
 
 @keyframes rotate-hint {
   0%   { transform: rotate(0deg); }
-  30%  { transform: rotate(-90deg); }
-  70%  { transform: rotate(-90deg); }
+  30%  { transform: rotate(+90deg); }
+  70%  { transform: rotate(+90deg); }
   100% { transform: rotate(0deg); }
 }
 
