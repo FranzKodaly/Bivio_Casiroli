@@ -528,12 +528,6 @@ nav {
 }
 
 /* ── ROTATE OVERLAY ── */
-@media (orientation: portrait) and (max-width: 768px) {
-  .rotate-overlay {
-    display: flex;
-  }
-}
-
 .rotate-overlay {
   display: none;
   position: fixed;
@@ -1364,6 +1358,28 @@ function setLang(lang) {
     }
   });
 }
+
+// ── ROTATE OVERLAY ──
+function checkRotate() {
+  var overlay = document.querySelector('.rotate-overlay');
+  if (!overlay) return;
+
+  var scale = screen.width / 1400;
+  var isMobile = scale <= 0.7;
+  var isPortrait = window.outerHeight > window.outerWidth;
+
+  if (isMobile && isPortrait) {
+    overlay.style.display = 'flex';
+  } else {
+    overlay.style.display = 'none';
+  }
+}
+
+window.addEventListener('orientationchange', function() {
+  setTimeout(checkRotate, 300);
+});
+window.addEventListener('resize', checkRotate);
+checkRotate();
 
 </script>
 
