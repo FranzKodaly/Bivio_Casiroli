@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" id="vp" content="width=1400">
+<script>
+  var scale = screen.width / 1400;
+  document.getElementById('vp').setAttribute('content',
+    'width=1400, initial-scale=' + scale + ', minimum-scale=' + scale
+  );
+</script>
+
+<title>Bivio Casiroli — nucleo storico Valle di Muggio</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #f1f0ed;
+  --ink: #1c1b1a;
+  --muted: #5a554c;
+  --line: #dedcd7;
+  --paper-dark: #cfcac2;
+  --gap: 40px;
+  --row: 200px;
+  --overlay-opacity: 1;
+}
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 120px 48px 80px 48px;
+}
+
+/* ── LANG SWITCHER ── */
+.lang-switcher {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-left: 24px;
+}
+
+.lang-btn {
+  background: none;
+  border: none;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 2px 4px;
+  letter-spacing: 0.04em;
+  transition: font-weight 0.1s, color 0.1s;
+}
+
+.lang-btn:hover {
+  color: var(--ink);
+}
+
+.lang-btn.active {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.lang-sep {
+  font-size: 11px;
+  color: var(--line);
+}
+
+/* ── OVERLAY FRASI ── */
+.grid-wrapper {
+  position: relative;
+}
+
+:root {
+  --overlay-offset: calc(-1 * (var(--row) + var(--gap)));
+}
+
+.grid {
+  position: relative;
+  z-index: 1;
+}
+
+.overlay-frase {
+  position: absolute;
+  z-index: 100;
+  pointer-events: none;
+  user-select: none;
+
+  font-size: clamp(28px, 4.5vw, 60px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: #007BFF;
+  opacity: 0.5;
+
+  max-width: 100%;
+  width: 100%;
+}
+
+.overlay-casiroli {
+  top: calc(var(--overlay-offset) + 7.2 * (var(--row) + var(--gap)) - 10px);
+  left: calc(1.5/5 * 100%);
+  width: calc(3/5 * 100%);
+  text-align: left;
+}
+.overlay-progetto {
+  top: calc(10.7 * (var(--row) + var(--gap)));
+  left: calc(0.5/5 * 100%);
+  width: calc(2/5 * 100%);
+}
+.overlay-visione {
+  top: calc(17.7 * (var(--row) + var(--gap)));
+  left: calc(3.4/5 * 100%);
+  width: calc(1.6/5 * 100%);
+  text-align: left;
+}
+.overlay-associazione {
+  top: calc(22.7 * (var(--row) + var(--gap)));
+  left: calc(0.7/5 * 100%);
+  width: calc(2.5/5 * 100%);
+}
+.overlay-sostieni {
+  top: calc(26.2 * (var(--row) + var(--gap)));
+  left: calc(1.5/5 * 100%);
+  width: calc(3/5 * 100%);
+}
+
+/* ── GRIGLIA ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--gap);
+  grid-auto-rows: var(--row);
+}
+
+.c1 { grid-column: span 1; }
+.c2 { grid-column: span 2; }
+.c3 { grid-column: span 3; }
+.c4 { grid-column: span 4; }
+.c5 { grid-column: span 5; }
+
+.r2 { grid-row: span 2; }
+.r3 { grid-row: span 3; }
+.r4 { grid-row: span 4; }
+
+.cell { overflow: visible; }
+
+.img-slot {
+  width: 100%;
+  height: 100%;
+  background-color: var(--paper-dark);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.img-slot.has-image {
+  background: transparent;
+  padding: 0;
+}
+
+.img-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.portrait {
+  position: relative;
+  overflow: visible;
+  display: flex;
+  align-items: flex-end;
+}
+
+.portrait img {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: transparent;
+}
+
+.img-big{
+  grid-column: span 2;
+  position: relative;
+  overflow: visible;
+}
+
+.portrait-overflow{
+  display: flex;
+  align-items: flex-end;
+}
+
+.portrait-overflow img{
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.flexible-overflow {
+  position: relative;
+  overflow: visible;
+}
+
+.flexible-overflow .img-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.flexible-overflow img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.flexible-overflow {
+  grid-row: auto;
+}
+
+.crop-height{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+.crop-vertical{
+  height: 100%;
+  overflow: hidden;
+}
+
+.crop-vertical img{
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.img-slot.left-align img {
+  object-fit: contain;
+  object-position: left center;
+}
+
+/* ── TESTO ── */
+.testo {
+  font-size: 13px;
+  line-height: 1.6;
+  align-self: start;
+  transform: translateY(-5.2px);
+}
+
+.img-slot.contain img {
+  object-fit: contain;
+  height: 100%;
+  width: 100%;
+}
+
+.drawing {
+  position: relative;
+}
+
+.drawing .base img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center left;
+}
+
+.drawing .overlay {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 35%;
+  transform: translate(15%, 15%);
+  z-index: 2;
+}
+
+.drawing .overlay img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+.img-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.img-slot.bn {
+  filter: grayscale(100%);
+  transition: filter 0.4s ease;
+}
+.img-slot.bn:hover {
+  filter: grayscale(0%);
+}
+
+.drawing {
+  align-self: start;
+}
+
+.object-left {
+  object-position: left center;
+}
+
+.object-right {
+  object-position: right center;
+}
+
+/* ── TIPOGRAFIA ── */
+h1 {
+  font-size: 72px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin-bottom: 16px;
+}
+
+.capitolo-titolo {
+  display: inline-block;
+  width: 100%;
+  padding: 0px 0px 6px 0px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-align: left;
+  border-bottom: 12px solid #000;
+  box-sizing: border-box;
+  scroll-margin-top: 65px;
+}
+
+.small {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+.qr-slot img{
+  object-fit: contain;
+  object-position: center center;
+}
+
+.legend-num {
+  position: relative;
+}
+
+.legend-num span {
+  position: absolute;
+  font-family: Helvetica, Arial;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.top-left span {
+  top: 0;
+  left: -25px;
+}
+
+.top-right span {
+  top: 0px;
+  right: -25px;
+}
+
+.bottom-left span {
+  bottom: -25px;
+  left: -25px;
+}
+
+.bottom-right span {
+  bottom: -25px;
+  right: -25px;
+}
+
+.chapter-tag {
+  position: absolute;
+  left: calc(-1 * 48px + 120px);
+  width: 300px;
+  min-width: 290px;
+  padding: 10px 20px;
+  background: rgba(241, 240, 237, 0.96);
+  color: var(--ink);
+  z-index: 999;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  line-height: 1.6;
+  border: 1px dashed rgba(28, 27, 26, 0.18);
+}
+
+.chapter-tag-left {
+  left: 0;
+  right: auto;
+  width: 400px;
+}
+
+.chapter-tag-right {
+  left: auto;
+  right: 0;
+  width: 400px;
+}
+
+:root {
+  --container-top: 120px;
+}
+
+.chapter-tag-casiroli {
+  top: calc(var(--container-top) + 8 * (var(--row) + var(--gap)));
+}
+
+.chapter-tag-progetto {
+  top: calc(var(--container-top) + 13.5 * (var(--row) + var(--gap)));
+}
+
+.chapter-tag-visione {
+  top: calc(var(--container-top) + 24 * (var(--row) + var(--gap)));
+}
+
+.chapter-tag-scorci {
+  top: calc(var(--container-top) + 36.4 * (var(--row) + var(--gap)));
+}
+
+.chapter-tag-scorci2 {
+  top: calc(var(--container-top) + 40.4 * (var(--row) + var(--gap)));
+}
+
+.chapter-tag-scorci3 {
+  top: calc(var(--container-top) + 47.25 * (var(--row) + var(--gap)));
+}
+
+
+.bottom-align {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-self: end;
+  transform: translateY(5.2px);
+}
+
+.hero-video {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.hero-video iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 56.25vw; /* 16:9 ratio */
+  min-height: 100vh;
+  min-width: 177.77vh;
+  transform: translate(-50%, -50%);
+  border: 0;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  background: rgba(241, 240, 237, 0.96);
+  backdrop-filter: blur(12px);
+  z-index: 1000;
+  border-bottom: 1px dashed rgba(28, 27, 26, 0.18);
+}
+
+.nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 48px;
+}
+.nav-l { grid-column: span 2; font-size: 13px; font-weight: 500; }
+.nav-r { grid-column: span 3; text-align: right; font-size: 11px; color: var(--muted); display: flex; align-items: center; justify-content: flex-end; }
+.nav-l{
+  grid-column: span 2;
+  display: flex;
+  align-items: center;
+}
+
+.nav-l img{
+  height: 45px;
+  width: auto;
+  display: block;
+}
+
+.nav-r a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: font-weight 0.1s;
+}
+
+.nav-r a:hover {
+  font-weight: 700;
+}
+
+/* ── NAV LINKS CONTAINER ── */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── ROTATE OVERLAY ── */
+@media (orientation: portrait) and (max-width: 768px) {
+  .rotate-overlay {
+    display: flex;
+  }
+}
+
+.rotate-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--bg);
+  z-index: 99999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  text-align: center;
+  padding: 48px;
+}
+
+.rotate-overlay svg {
+  width: 48px;
+  height: 48px;
+  opacity: 0.4;
+  animation: rotate-hint 2.5s ease-in-out infinite;
+}
+
+.rotate-overlay p {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  line-height: 1.7;
+}
+
+@keyframes rotate-hint {
+  0%   { transform: rotate(0deg); }
+  30%  { transform: rotate(90deg); }
+  70%  { transform: rotate(90deg); }
+  100% { transform: rotate(0deg); }
+}
+
+</style>
+</head>
+<body data-lang="it">
+
+  <div class="rotate-overlay">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+       stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="5" y="2" width="14" height="20" rx="2"/>
+    <path d="M12 18h.01"/>
+    <path d="M2 12h2M20 12h2" opacity="0.4"/>
+    <path d="M17 7l2 2-2 2" opacity="0.4"/>
+  </svg>
+  <p class="t"
+    data-it="Ruota il dispositivo<br>per una migliore esperienza"
+    data-de="Gerät drehen<br>für ein besseres Erlebnis"
+    data-en="Rotate your device<br>for a better experience"
+    data-fr="Tournez votre appareil<br>pour une meilleure expérience">
+    Ruota il dispositivo<br>per una migliore esperienza
+  </p>
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-l"></div>
+    <div class="nav-r">
+      <div class="nav-links">
+        <a href="#Casiroli" class="t" data-it="Casiroli" data-de="Casiroli" data-en="Casiroli" data-fr="Casiroli">Casiroli</a>&nbsp;&nbsp;-&nbsp;&nbsp;
+        <a href="#Il-progetto" class="t" data-it="Il progetto" data-de="Das Projekt" data-en="The project" data-fr="Le projet">Il progetto</a>&nbsp;&nbsp;-&nbsp;&nbsp;
+        <a href="#La-visione" class="t" data-it="La visione" data-de="Die Vision" data-en="The vision" data-fr="La vision">La visione</a>&nbsp;&nbsp;-&nbsp;&nbsp;
+        <a href="#Lassociazione" class="t" data-it="L'associazione" data-de="Der Verein" data-en="The association" data-fr="L'association">L'associazione</a>&nbsp;&nbsp;-&nbsp;&nbsp;
+        <a href="#Sostieni-Casiroli" class="t" data-it="Sostieni Casiroli" data-de="Unterstütze" data-en="Support Casiroli" data-fr="Soutenir Casiroli">Sostieni Casiroli</a>
+      </div>
+      <div class="lang-switcher">
+        <span class="lang-sep">|</span>
+        <button class="lang-btn active" onclick="setLang('it')">IT</button>
+        <span class="lang-sep">/</span>
+        <button class="lang-btn" onclick="setLang('de')">DE</button>
+        <span class="lang-sep">/</span>
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+        <span class="lang-sep">/</span>
+        <button class="lang-btn" onclick="setLang('fr')">FR</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- CHAPTER TAG CASIROLI -->
+<div class="chapter-tag chapter-tag-casiroli chapter-tag-right">
+  <strong>1.</strong>&nbsp;<span class="t" data-it="Veduta aerea di Casiroli, 1950" data-de="Luftaufnahme von Casiroli, 1950" data-en="Aerial view of Casiroli, 1950" data-fr="Vue aérienne de Casiroli, 1950">Veduta aerea di Casiroli, 1950</span><br>
+  <strong>2.</strong>&nbsp;<span class="t" data-it="Veduta aerea di Casiroli, 2026" data-de="Luftaufnahme von Casiroli, 2026" data-en="Aerial view of Casiroli, 2026" data-fr="Vue aérienne de Casiroli, 2026">Veduta aerea di Casiroli, 2026</span><br>
+  <strong>3.</strong>&nbsp;<span class="t" data-it="Abitante di Casiroli,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fotografia rinvenuta in loco" data-de="Einwohner von Casiroli,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vor Ort gefundene Fotografie" data-en="Residents of Casiroli,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;photograph found on site" data-fr="Habitant de Casiroli,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;photographie trouvée sur place">Abitante di Casiroli, <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fotografia rinvenuta in loco</span><br>
+  <strong>4.</strong> <em>&nbsp;Asphodelus albus</em><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t" data-it="specie endemica, minacciata e protetta" data-de="eine endemische, bedrohte und geschützte Art" data-en="an endemic, endangered, and protected species" data-fr="une espèce endémique, menacée et protégée">specie endemica, minacciata e protetta</span>
+</div>
+
+<!-- CHAPTER TAG IL PROGETTO -->
+<div class="chapter-tag chapter-tag-progetto chapter-tag-left">
+  <strong>5.</strong>&nbsp;<span class="t" data-it="Terrazzamenti incolti invasi dalla vegetazione, veduta Est-Ovest" data-de="Brachliegende Terrassen, Blick von Ost nach West" data-en="Unused terraces, view from east to west" data-fr="Terrasses en friche, vue d'est en ouest">Terrazzamenti incolti invasi dalla vegetazione, veduta Est-Ovest</span><br>
+  <strong>6.</strong>&nbsp;<span class="t" data-it="Terrazzamenti incolti invasi dalla vegetazione, veduta Ovest-Est" data-de="Brachliegende Terrassen, Blick von West nach Ost" data-en="Unused terraces, view from west to east" data-fr="Terrasses en friche, vue d'ouest en est">Terrazzamenti incolti invasi dalla vegetazione, veduta Ovest-Est</span><br>
+  <strong>7.</strong>&nbsp;<span class="t" data-it="Uovo di Circaetus gallicus – Biancone,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specie vulnerabile osservata nella regione" data-de="Ei des Circaetus gallicus – Schlangenadler,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eine in der Region gefährdeten Art" data-en="Egg of the Circaetus gallicus – short-toed snake eagle,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a species endangered in the region" data-fr="Œuf du Circaetus gallicus – Circaète Jean-le-Blanc,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;espèce vulnérable observée dans la région">Uovo di <em>Circaetus gallicus</em> – Biancone,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specie vulnerabile osservata nella regione</span><br>
+  <strong>8.</strong>&nbsp;<span class="t" data-it="Muro a secco degradato" data-de="Verfallene Trockenbauwand" data-en="Deteriorated dry stone wall" data-fr="Mur en pierre sèche dégradé">Muro a secco degradato</span>
+</div>
+
+<!-- CHAPTER TAG LA VISIONE -->
+<div class="chapter-tag chapter-tag-visione chapter-tag-right">
+  <strong>9.</strong>&nbsp;&nbsp;&nbsp;<span class="t" data-it="Casiroli, allargando lo sguardo" data-de="Casiroli, der Blick in die Weite" data-en="Casiroli, a view into the distance" data-fr="Casiroli, le regard qui s'élargit">Casiroli, allargando lo sguardo</span><br>
+  <strong>10.</strong> <em>&nbsp;Lacerta bilineata</em> –
+  <span class="t" data-it="Ramarro<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specie endemica, minacciata e protetta" data-de="Smaragdeidechse<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eine endemische, bedrohte und geschützte Art" data-en="two-lined lizard<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an endemic, endangered and protected species" data-fr="Lézard à deux raies<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;espèce endémique, menacée et protégée">Ramarro<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specie endemica, minacciata e protetta</span><br>
+  <strong>11.</strong>&nbsp;&nbsp;<span class="t" data-it="I proprietari attuali incontrano l'associazione" data-de="Die derzeitigen Eigentümer treffen sich mit dem Verein" data-en="The current owners are meeting with the association" data-fr="Les propriétaires actuels rencontrent l'association">I proprietari attuali incontrano l'associazione</span><br>
+  <strong>12.</strong>&nbsp;&nbsp;<span class="t" data-it="Picchio rosso maggiore, abitante di Casiroli" data-de="Buntspecht, Bewohner von Casiroli" data-en="Great spotted woodpecker, a resident of Casiroli" data-fr="Pic épeiche, habitant de Casiroli">Picchio rosso maggiore, abitante di Casiroli</span><br>
+  <strong>13.</strong>&nbsp;&nbsp;<em>Doronicum pardalianches</em> –
+  <span class="t" data-it="Doronico medicinale,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specie endeminca, minacciata e protetta. Osservata a Casiroli." data-de="Kriechende Gämswurz,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eine endemische, bedrohte und geschützte Art." data-en="Leopard's bane,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an endemic, endangered and protected species. Observed at Casiroli." data-fr="Doronic des montagnes,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;espèce endémique, menacée et protégée. Observée à Casiroli.">Doronico medicinale, <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specie endeminca, minacciata e protetta. Osservata a Casiroli.</span>
+</div>
+
+<!-- CHAPTER TAG LA SCORCI 1&2-->
+<div class="chapter-tag chapter-tag-scorci chapter-tag-left">
+  <strong> 14. </strong> &nbsp;&nbsp;Edificio centrale, sede dell'Associazione<br> <span> </span>
+  <strong> 15.</strong> &nbsp;&nbsp; Rudere <br> <span> </span>
+  <strong> 16.</strong> &nbsp;&nbsp; Dettaglio: finestra e facciata a calce <br> <span> </span>
+  <strong> 17.</strong> &nbsp;&nbsp; Dettaglio: tetto e facciata a calce <br> <span> </span>
+  <strong> 18.</strong> &nbsp;&nbsp; Sentiero per Casiroli <br> <span> </span>
+</div>
+
+
+
+<div class="chapter-tag chapter-tag-scorci2 chapter-tag-right">
+  <strong> 19. </strong> &nbsp;&nbsp; Tiglio monumentale sul sentiero per Casiroli <br> <span> </span>
+  <strong> 20.</strong> &nbsp;&nbsp; Interno <br> <span> </span>
+  <strong> 21.</strong> &nbsp;&nbsp;  Canopea <br>  <span> </span>
+  <strong> 22.</strong> &nbsp;&nbsp; Interno <br> <span> </span>
+  <strong> 23.</strong> &nbsp;&nbsp; Rimanenze e artefatti <br> <span> </span>
+</div>
+
+
+<div class="chapter-tag chapter-tag-scorci3 chapter-tag-left">
+  <strong> 24.</strong> &nbsp;&nbsp; Porta massiccia <br> <span> </span>
+  <strong> 25.</strong> &nbsp;&nbsp; Muro a secco <br> <span> </span>
+  <strong> 26.</strong> &nbsp;&nbsp; Tavolato <br> <span> </span>
+  <strong> 27.</strong> &nbsp;&nbsp; Dettaglio: ripiano <br> <span> </span>
+  <strong> 28.</strong> &nbsp;&nbsp; Focolare aperto <br> <span> </span>
+  <strong> 28.</strong> &nbsp;&nbsp; Pavimento in lastre di pietra <br> <span> </span>
+  <strong> 28.</strong> &nbsp;&nbsp; Tavolato <br> <span> </span>
+</div>
+
+<div class="container">
+<div class="grid-wrapper">
+
+  <svg id="percorso-svg" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:50; overflow:visible;"></svg>
+
+  <!-- ── OVERLAY FRASI ── -->
+  <div class="overlay-frase overlay-casiroli">
+    <span class="t"
+      data-it="Un nucleo storico in Valle di Muggio. Fragile testimonianza d'un abitare quasi scomparso,"
+      data-de="Ein historischer Ort im Muggiotal. Dokument einer fast verschwundenen Lebensweise,"
+      data-en="A historic site in the Muggio Valley. A testament to a way of life that has almost disappeared," data-fr="Un noyau historique dans la Vallée de Muggio. Témoignage fragile d'un habiter presque disparu,">
+      Un nucleo storico in Valle di Muggio. Fragile testimonianza d'un abitare quasi scomparso,
+    </span>
+  </div>
+
+  <div class="overlay-frase overlay-progetto">
+    <span class="t"
+      data-it="a cui l'associazione intende restituire cura,"
+      data-de="dem der Verein wieder Sorge widmen will,"
+      data-en="to which the association intends to return its care," data-fr="auquel l'association entend restituer son soin,">
+      a cui l'associazione intende restituire cura,
+    </span>
+  </div>
+
+  <div class="overlay-frase overlay-visione">
+    <span class="t"
+      data-it="definendo uno spazio collettivo e multispecie in continuo cambiamento"
+      data-de="um einen multispezies Gemeinschaftsraum im fortwährenden Wandel zu schaffen,"
+      data-en="to create a shared multispecies space in continuous change" data-fr="en définissant un espace collectif et multiespèce en continuel devenir">
+      definendo <br> uno spazio <br> collettivo e multispecie in continuo cambiamento
+    </span>
+  </div>
+
+  <div class="overlay-frase overlay-associazione">
+    <span class="t"
+      data-it="grazie all'integrazione di esperienze diverse."
+      data-de="durch die Verbindung verschiedener Erfahrungen."
+      data-en="through the integration of diverse experiences." data-fr="grâce à l'intégration d'expériences diverses.">
+      grazie all'integrazione di esperienze diverse.
+    </span>
+  </div>
+
+  <div class="overlay-frase overlay-sostieni">
+    <span class="t"
+      data-it="E ci serve una mano."
+      data-de="Wir brauchen eure Unterstützung."
+      data-en="We need your support." data-fr="Et nous avons besoin d'aide.">
+      E ci serve una mano.
+    </span>
+  </div>
+
+  <!-- ── GRIGLIA ── -->
+  <div class="grid">
+
+    <!-- ═══ APERTURA ═══ -->
+    <div class="c2 cell r1" style="position:relative; top:250px; left:200px; z-index:2; margin-bottom:-80px;">
+      <div style="position:relative; width:80%; opacity:1;">
+        <img src="images/l2.png" style="width:100%; opacity:0; height:auto; display:block; animation:fadeIn 0.4s ease forwards 1s;">
+        <img src="images/l3.png" style="position:absolute; top:0; left:0; width:100%; opacity:0; height:auto; display:block; animation:fadeIn 0.4s ease forwards 1.5s;">
+        <img src="images/l1.png" style="position:absolute; top:0; right:100%; height:100%; opacity:0; width:auto; display:block; animation:fadeIn 0.4s ease forwards 0.5s;">
+      </div>
+    </div>
+
+    <div class="c3 cell r2" style="opacity:0; animation:fadeIn 0.4s ease forwards 1.5s;">
+      <div class="img-slot has-image">
+        <img src="images/casi-beige.jpg">
+      </div>
+    </div>
+
+    <div class="c5 cell" style="height:calc(var(--row) / 2);"></div>
+
+    <!-- ═══ CASIROLI ═══ -->
+    <div class="c1 cell capitolo-shift">
+      <div class="capitolo-titolo" id="Casiroli">
+        <span class="t" data-it="Casiroli" data-de="Casiroli" data-en="Casiroli" data-fr="Casiroli">Casiroli</span>
+      </div>
+    </div>
+
+    <div class="c1 cell"></div>
+    <div class="c1 cell testo">
+      <p><span class="t"
+        data-it="Casiroli è un piccolo nucleo storico in Valle di Muggio: un insediamento minimo, poche case raccolte e celate dalla faggeta vicino a Scudellate, proprio nel punto in cui il bosco s'apre improvvisamente alla Valle. È un luogo residuo. Un luogo in cui l'architettura vernacolare, i prati da sfalcio e i pendii terrazzati s'intessono con l'ambiente formando un sistema coerente, capace ancora oggi di raccontare la storia d'un abitare rurale, oramai diradatosi, forse dimenticato. A Casiroli, come in molte altre regioni di montagna, l'esaurirsi delle civiltà contadine ha innescato una profonda trasformazione ecologica e paesaggistica. Il bosco riconquista i terrazzamenti, le superfici aperte si chiudono, i margini ecotonali si riducono e le strutture architettoniche – un tempo scenario di vita quotidiana – si deteriorano e crollano. Con l'avanzare del bosco e il degradarsi del nucleo s'erodono così anche la memoria e la conoscenza di quelle pratiche che, una pietra posata e un colpo di falce alla volta, hanno nei secoli modellato uno dei più importanti e suggestivi paesaggi svizzeri."
+        data-de="Casiroli ist ein historischer Ort im Muggiotal. Eine kleine Siedlung mit wenigen Häusern, die sich unweit eines Buchenwaldes in der Nähe von Scudellate befindet — genau an der Stelle, an der sich der Wald zum Tal hin öffnet. Ein Ort, an dem sich traditionelle Architektur, Mähwiesen und terrassierte Hänge mit der Umgebung zu einem zusammenhängenden System vereinen, das noch heute die Geschichte eines ländlichen Lebens erzählt, das mittlerweile fast in Vergessenheit geraten ist. Wie in vielen anderen Bergregionen hat das Verschwinden der bäuerlichen Kultur einen tiefgreifenden ökologischen und landschaftlichen Wandel ausgelöst. Der Wald erobert die Terrassen zurück, offene Flächen schließen sich, die ökologischen Übergangsbereiche schrumpfen und die gebauten Strukturen – einst Mittelpunkt des Alltagslebens – verfallen zunehmend. Mit der Ausweitung des Waldes und dem Verfall des Ortskerns schwinden so auch die Erinnerung und das Wissen jener ruhenden Praktiken, die Stein für Stein und Hieb für Hieb über Jahrhunderte eine der bedeutendsten Kulturlandschaften der Schweiz geformt haben."
+        data-en="Casiroli is a historic settlement in the Muggio Valley: just a few houses gathered at the edge of a beech forest near Scudellate, at the precise point where the woods open suddenly toward the valley. A residual place. One where vernacular architecture, hay meadows, and terraced slopes weave together with the environment to form a coherent system — still capable today of telling the story of a rural way of life that has since thinned out, perhaps been forgotten. As in many other mountain regions, the disappearance of agrarian culture has triggered profound ecological and landscape changes. The forest is reclaiming the terraces, open spaces are closing in, ecotonal margins are shrinking, and the built structures — once the backdrop of daily life — are decaying and collapsing. With the advance of the forest and the decay of the core, the memory and knowledge of those suspended practices that, stone by stone and scythe stroke by scythe stroke, shaped one of Switzerland's most significant and evocative landscapes over the centuries, are also eroding." data-fr="Casiroli est un petit noyau historique dans la Vallée de Muggio : un établissement minimal, quelques maisons rassemblées et dissimulées par la hêtraie près de Scudellate, précisément là où la forêt s'ouvre brusquement sur la vallée. Un lieu résiduel. Un lieu où l'architecture vernaculaire, les prés de fauche et les versants en terrasses se tissent avec l'environnement pour former un système cohérent, capable encore aujourd'hui de raconter l'histoire d'un habiter rural, désormais effiloché, peut-être oublié. À Casiroli, comme dans beaucoup d'autres régions de montagne, l'épuisement des civilisations paysannes a déclenché une profonde transformation écologique et paysagère. La forêt reconquiert les terrasses, les surfaces ouvertes se referment, les marges écotonales se réduisent et les structures architecturales — autrefois décor de la vie quotidienne — se dégradent et s'effondrent. Avec l'avancée de la forêt et la dégradation du noyau s'érodent ainsi la mémoire et la connaissance de ces pratiques qui, pierre posée et coup de faux après coup de faux, ont au fil des siècles façonné l'un des paysages les plus importants et les plus évocateurs de Suisse."
+        >Casiroli è un piccolo nucleo storico in Valle di Muggio: un insediamento minimo, poche case raccolte e celate dalla faggeta vicino a Scudellate, proprio nel punto in cui il bosco s'apre improvvisamente alla Valle. È un luogo residuo. Un luogo in cui l'architettura vernacolare, i prati da sfalcio e i pendii terrazzati s'intessono con l'ambiente formando un sistema coerente, capace ancora oggi di raccontare la storia d'un abitare rurale, oramai diradatosi, forse dimenticato.
+      A Casiroli, come in molte altre regioni di montagna, l'esaurirsi delle civiltà contadine ha innescato una profonda trasformazione ecologica e paesaggistica. Il bosco riconquista i terrazzamenti, le superfici aperte si chiudono, i margini ecotonali si riducono e le strutture architettoniche – un tempo scenario di vita quotidiana – si deteriorano e crollano. Con l'avanzare del bosco e il degradarsi del nucleo s'erodono così anche la memoria e la conoscenza di quelle pratiche che, una pietra posata e un colpo di falce alla volta, hanno nei secoli modellato uno dei più importanti e suggestivi paesaggi svizzeri.</span>
+      </p>
+    </div>
+    <div class="img-slot has-image">
+      <img src="images/casiroli_old.jpg">
+    </div>
+    <div class="c1 cell legend-num top-left">
+      <span style="top:-4px; left:px;">1.</span>
+    </div>
+    <div class="c1 cell legend-num bottom-left">
+      <span style="top:255px; left:0;">3.</span>
+    </div>
+
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="img-slot has-image bn">
+      <img src="images/casiroli_oggi.png">
+    </div>
+    <div class="c1 cell legend-num top-left">
+      <span style="top:-4px; left:px;">2.</span>
+    </div>
+
+    <div class="c1 cell" style="display:flex; align-items:flex-end;">
+      <img src="images/donna_casiroli.png" style="width:50%; height:auto; display:block;">
+    </div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+
+    <div class="c1 cell testo">
+      <p><span class="t"
+        data-it="Se per ora Casiroli resiste – riuscendo, nelle dissimulate sembianze attuali, a restituire agli sporadici visitatori una testimonianza della sua storia – l'attuale stato d'abbandono ne minaccia severamente l'integrità. E a vacillare non è solo il patrimonio materiale, ma anche e soprattutto il prezioso patrimonio intangibile che, se conservato, può ancora essere interpretato, compreso e trasmesso. In questo senso, il nucleo non rappresenta esclusivamente un frammento relitto di un passato da proteggere, ma un insieme di relazioni vive, ancora capaci di dialogare con il presente. Qui la fitta e fragile rete di relazioni ecoculturali, oggi sedimentate, ci invita all'esplorazione dei nostri luoghi e della nostra storia, lungo vie in cui il paesaggio si rivela memoria collettiva, e la memoria collettiva, paesaggio."
+        data-de="Für seine gelegentlichen Besucher schafft Casiroli in seinem aktuellen Zustand ein Zeugnis der Geschichte, ist aber durch Verwilderung und Verfall bedroht. Und nicht nur das bauliche Erbe gerät ins Wanken, sondern auch das immaterielle, welches bewahrt, verstanden und weitergegeben werden will. In diesem Sinne stellt der Ort nicht nur ein Dokument einer zu schützenden Vergangenheit dar, sondern ein Geflecht dynamischer Beziehungen, die noch immer im Dialog mit der Gegenwart stehen. Hier lädt uns das dichte Netz von ökologisch-kultureller Beziehungen dazu ein, Casiroli mit seiner Geschichte zu erkunden, um die Landschaft als kollektives Gedächtnis und das kollektive Gedächtnis als Landschaft zu verstehen."
+        data-en="In its current state, Casiroli serves as a testament to history for its occasional visitors, yet it is threatened by neglect and decay. And it is not only the built heritage that is faltering, but also the intangible heritage, which needs to be preserved and still seeks to be understood, developed, and passed on. In this sense, the core represents not only a document of a past to be protected, but a network of dynamic relationships that remain in dialogue with the present. Here, the dense and fragile web of ecological-cultural relationships invites us to explore Casiroli and its history in order to understand the landscape as collective memory and collective memory as landscape." data-fr="Si pour l'instant Casiroli résiste — parvenant, dans ses apparences actuelles dissimulées, à restituer aux visiteurs occasionnels un témoignage de son histoire — l'état d'abandon actuel menace sévèrement son intégrité. Et ce n'est pas seulement le patrimoine matériel qui vacille, mais aussi et surtout le précieux patrimoine immatériel qui, s'il est conservé, peut encore être interprété, compris et transmis. En ce sens, le noyau ne représente pas exclusivement un fragment relique d'un passé à protéger, mais un ensemble de relations vivantes, encore capables de dialoguer avec le présent. Ici, le réseau dense et fragile de relations écoculturelles, aujourd'hui sédimentées, nous invite à l'exploration de nos lieux et de notre histoire, par des voies où le paysage se révèle mémoire collective, et la mémoire collective, paysage."
+        >Se per ora Casiroli resiste – riuscendo, nelle dissimulate sembianze attuali, a restituire agli sporadici visitatori una testimonianza della sua storia – l'attuale stato d'abbandono ne minaccia severamente l'integrità. E a vacillare non è solo il patrimonio materiale, ma anche e soprattutto il prezioso patrimonio intangibile che, se conservato, può ancora essere interpretato, compreso e trasmesso.
+      In questo senso, il nucleo non rappresenta esclusivamente un frammento relitto di un passato da proteggere, ma un insieme di relazioni vive, ancora capaci di dialogare con il presente.
+      Qui la fitta e fragile rete di relazioni ecoculturali, oggi sedimentate, ci invita all'esplorazione dei nostri luoghi e della nostra storia, lungo vie in cui il paesaggio si rivela memoria collettiva, e la memoria collettiva, paesaggio.</span>
+      </p>
+    </div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell legend-num bottom-left">
+      <span style="top:0; left:-35px;">4.</span>
+    </div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell">
+      <div class="img-slot has-image contain bn">
+        <img src="images/microcosmo_.png">
+      </div>
+      <div class="legend-num top-left"><span></span></div>
+    </div>
+    <div class="c1 cell"></div>
+
+    <div class="c2 cell img-big portrait-overflow" style="pointer-events:none;">
+      <img src="images/asph2.png">
+    </div>
+
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+
+    <!-- ═══ IL PROGETTO ═══ -->
+    <div class="c1 cell capitolo-shift">
+      <div class="capitolo-titolo" id="Il-progetto">
+        <span class="t" data-it="Il progetto" data-de="Das Projekt" data-en="The project" data-fr="Le projet">Il progetto</span>
+      </div>
+    </div>
+
+    <div class="c1 cell testo">
+      <p><span class="t"
+        data-it="Il progetto mira alla valorizzazione e alla rigenerazione del nucleo, dapprima indirizzando gli sforzi all'edificio centrale, il più grande e in miglior condizione, e dedicandosi in seguito al resto dell'insediamento. L'associazione intende orientare il proprio operato sulla traccia delle pratiche sospese, per cui ambisce a immaginare e proporre un proseguimento."
+        data-de="Das Projekt zielt zunächst auf die Aufwertung und Erneuerung des Ortskerns ab, wobei die Bemühungen zunächst auf das zentrale Gebäude gerichtet sind — das größte und am besten erhaltene — bevor sich der Rest der Siedlung angenommen wird. Der Verein beabsichtigt, seine Arbeit an der Spur der ruhenden Praktiken auszurichten, um deren Fortsetzung zu erdenken und vorzuschlagen."
+        data-en="The project aims at the valorisation and regeneration of the settlement, initially directing efforts toward the central building — the largest and in the best condition — before turning to the rest of the site. The association intends to orient its work along the trace of suspended practices, seeking to imagine and propose their continuation." data-fr="Le projet vise la valorisation et la régénération du noyau, en dirigeant d'abord les efforts vers le bâtiment central, le plus grand et en meilleur état, avant de se consacrer au reste de l'établissement. L'association entend orienter son action sur la trace des pratiques suspendues, pour lesquelles elle ambitionne d'imaginer et de proposer une continuation."
+        >Il progetto mira alla valorizzazione e alla rigenerazione del nucleo, dapprima indirizzando gli sforzi all'edificio centrale, il più grande e in miglior condizione, e dedicandosi in seguito al resto dell'insediamento. L'associazione intende orientare il proprio operato sulla traccia delle pratiche sospese, per cui ambisce a immaginare e proporre un proseguimento.</span>
+      </p>
+    </div>
+    <div class="img-slot has-image bn">
+      <img src="images/DSC00107.JPG">
+    </div>
+    <div class="c1 cell legend-num top-left">
+      <span style="top:-4px; left:px;">5.</span>
+    </div>
+    <div class="c1 cell"></div>
+
+    <div class="c1 cell flexible-overflow">
+      <div class="img-wrap">
+        <img src="images/51220442671_e3cf48dd7d_o.png">
+      </div>
+    </div>
+    <div class="c1 cell legend-num top-right">
+      <span style="top:-3px; left:px;">6.</span>
+    </div>
+    <div class="img-slot has-image bn">
+      <img src="images/DSC00136.JPG">
+    </div>
+    <div class="c1 cell testo">
+      <p><span class="t"
+        data-it="L'acquisizione dell'immobile centrale costituisce il presupposto operativo per garantire l'accesso e il coordinamento degli interventi. Sebbene una parte significativa dei fondi destinati all'acquisto sia stata raccolta grazie al contributo dei membri dell'associazione, la vitalità del progetto dipende ancora dall'ottenimento dei finanziamenti necessari al suo sviluppo nel lungo periodo. Nelle fasi successive il progetto prevede la valorizzazione dei terrazzamenti, la manutenzione dei muri a secco, la gestione delle superfici aperte e la messa in sicurezza degli edifici esistenti. Gli interventi su acqua, smaltimento, impianti ed elementi costruttivi sono definiti in relazione alle particolari condizioni del luogo: accessibilità limitata, assenza di infrastrutture, vincoli legati alla protezione delle acque e allo statuto degli edifici fuori zona edificabile. L'obbiettivo non è ristabilire uno stato precedente ma mantenere operative le relazioni tra elementi al fine di rendere il sito nuovamente abitabile. Le modalità d'intervento previste privilegiano la combinazione di competenze e approcci diversi, con l'obiettivo di favorire presenze temporanee e la trasmissione di conoscenze. I gruppi di lavoro opereranno dunque su scala ridotta, in modo non continuativo, in base alle esigenze specifiche del sito."
+        data-de="Der Erwerb des zentralen Gebäudes bildet die operative Voraussetzung, um die Vorstellungen des Vereins umsetzen zu können. Ein großer Teil der für den Kauf vorgesehenen Mittel wird durch die Vereinsmitglieder aufgebracht. Dennoch hängt die Zukunftsfähigkeit und langfristige Entwicklung des Projektes davon ab, dass weitere Finanzmittel akquiriert werden. In den nachfolgenden Phasen sieht das Projekt die Aufwertung der Terrassen, die Instandhaltung der Trockenmauern, die Pflege der Freiflächen und die Sicherung der anderen bestehenden Gebäude vor. Die weiteren baulichen Arbeiten werden unter Berücksichtigung der besonderen örtlichen Gegebenheiten festgelegt. Dazu gehören eine eingeschränkte Zugänglichkeit, fehlende Infrastruktur, Auflagen im Zusammenhang mit dem Gewässerschutz und dem Bebauungsplan. Das Ziel besteht darin, den Ort wieder bewohnbar zu machen. Die Vorgehensweisen innerhalb des Vereins verknüpft verschiedene Kompetenzen und Ansätze mit dem Ziel eine Wissensvermittlung zu fördern."
+        data-en="The acquisition of the central building is the operative prerequisite for ensuring access and coordinating interventions. Although a significant portion of the funds earmarked for the purchase has been raised through the association's members, the project's long-term viability still depends on securing the necessary financing. In the subsequent phases, the project plans to upgrade the terraces, maintain the dry stone walls, manage the open surfaces, and secure the existing buildings. Work on water, drainage, infrastructure, and structural elements is defined in relation to the particular conditions of the site: limited accessibility, absence of infrastructure, constraints related to water protection, and the status of buildings outside the building zone. The goal is not to restore a previous state but to keep the relationships between elements operational, so as to make the site habitable again. The planned modes of intervention favour combining different competencies and approaches, with the aim of encouraging temporary presences and the transmission of knowledge. Working groups will therefore operate on a reduced scale, in a non-continuous manner, according to the specific needs of the site." data-fr="L'acquisition du bâtiment central constitue le préalable opérationnel pour garantir l'accès et la coordination des interventions. Bien qu'une part significative des fonds destinés à l'achat ait été réunie grâce à la contribution des membres de l'association, la vitalité du projet dépend encore de l'obtention des financements nécessaires à son développement sur le long terme. Dans les phases suivantes, le projet prévoit la valorisation des terrasses, l'entretien des murs en pierre sèche, la gestion des surfaces ouvertes et la mise en sécurité des bâtiments existants. Les interventions sur l'eau, l'assainissement, les installations et les éléments constructifs sont définies en relation avec les conditions particulières du lieu : accessibilité limitée, absence d'infrastructures, contraintes liées à la protection des eaux et au statut des bâtiments hors zone constructible. L'objectif n'est pas de rétablir un état antérieur mais de maintenir opérationnelles les relations entre éléments afin de rendre le site à nouveau habitable. Les modes d'intervention prévus privilégient la combinaison de compétences et d'approches différentes, dans le but de favoriser des présences temporaires et la transmission des savoirs. Les groupes de travail opéreront donc à petite échelle, de manière non continue, en fonction des besoins spécifiques du site."
+        >L'acquisizione dell'immobile centrale costituisce il presupposto operativo per garantire l'accesso e il coordinamento degli interventi. Sebbene una parte significativa dei fondi destinati all'acquisto sia stata raccolta grazie al contributo dei membri dell'associazione, la vitalità del progetto dipende ancora dall'ottenimento dei finanziamenti necessari al suo sviluppo nel lungo periodo. <br>
+      Nelle fasi successive il progetto prevede la valorizzazione dei terrazzamenti, la manutenzione dei muri a secco, la gestione delle superfici aperte e la messa in sicurezza degli edifici esistenti. Gli interventi su acqua, smaltimento, impianti ed elementi costruttivi sono definiti in relazione alle particolari condizioni del luogo: accessibilità limitata, assenza di infrastrutture, vincoli legati alla protezione delle acque e allo statuto degli edifici fuori zona edificabile.<br>
+      L'obbiettivo non è ristabilire uno stato precedente ma mantenere operative le relazioni tra elementi al fine di rendere il sito nuovamente abitabile. Le modalità d'intervento previste privilegiano la combinazione di competenze e approcci diversi, con l'obiettivo di favorire presenze temporanee e la trasmissione di conoscenze. I gruppi di lavoro opereranno dunque su scala ridotta, in modo non continuativo, in base alle esigenze specifiche del sito.</span>
+      </p>
+    </div>
+    <div class="c1 cell"></div>
+
+    <div class="c1 cell legend-num top-left">
+      <span style="top:-50px; left:10px;">7.</span>
+    </div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="img-slot has-image bn">
+      <img src="images/DSC00122.JPG">
+    </div>
+
+    <div class="c2 cell r1 drawing">
+      <div class="img-slot has-image base">
+        <img src="images/disegno.png">
+      </div>
+    </div>
+
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+
+    <div class="c1 cell legend-num top-right">
+      <span style="top:-54px; left:px;">8.</span>
+    </div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+
+    <div class="c5 cell r2 drawing">
+      <div class="img-slot has-image base drawing">
+        <img src="images/TL.png">
+      </div>
+    </div>
+
+    <!-- ═══ LA VISIONE ═══ -->
+    <div class="c1 cell capitolo-shift">
+      <div class="capitolo-titolo" id="La-visione">
+        <span class="t" data-it="La visione" data-de="Die Vision" data-en="The vision" data-fr="La vision">La visione</span>
+      </div>
+    </div>
+    <div class="c1 cell" style="position:relative; overflow:visible;">
+      <div class="img-slot has-image contain" style="position:absolute; left:80%; width:60%; z-index:2; opacity:0.9;">
+        <img src="images/mano.png">
+      </div>
+    </div>
+
+    <div class="img-slot has-image bn" onclick="
+      document.getElementById('video-modal').style.display='flex';
+      document.querySelectorAll('.overlay-frase, .chapter-tag').forEach(el => el.style.visibility='hidden');
+    " style="cursor:pointer;">
+      <img src="images/2.jpg">
+    </div>
+
+    <!-- modal video -->
+
+<div id="video-modal" onclick="if(event.target===this){
+  this.style.display='none';
+  document.querySelectorAll('.overlay-frase, .chapter-tag').forEach(el => el.style.visibility='visible');
+}" 
+style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999; align-items:center; justify-content:center;">
+
+  <div style="position:relative; width:80%; max-width:1000px; aspect-ratio:16/9;">
+
+    <iframe
+      src="https://player.vimeo.com/video/1198998450?autoplay=1&muted=1&loop=1"
+      style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
+      allow="autoplay; fullscreen"
+      allowfullscreen>
+    </iframe>
+
+  </div>
+</div>
+
+    <div class="img-slot has-image bn"><img src="images/3.jpg"></div>
+    <div class="img-slot has-image bn"><img src="images/4.jpg"></div>
+
+    <div class="c1 cell testo r2">
+      <p><span class="t"
+        data-it="Casiroli è uno spazio multiforme, un luogo in cui pratiche, processi ecologici e presenza umana coesistono e assumono nel tempo configurazioni variabili. Casiroli è uno spazio multispecie, un habitat condiviso in cui le relazioni tra umani e non umani concorrono a definire la mutevole identità del luogo. Casiroli è uno spazio collettivo, un luogo di permanenza temporanea che si rende accessibile a gruppi e a individui e in cui la partecipazione, nei suoi effetti cumulativi, garantisce la manutenzione e il perpetuarsi delle pratiche di gestione. Casiroli è anche ciò che ancora è da venire. L'associazione non definisce un esito formale ma una condizione operativa: mantenere il sito come spazio vivo e permettere il continuo rinnovarsi di Casiroli."
+        data-de="Casiroli ist ein vielgestaltiger Raum — ein Ort, an dem Praktiken, ökologische Prozesse und menschliche Präsenz nebeneinander bestehen und im Laufe der Zeit unterschiedliche Formen annehmen. Casiroli ist ein multispezies Raum, ein gemeinsamer Lebensraum, in dem die Beziehungen zwischen Menschen und Nicht-Menschen die sich wandelnde Identität des Ortes mitbestimmen. Casiroli ist ein kollektiver Raum, ein Ort temporären Verweilens, der Gruppen und Einzelpersonen offensteht und in dem die Teilhabe, in ihren kumulativen Wirkungen, die Pflege und das Fortbestehen der Bewirtschaftungspraktiken sichert. Casiroli ist auch das, was noch kommen wird. Der Verein definiert kein formales Ergebnis, sondern eine operative Bedingung: den Ort als lebendigen Raum zu erhalten und das fortwährende Erneuern von Casiroli zu ermöglichen."
+        data-en="Casiroli is a multiform space, a place where practices, ecological processes, and human presence coexist and assume variable configurations over time. Casiroli is a multispecies space, a shared habitat in which the relationships between humans and non-humans contribute to defining the shifting identity of the place. Casiroli is a collective space, a place of temporary dwelling made accessible to groups and individuals, where participation — in its cumulative effects — ensures the maintenance and perpetuation of stewardship practices. Casiroli is also what is yet to come. The association does not define a formal outcome but an operative condition: to keep the site as a living space and allow the continual renewal of Casiroli." data-fr="Casiroli est un espace multiforme, un lieu où pratiques, processus écologiques et présence humaine coexistent et prennent dans le temps des configurations variables. Casiroli est un espace multiespèce, un habitat partagé où les relations entre humains et non-humains concourent à définir l'identité mouvante du lieu. Casiroli est un espace collectif, un lieu de séjour temporaire rendu accessible à des groupes et à des individus, où la participation, dans ses effets cumulatifs, garantit l'entretien et la perpétuation des pratiques de gestion. Casiroli est aussi ce qui est encore à venir. L'association ne définit pas un résultat formel mais une condition opératoire : maintenir le site comme espace vivant et permettre le continuel renouvellement de Casiroli."
+        >Casiroli è uno spazio multiforme, un luogo in cui pratiche, processi ecologici e presenza umana coesistono e assumono nel tempo configurazioni variabili.<br>
+      Casiroli è uno spazio multispecie, un habitat condiviso in cui le relazioni tra umani e non umani concorrono a definire la mutevole identità del luogo.
+      Casiroli è uno spazio collettivo, un luogo di permanenza temporanea che si rende accessibile a gruppi e a individui e in cui la partecipazione, nei suoi effetti cumulativi, garantisce la manutenzione e il perpetuarsi delle pratiche di gestione.<br>
+      Casiroli è anche ciò che ancora è da venire. L'associazione non definisce un esito formale ma una condizione operativa: mantenere il sito come spazio vivo e permettere il continuo rinnovarsi di Casiroli.</span>
+      </p>
+    </div>
+
+    <div class="c2 cell r3 drawing">
+      <div class="img-slot has-image base drawing">
+        <img src="images/occhio.png">
+      </div>
+    </div>
+
+    <div class="c1 cell"></div>
+
+    <div class="c1 cell legend-num top-right">
+      <span style="top:-28px; left:221px;">9.</span>
+    </div>
+
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+
+    <div class="c1 cell">
+      <div class="img-slot has-image contain">
+        <img src="images/ramarro.png">
+      </div>
+      <div class="legend-num top-right">
+        <span style="top:-35px; left:220px;">10.</span>
+      </div>
+    </div>
+
+    <!-- ═══ L'ASSOCIAZIONE ═══ -->
+    <div class="c1 cell">
+      <div class="capitolo-titolo capitolo-shift" id="Lassociazione">
+        <span class="t" data-it="L'associazione" data-de="Der Verein" data-en="The association" data-fr="L'association">L'associazione</span>
+      </div>
+    </div>
+    <div class="c1 cell testo">
+      <p><span class="t"
+        data-it="L'associazione Bivio Casiroli nasce per contrastare l'abbandono del nucleo e promuoverne la rigenerazione attraverso un processo di manutenzione fondato sulla riadozione di pratiche collettive di cura e presenza."
+        data-de="Der Verein Bivio Casiroli wurde gegründet, um den Ort zu bewahren und dessen Wiederbelebung zu fördern."
+        data-en="The Bivio Casiroli association was founded to preserve the village and promote its revitalisation." data-fr="L'association Bivio Casiroli naît pour contrer l'abandon du noyau et en promouvoir la régénération à travers un processus d'entretien fondé sur la réadoption de pratiques collectives de soin et de présence."
+        >L'associazione Bivio Casiroli nasce per contrastare l'abbandono del nucleo e promuoverne la rigenerazione attraverso un processo di manutenzione fondato sulla riadozione di pratiche collettive di cura e presenza.</span>
+      </p>
+    </div>
+
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+
+    <div class="c2 cell r1 drawing">
+      <div class="img-slot has-image base bn">
+        <img src="images/bGIJz-bianco.png">
+      </div>
+    </div>
+
+    <div class="c1 cell testo">
+      <p><span class="t"
+        data-it="Il comitato promotore è composto da cinque persone tra i 30 e i 40 anni, con competenze multidisciplinari e un forte radicamento nel territorio. Il gruppo riunisce un'agronoma e agricoltrice della valle, una giovane regista, un ecologo e botanico, un operatore sociale e una coordinatrice di progetti con esperienza nelle ONG internazionali. Il gruppo, composto da tre ticinesi e due tedeschi, unisce una profonda conoscenza locale a uno sguardo internazionale. La diversità di profili consente un approccio integrato, attento alla rigenerazione ecologica e paesaggistica del sito così come alla dimensione sociale e alla narrazione culturale. Il gruppo consente dunque al progetto di radicarsi in un tessuto di relazioni già attive con associazioni agricole, enti di tutela del paesaggio, cooperative sociali e realtà culturali del Cantone."
+        data-de="Der Verein besteht momentan aus fünf Personen im Alter zwischen 30 und 40 Jahren, die über interdisziplinäre Kompetenzen verfügen. Die Gruppe besteht aus einer Landwirtin aus dem Tal, einer jungen Filmemacherin, einem Ökologen und Botaniker, einem Sozialarbeiter sowie eine Projektkoordinatorin mit Erfahrung in internationalen NGOs. Mit drei Tessiner*innen ist die Gruppe teils stark in der Region verwurzelt. Eine überregionale Perspektive bekommt das Projekt durch zwei aus Deutschland stammenden Menschen. Diese Vielfalt ermöglicht einen ganzheitlichen Ansatz, der sowohl ökologische und gesamtgesellschaftlichen Dimensionen vereint. Die Gruppe ermöglicht es dem Projekt, sich in ein bereits bestehendes Beziehungsgeflecht aus landwirtschaftlichen Verbänden, Landschaftsschutzorganisationen und sozial-kulturellen Einrichtungen des Kantons einzubinden."
+        data-en="The association currently consists of five people aged between 30 and 40, all of whom possess interdisciplinary skills. It comprises a local farmer from the valley, a young filmmaker, an ecologist and botanist, a social worker, and a project coordinator with experience in international NGOs. With three members from Ticino, the group has strong roots in the region. The project gains a supra-regional perspective through two members from Germany. This diversity enables a holistic approach that combines both ecological and broader societal dimensions. The group enables the project to integrate into an existing network of agricultural associations, landscape conservation organisations and socio-cultural institutions within the canton." data-fr="Le comité promoteur est composé de cinq personnes entre 30 et 40 ans, aux compétences multidisciplinaires et fortement ancrées dans le territoire. Le groupe réunit une agronome et agricultrice de la vallée, une jeune réalisatrice, un écologue et botaniste, un travailleur social et une coordinatrice de projets avec une expérience dans les ONG internationales. Le groupe, composé de trois Tessinois et deux Allemands, unit une connaissance locale profonde à un regard international. La diversité des profils permet une approche intégrée, attentive à la régénération écologique et paysagère du site ainsi qu'à la dimension sociale et à la narration culturelle. Le groupe permet ainsi au projet de s'enraciner dans un tissu de relations déjà actives avec des associations agricoles, des organismes de protection du paysage, des coopératives sociales et des réalités culturelles du Canton."
+        >Il comitato promotore è composto da cinque persone tra i 30 e i 40 anni, con competenze multidisciplinari e un forte radicamento nel territorio. Il gruppo riunisce un'agronoma e agricoltrice della valle, una giovane regista, un ecologo e botanico, un operatore sociale e una coordinatrice di progetti con esperienza nelle ONG internazionali. Il gruppo, composto da tre ticinesi e due tedeschi, unisce una profonda conoscenza locale a uno sguardo internazionale.
+      La diversità di profili consente un approccio integrato, attento alla rigenerazione ecologica e paesaggistica del sito così come alla dimensione sociale e alla narrazione culturale.
+      Il gruppo consente dunque al progetto di radicarsi in un tessuto di relazioni già attive con associazioni agricole, enti di tutela del paesaggio, cooperative sociali e realtà culturali del Cantone.</span>
+      </p>
+    </div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="legend-num top-right">
+      <span style="top:-60px; left:210px;">11.</span>
+    </div>
+
+    <div class="c1 cell"></div>
+
+    <div class="c1 cell portrait-overflow img-legend-wrap" style="align-items:flex-end; margin-bottom:40px;">
+      <img src="images/picchio.png">
+      <div class="legend-num top-left">
+        <span style="top:-400px; left:-180px;">12.</span>
+      </div>
+    </div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+
+    <!-- ═══ SOSTIENI CASIROLI ═══ -->
+    <div class="c1 cell capitolo-shift">
+      <div class="capitolo-titolo" id="Sostieni-Casiroli">
+        <span class="t" data-it="Sostieni Casiroli" data-de="Unterstütze" data-en="Support Casiroli" data-fr="Soutenir Casiroli">Sostieni Casiroli</span>
+      </div>
+    </div>
+    <div class="c1 cell testo">
+      <p><span class="t"
+        data-it="È possibile contribuire al progetto attraverso una donazione libera, destinata all'acquisizione del primo immobile e all'avvio delle attività di recupero e gestione del nucleo. I fondi raccolti sosterranno gli interventi prioritari sul paesaggio e sugli edifici, la manutenzione delle superfici aperte e la realizzazione delle prime infrastrutture necessarie alla presenza sul sito. Ogni contributo rappresenta un sostegno concreto alla salvaguardia e alla rivalorizzazione di un fragile patrimonio paesaggistico e culturale della Valle di Muggio e contribuisce a mantenere vivo un luogo in cui memoria, pratiche e dinamiche ecologiche continuano a intrecciarsi nello spazio e nel tempo."
+        data-de="Das Projekt kann mit einer Spende unterstützt werden, die für den Erwerb des ersten Gebäudes und den Beginn der Sanierungs- und Bewirtschaftungsarbeiten im Ortskern bestimmt ist. Die gesammelten Mittel fließen vorrangig in prioritäre Maßnahmen zur Landschafts- und Gebäudepflege, die Instandhaltung der offenen Flächen und die Errichtung der ersten vor Ort notwendigen Infrastrukturen. Jeder Beitrag ist eine konkrete Unterstützung für den Erhalt und die Aufwertung eines fragilen Landschafts- und Kulturerbes im Muggiotal — und trägt dazu bei, einen Ort lebendig zu halten, an dem Erinnerung, ruhende Praktiken und ökologische Dynamiken sich im Raum und in der Zeit weiterhin verflechten."
+        data-en="You can support the project through a free donation, intended for the acquisition of the first building and the start of recovery and management activities at the site. The funds raised will support priority interventions on the landscape and the buildings, the maintenance of open surfaces, and the creation of the first infrastructures necessary for presence on the site. Every contribution is a concrete act of care for the safeguarding and revitalisation of a fragile landscape and cultural heritage of the Muggio Valley — and helps keep alive a place where memory, practices, and ecological dynamics continue to interweave in space and time." data-fr="Il est possible de contribuer au projet par un don libre, destiné à l'acquisition du premier bâtiment et au lancement des activités de récupération et de gestion du noyau. Les fonds collectés soutiendront les interventions prioritaires sur le paysage et les bâtiments, l'entretien des surfaces ouvertes et la réalisation des premières infrastructures nécessaires à la présence sur le site. Chaque contribution représente un soutien concret à la sauvegarde et à la revalorisation d'un fragile patrimoine paysager et culturel de la Vallée de Muggio, et contribue à maintenir vivant un lieu où mémoire, pratiques et dynamiques écologiques continuent de s'entrecroiser dans l'espace et dans le temps."
+        >È possibile contribuire al progetto attraverso una donazione libera, destinata all'acquisizione del primo immobile e all'avvio delle attività di recupero e gestione del nucleo.
+
+      I fondi raccolti sosterranno gli interventi prioritari sul paesaggio e sugli edifici, la manutenzione delle superfici aperte e la realizzazione delle prime infrastrutture necessarie alla presenza sul sito.
+
+      Ogni contributo rappresenta un sostegno concreto alla salvaguardia e alla rivalorizzazione di un fragile patrimonio paesaggistico e culturale della Valle di Muggio e contribuisce a mantenere vivo un luogo in cui memoria, pratiche e dinamiche ecologiche continuano a intrecciarsi nello spazio e nel tempo.</span>
+      </p>
+    </div>
+
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+
+    <div class="c1 cell legend-num bottom-right span">
+      <span style="top:0px; left:200px;">13.</span>
+    </div>
+
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+
+    <div class="c1 cell portrait-overflow">
+      <img src="images/Doronicum.png">
+    </div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+
+    <div class="c1 cell"></div>
+    <div class="img-slot has-image qr-slot left-align">
+      <img src="images/QR.png">
+    </div>
+    <div class="c1 cell testo bottom-align">
+      <p>Associazione Bivio Casiroli <p></p>IBAN: CH66 8080 8005 3949 6868 1</p>
+    </div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+
+
+<!-- ═══ SCORCI ═══ -->
+
+<div class="c1 cell capitolo-shift">
+      <div class="capitolo-titolo" id="Scorci">
+        <span class="t" data-it="Scorci" data-de="Einblicke" data-en="Glimpses" data-fr="Vues">Scorci</span>
+      </div>
+<div class="c1 cell legend-num bottom-right span">
+      <span style="top:160px; left:0px;">14.</span>
+    </div>
+    </div>
+
+ <div class="c1 cell legend-num bottom-right span">
+      <span style="top:0px; left:237px;">15.</span>
+    </div>
+
+<div class="c2 r2 cell">
+  <div class="img-slot bn">
+    <img src="images/DSC00058.jpg">
+  </div>
+</div>
+
+<div class="c1 cell legend-num bottom-right span">
+      <span style="top:207px; left:212px;">16.</span>
+    </div>
+
+
+<div class="c2 r3 cell">
+  <div class="img-slot bn">
+    <img src="images/DSC00141.jpg">
+  </div>
+</div>
+
+
+
+<div class="c1 r2 cell">
+  <div class="img-slot bn">
+    <img src="images/DSC00155.jpg">
+  </div>
+</div>
+
+<div class="c1 cell"></div>
+    <div class="c1 cell"></div>
+
+
+<div class="c1 cell legend-num bottom-right span">
+      <span style="top:0px; left:237px;">18.</span>
+    </div>
+
+<div class="c1 r2 cell">
+  <div class="img-slot bn">
+    <img src="images/DSC00013.jpg">
+  </div>
+</div>
+
+
+
+
+<div class="c1 cell legend-num bottom-right span">
+      <span style="top:207px; left:212px;">19.</span>
+    </div>
+
+
+<div class="c1  r2 cell">
+  <div class="c1 cell legend-num bottom-right span">
+      <span style="top:0px; left:237px;">17.</span>
+    </div>
+</div>
+
+<div class="c2 r2 cell">
+  <div class="img-slot bn">
+    <img src="images/IMG_3578.jpg">
+  </div>
+</div>
+
+<div class="c1 r4 cell">
+  <div class="img-slot bn">
+    <img src="images/DSC00164.jpg">
+  </div>
+</div>
+
+<div class="c1 cell"></div>
+<div class="c1 cell"></div>
+<div class="c1 cell legend-num bottom-right span">
+      <span style="top:207px; left:212px;">20.</span>
+    </div>
+<div class="c1 cell"></div>
+<div class="c1 cell"></div>
+
+<div class="c2 r2 cell">
+  <div class="img-slot bn">
+    <img src="images/IMG_3548.jpg">
+  </div>
+</div>
+<div class="c1 cell legend-num bottom-left span">
+      <span style="top:207px; left:0px;">21.</span>
+    </div>
+<div class="c1  r1 cell"></div>
+<div class="c3 r2 cell">
+  <div class="img-slot bn">
+    <img src="images/DSC00167.jpg">
+  </div>
+</div>
+
+<div class="c1 cell legend-num bottom-left span">
+      <span style="top:207px; left:0px;">22.</span>
+    </div>
+
+<div class="c2 r2 cell">
+  <div class="img-slot bn">
+    <img src="images/IMG_3549.jpg">
+  </div>
+</div>
+
+
+<div class="c1 cell"></div>
+<div class="c1 cell"></div>
+<div class="c1 cell"></div>
+<div class="c1 cell legend-num bottom-left span">
+      <span style="top:207px; left:0px;">23.</span>
+    </div>
+
+
+<div class="c1 cell legend-num bottom-right span">
+      <span style="top:0px; left:237px;">24.</span>
+    </div>
+
+
+<div class="c1 r2 cell">
+  <div class="img-slot bn">
+    <img src="images/IMG_3692.jpg">
+  </div>
+</div>
+
+<div class="c1 cell"></div>
+<div class="c1 cell"></div>
+
+<div class="c2 r3 cell">
+  <div class="img-slot bn">
+    <img src="images/DSC00066.jpg">
+  </div>
+</div>
+
+<div class="c1 r2 cell">
+  <div class="img-slot bn">
+    <img src="images/DSC00129.jpg">
+  </div>
+</div>
+
+<div class="c1 cell legend-num bottom-right span">
+      <span style="top:-2px; left:-22px;">25.</span>
+    </div>
+
+
+
+<div class="c1 cell"></div>
+<div class="c1 cell legend-num bottom-left">
+  <span style="top:207px; left:0px;">26.</span>
+</div>
+<div class="c1 cell legend-num bottom-left">
+  <span style="top:207px; left:0px;">28.</span>
+</div>
+<div class="c1 cell"></div>
+<div class="c1 cell">
+  <div class="img-slot bn">
+    <img src="images/_RIV4049.jpg">
+  </div>
+</div>
+
+
+<div class="c1 cell legend-num bottom-right">
+  <span style="top:-2px; left:235px;">27.</span>
+</div>
+
+<div class="c1 r2 cell">
+  <div class="img-slot bn">
+    <img src="images/_RIV4046.jpg">
+  </div>
+</div>
+
+<div class="c1 r2  cell">
+  <div class="img-slot bn">
+    <img src="images/_RIV4035.jpg">
+  </div>
+</div>
+
+
+
+<div class="c1 r1 cell">
+  <div class="img-slot bn">
+    <img src="images/_RIV4037.jpg">
+  </div>
+</div>
+
+<div class="c1 cell legend-num bottom-right span">
+      <span style="top:-2px; left:-22px;">29.</span>
+    </div>
+
+
+<div class="c1 cell legend-num bottom-left">
+  <span style="top:207px; left:0px;">30.</span>
+</div>
+
+
+
+<div class="c1 cell"></div>
+
+
+
+<div class="c1 cell legend-num bottom-right">
+  <span style="top:207px; left:212px;">31.</span>
+</div>
+
+<div class="c2 r2 cell">
+  <div class="img-slot bn">
+    <img src="images/_RIV4060.jpg">
+  </div>
+</div>
+
+
+
+<div class="c2 r2 cell">
+  <div class="img-slot bn">
+    <img src="images/_RIV4061.jpg">
+  </div>
+</div>
+
+
+
+<div class="c5 r2 cell"></div>
+
+  </div><!-- /grid -->
+</div><!-- /grid-wrapper -->
+</div><!-- /container -->
+
+<script>
+// ── LANGUAGE SWITCHER ──
+// Each element with class "t" carries data-it / data-de / data-en.
+// setLang() updates their textContent (or innerHTML for elements containing HTML).
+
+function setLang(lang) {
+  // update body attribute (for potential CSS hooks)
+  document.body.setAttribute('data-lang', lang);
+  document.documentElement.setAttribute('lang', lang);
+
+  // update all translatable nodes
+  document.querySelectorAll('.t').forEach(function(el) {
+    var text = el.getAttribute('data-' + lang);
+    if (text !== null) {
+      // use innerHTML to support <br> and <em> in captions
+      el.innerHTML = text;
+    }
+  });
+
+  // update active button state
+  document.querySelectorAll('.lang-btn').forEach(function(btn) {
+    btn.classList.remove('active');
+    if (btn.textContent.toLowerCase() === lang) {
+      btn.classList.add('active');
+    }
+  });
+}
+
+</script>
+
+</body>
+</html>
