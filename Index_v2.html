@@ -1393,7 +1393,6 @@ function updateViewport() {
 window.addEventListener('orientationchange', function() {
   setTimeout(function() {
     updateViewport();
-    checkRotate();
     anchorChapterTags();
 
     var scale = screen.width / 1400;
@@ -1401,14 +1400,20 @@ window.addEventListener('orientationchange', function() {
     var isPortrait = window.outerHeight > window.outerWidth;
 
     if (!isPortrait && isMobile) {
+      // mostra ruota3, nasconde ruota2
       document.getElementById('ruota2').style.display = 'none';
       document.getElementById('ruota3').style.display = 'block';
-      
+
       setTimeout(function() {
+        // dopo 2 secondi nasconde tutto e ripristina
         document.querySelector('.rotate-overlay').style.display = 'none';
         document.getElementById('ruota2').style.display = 'block';
         document.getElementById('ruota3').style.display = 'none';
       }, 2000);
+
+    } else {
+      // se torna in portrait, checkRotate gestisce la visibilità
+      checkRotate();
     }
   }, 300);
 });
