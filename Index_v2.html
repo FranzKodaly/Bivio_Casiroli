@@ -1416,6 +1416,13 @@ checkRotate();
 
 // ── ANCHOR CHAPTER TAGS ──
 function anchorChapterTags() {
+ var scale = Math.max(screen.width, screen.height) / 1400;
+  var fontSize = Math.round(10 * scale); // 10px è il font-size base
+
+  document.querySelectorAll('.chapter-tag').forEach(function(tag) {
+    tag.style.fontSize = fontSize + 'px';
+  });
+  
   var anchors = [
     { tag: '.chapter-tag-casiroli', ref: '#anchor-casiroli' },
     { tag: '.chapter-tag-progetto', ref: '#anchor-progetto' },
