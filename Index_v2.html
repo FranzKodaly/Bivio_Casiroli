@@ -1392,7 +1392,6 @@ function updateViewport() {
 
 window.addEventListener('orientationchange', function() {
   setTimeout(function() {
-    updateViewport();
     anchorChapterTags();
 
     var scale = screen.width / 1400;
@@ -1400,19 +1399,34 @@ window.addEventListener('orientationchange', function() {
     var isPortrait = window.outerHeight > window.outerWidth;
 
     if (!isPortrait && isMobile) {
-      // mostra ruota3, nasconde ruota2
-      document.getElementById('ruota2').style.display = 'none';
-      document.getElementById('ruota3').style.display = 'block';
+      // ferma ruota2 nella posizione ruotata
+      var r2 = document.getElementById('ruota2');
+      r2.style.animation = 'none';
+      r2.style.transform = 'rotate(90deg)';
 
       setTimeout(function() {
-        // dopo 2 secondi nasconde tutto e ripristina
-        document.querySelector('.rotate-overlay').style.display = 'none';
-        document.getElementById('ruota2').style.display = 'block';
-        document.getElementById('ruota3').style.display = 'none';
+        // dopo 2 secondi nasconde ruota2 e mostra ruota3
+        r2.style.display = 'none';
+        var r3 = document.getElementById('ruota3');
+        r3.style.transform = 'rotate(-90deg)';
+        r3.style.transformOrigin = 'center center';
+        r3.style.display = 'block';
+
+        setTimeout(function() {
+          // dopo 3-4 secondi aggiorna viewport e apre il sito
+          updateViewport();
+          document.querySelector('.rotate-overlay').style.display = 'none';
+          // ripristina ruota2 per eventuale ritorno in portrait
+          r2.style.animation = '';
+          r2.style.transform = '';
+          r2.style.display = 'block';
+          r3.style.display = 'none';
+          anchorChapterTags();
+        }, 3500);
+
       }, 2000);
 
     } else {
-      // se torna in portrait, checkRotate gestisce la visibilità
       checkRotate();
     }
   }, 300);
