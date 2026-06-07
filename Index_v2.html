@@ -1390,7 +1390,24 @@ function updateViewport() {
   );
 }
 
+
+function freezeViewport() {
+  document.getElementById('vp').setAttribute('content',
+    'width=1400, initial-scale=' + (screen.width / 1400) + ', minimum-scale=' + (screen.width / 1400) + ', maximum-scale=' + (screen.width / 1400)
+  );
+}
+
+function unfreezeViewport() {
+  var w = Math.max(screen.width, screen.height);
+  var scale = w / 1400;
+  document.getElementById('vp').setAttribute('content',
+    'width=1400, initial-scale=' + scale + ', minimum-scale=' + scale
+  );
+}
+
 window.addEventListener('orientationchange', function() {
+  freezeViewport(); // blocca subito lo zoom
+  
   setTimeout(function() {
     anchorChapterTags();
 
@@ -1399,13 +1416,11 @@ window.addEventListener('orientationchange', function() {
     var isPortrait = window.outerHeight > window.outerWidth;
 
     if (!isPortrait && isMobile) {
-      // ferma ruota2 nella posizione ruotata
       var r2 = document.getElementById('ruota2');
       r2.style.animation = 'none';
       r2.style.transform = 'rotate(90deg)';
 
       setTimeout(function() {
-        // dopo 2 secondi nasconde ruota2 e mostra ruota3
         r2.style.display = 'none';
         var r3 = document.getElementById('ruota3');
         r3.style.transform = 'rotate(-90deg)';
@@ -1413,10 +1428,8 @@ window.addEventListener('orientationchange', function() {
         r3.style.display = 'block';
 
         setTimeout(function() {
-          // dopo 3-4 secondi aggiorna viewport e apre il sito
-          updateViewport();
+          unfreezeViewport(); // sblocca viewport solo alla fine
           document.querySelector('.rotate-overlay').style.display = 'none';
-          // ripristina ruota2 per eventuale ritorno in portrait
           r2.style.animation = '';
           r2.style.transform = '';
           r2.style.display = 'block';
@@ -1427,11 +1440,12 @@ window.addEventListener('orientationchange', function() {
       }, 2000);
 
     } else {
+      unfreezeViewport();
       checkRotate();
     }
   }, 300);
 });
-
+  
 updateViewport(); // esegui subito
 
 
