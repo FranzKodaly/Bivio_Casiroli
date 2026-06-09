@@ -1422,12 +1422,12 @@ window.addEventListener('orientationchange', function() {
   blackout.style.display = 'block';
 
  setTimeout(function() {
+  console.log('innerWidth:', window.innerWidth, window.innerHeight);
   console.log('OC timeout — screen:', screen.width, screen.height, '| outer:', window.outerWidth, window.outerHeight, '| isPortrait:', window.outerHeight > window.outerWidth);
-    var isPortrait = window.outerHeight > window.outerWidth;
-    var physicalWidth = isPortrait ? Math.min(screen.width, screen.height) : Math.max(screen.width, screen.height);
-    var newScale = physicalWidth / 1400;
-    document.getElementById('vp').setAttribute('content',
-      'width=1400, initial-scale=' + newScale + ', minimum-scale=' + newScale
+  var isPortrait = window.outerHeight > window.outerWidth;
+  var newScale = window.innerWidth / 1400;
+  document.getElementById('vp').setAttribute('content',
+  'width=1400, initial-scale=' + newScale + ', minimum-scale=' + newScale
     );
     anchorChapterTags();
 
