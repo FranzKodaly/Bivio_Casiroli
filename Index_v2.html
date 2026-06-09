@@ -1389,6 +1389,9 @@ function updateViewport() {
   );
 }
 
+// Variabile globale per tracciare se l'overlay è già stato nascosto
+var overlayHidden = false;
+
 window.addEventListener('orientationchange', function() {
   setTimeout(function() {
     updateViewport();
@@ -1399,10 +1402,17 @@ window.addEventListener('orientationchange', function() {
     var isPortrait = window.outerHeight > window.outerWidth;
 
     if (!isPortrait && isMobile) {
-      // Nascondi subito l'overlay senza ruota3
+      // Nascondi l'overlay in orizzontale
       document.querySelector('.rotate-overlay').style.display = 'none';
+      overlayHidden = true; // Segna che è stato nascosto
     } else {
-      checkRotate();
+      // Solo se l'overlay non è ancora stato nascosto, controlla
+      if (!overlayHidden) {
+        checkRotate();
+      } else {
+        // Assicurati che l'overlay rimanga nascosto anche in verticale
+        document.querySelector('.rotate-overlay').style.display = 'none';
+      }
     }
   }, 300);
 });
