@@ -2,7 +2,13 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" id="vp" content="width=device-width, initial-scale=1">
+<meta name="viewport" id="vp" content="width=1400">
+<script>
+  var scale = screen.width / 1400;
+  document.getElementById('vp').setAttribute('content',
+    'width=1400, initial-scale=' + scale + ', minimum-scale=' + scale
+  );
+</script>
 
 <title>Bivio Casiroli — nucleo storico Valle di Muggio</title>
 
@@ -30,7 +36,7 @@ body {
   color: var(--ink);
   line-height: 1.55;
   overflow-x: hidden;
-  position: relative;
+   position: relative;
 }
 
 .container {
@@ -413,10 +419,10 @@ h1 {
 
 @media (max-width: 932px) and (orientation: landscape) {
   .chapter-tag-left {
-    left: -60px;
+    left: -120px;
   }
   .chapter-tag-right {
-    right: -60px;
+    right: -120px;
   }
 }
 
@@ -545,17 +551,13 @@ nav {
   gap: 24px;
   text-align: center;
   padding: 48px;
-  will-change: transform;
-
 }
 
-.rotate-overlay img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
+.rotate-overlay svg {
+  width: 48px;
+  height: 48px;
+  opacity: 0.4;
+  animation: rotate-hint 5s ease-in-out infinite;
 }
 
 .rotate-overlay p {
@@ -572,36 +574,17 @@ nav {
   100% { transform: rotate(0deg); }
 }
 
-  .orientation-blackout {
-  display: none;
-  position: fixed;
-  top: -10%; left: -10%;
-  width: 120%; height: 120%;
-  background: var(--bg);
-  z-index: 999999;
-  pointer-events: none;
-}
-
-#site-wrapper {
-  width: 1400px;
-  transform-origin: top left,
-  overflow: hidden;
-}
-
-  
 </style>
 </head>
 <body data-lang="it">
 
-<div class="orientation-blackout" id="orientation-blackout"></div>
 <div class="rotate-overlay">
-  <img src="images/ruota1.jpg">
-  <img id="ruota2" src="images/ruota2.png" style="animation:rotate-hint 2.5s ease-in-out infinite;">
-  <img id="ruota3" src="images/ruota3.png" style="display:none;">
+  <img src="images/ruota1.jpg" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0;">
+  <img id="ruota2" src="images/ruota2.png" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; animation:rotate-hint 2.5s ease-in-out infinite;">
+  <img id="ruota3" src="images/ruota3.png" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; display:none;">
 </div>
 
-<div id="site-wrapper">
-  
+
 <nav>
   <div class="nav-inner">
     <div class="nav-l"></div>
@@ -1347,7 +1330,6 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
   </div><!-- /grid -->
 </div><!-- /grid-wrapper -->
 </div><!-- /container -->
-  </div>
 
 <script>
 // ── LANGUAGE SWITCHER ──
@@ -1379,16 +1361,6 @@ function setLang(lang) {
 
 // ── ROTATE OVERLAY ──
 // ── ROTATE OVERLAY ──
-
-
-function applyScale() {
-  var scale = window.innerWidth / 1400;
-  var wrapper = document.getElementById('site-wrapper');
-  wrapper.style.transform = 'scale(' + scale + ')';
-  wrapper.style.transformOrigin = 'top left';
-  wrapper.style.height = (window.innerHeight / scale) + 'px';
-}
-  
 function checkRotate() {
   var overlay = document.querySelector('.rotate-overlay');
   if (!overlay) return;
@@ -1404,69 +1376,49 @@ function checkRotate() {
   }
 }
 
-
-
-
-
+function updateViewport() {
+  var w = screen.width;
+  var h = screen.height;
+  // In landscape la dimensione maggiore è la larghezza
+  var landscapeWidth = Math.max(w, h);
+  var portraitWidth = Math.min(w, h);
+  var isPortrait = window.outerHeight > window.outerWidth;
+  var physicalWidth = isPortrait ? portraitWidth : landscapeWidth;
+  var scale = physicalWidth / 1400;
+  document.getElementById('vp').setAttribute('content',
+    'width=1400, initial-scale=' + scale + ', minimum-scale=' + scale
+  );
+}
 
 window.addEventListener('orientationchange', function() {
-  console.log('OC fired — screen:', screen.width, screen.height, '| outer:', window.outerWidth, window.outerHeight);
-  var blackout = document.getElementById('orientation-blackout');
-  var scale = screen.width / 1400;
-  var isMobile = scale <= 0.7;
-
-  if (!isMobile) {
-    setTimeout(applyScale, 350);
-    return;
-  }
-
-  // Mostra blackout immediatamente — copre il flicker di iOS
-  blackout.style.display = 'block';
-
- setTimeout(function() {
-  console.log('devicePixelRatio:', window.devicePixelRatio);
-  console.log('innerWidth:', window.innerWidth, window.innerHeight);
-  console.log('OC timeout — screen:', screen.width, screen.height, '| outer:', window.outerWidth, window.outerHeight, '| isPortrait:', window.outerHeight > window.outerWidth);
-  var isPortrait = window.outerHeight > window.outerWidth;
-  applyScale();
-   
-    );
+  setTimeout(function() {
+    updateViewport();
     anchorChapterTags();
 
-    if (!isPortrait) {
-      // portrait → landscape: sequenza ruota2 → ruota3 → sito
-      var r2 = document.getElementById('ruota2');
-      r2.style.animation = 'none';
-      r2.style.transform = 'rotate(90deg)';
-      blackout.style.display = 'none'; // viewport corretto, possiamo togliere il blackout
+    var scale = screen.width / 1400;
+    var isMobile = scale <= 0.7;
+    var isPortrait = window.outerHeight > window.outerWidth;
+
+    if (!isPortrait && isMobile) {
+      // mostra ruota3, nasconde ruota2
+      document.getElementById('ruota2').style.display = 'none';
+      document.getElementById('ruota3').style.display = 'block';
 
       setTimeout(function() {
-        r2.style.display = 'none';
-        var r3 = document.getElementById('ruota3');
-        r3.style.transform = 'rotate(-90deg)';
-        r3.style.transformOrigin = 'center center';
-        r3.style.display = 'block';
-
-        setTimeout(function() {
-          document.querySelector('.rotate-overlay').style.display = 'none';
-          r2.style.animation = '';
-          r2.style.transform = '';
-          r2.style.display = 'block';
-          r3.style.display = 'none';
-          anchorChapterTags();
-        }, 3000);
-      }, 1800);
+        // dopo 2 secondi nasconde tutto e ripristina
+        document.querySelector('.rotate-overlay').style.display = 'none';
+        document.getElementById('ruota2').style.display = 'block';
+        document.getElementById('ruota3').style.display = 'none';
+      }, 2000);
 
     } else {
-      // landscape → portrait: mostra overlay rotazione
-      blackout.style.display = 'none';
+      // se torna in portrait, checkRotate gestisce la visibilità
       checkRotate();
     }
-
-  }, 450);
+  }, 300);
 });
-  
-applyScale(); // esegui subito
+
+updateViewport(); // esegui subito
 
 
 window.addEventListener('resize', checkRotate);
@@ -1506,8 +1458,6 @@ function anchorChapterTags() {
 window.addEventListener('load', anchorChapterTags);
 window.addEventListener('resize', function() { setTimeout(anchorChapterTags, 100); });
 window.addEventListener('orientationchange', function() { setTimeout(anchorChapterTags, 350); });
-window.addEventListener('load', applyScale);
-window.addEventListener('resize', applyScale);
   
 </script>
 
