@@ -1399,23 +1399,14 @@ window.addEventListener('orientationchange', function() {
     var isPortrait = window.outerHeight > window.outerWidth;
 
     if (!isPortrait && isMobile) {
-      // mostra ruota3, nasconde ruota2
-      document.getElementById('ruota2').style.display = 'none';
-      document.getElementById('ruota3').style.display = 'block';
-
-      setTimeout(function() {
-        // dopo 2 secondi nasconde tutto e ripristina
-        document.querySelector('.rotate-overlay').style.display = 'none';
-        document.getElementById('ruota2').style.display = 'block';
-        document.getElementById('ruota3').style.display = 'none';
-      }, 2000);
-
+      // Nascondi subito l'overlay senza ruota3
+      document.querySelector('.rotate-overlay').style.display = 'none';
     } else {
-      // se torna in portrait, checkRotate gestisce la visibilità
       checkRotate();
     }
   }, 300);
 });
+
 
 updateViewport(); // esegui subito
 
