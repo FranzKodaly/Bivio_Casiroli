@@ -30,7 +30,7 @@ body {
   color: var(--ink);
   line-height: 1.55;
   overflow-x: hidden;
-   position: relative;
+  position: relative;
 }
 
 .container {
@@ -584,7 +584,8 @@ nav {
 
 #site-wrapper {
   width: 1400px;
-  transform-origin: top left;
+  transform-origin: top left,
+  overflow: hidden;
 }
 
   
@@ -1427,9 +1428,8 @@ window.addEventListener('orientationchange', function() {
   console.log('innerWidth:', window.innerWidth, window.innerHeight);
   console.log('OC timeout — screen:', screen.width, screen.height, '| outer:', window.outerWidth, window.outerHeight, '| isPortrait:', window.outerHeight > window.outerWidth);
   var isPortrait = window.outerHeight > window.outerWidth;
-  var newScale = window.innerWidth / 1400;
-  document.getElementById('vp').setAttribute('content',
-  'width=1400, initial-scale=' + newScale + ', minimum-scale=' + newScale
+  applyScale();
+   
     );
     anchorChapterTags();
 
