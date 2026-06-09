@@ -1422,6 +1422,7 @@ window.addEventListener('orientationchange', function() {
   blackout.style.display = 'block';
 
  setTimeout(function() {
+  console.log('devicePixelRatio:', window.devicePixelRatio);
   console.log('innerWidth:', window.innerWidth, window.innerHeight);
   console.log('OC timeout — screen:', screen.width, screen.height, '| outer:', window.outerWidth, window.outerHeight, '| isPortrait:', window.outerHeight > window.outerWidth);
   var isPortrait = window.outerHeight > window.outerWidth;
