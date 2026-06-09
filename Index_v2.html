@@ -1346,6 +1346,7 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
   </div><!-- /grid -->
 </div><!-- /grid-wrapper -->
 </div><!-- /container -->
+  </div>
 
 <script>
 // ── LANGUAGE SWITCHER ──
@@ -1403,7 +1404,7 @@ function checkRotate() {
 }
 
 
-}
+
 
 
 
@@ -1414,7 +1415,7 @@ window.addEventListener('orientationchange', function() {
   var isMobile = scale <= 0.7;
 
   if (!isMobile) {
-    setTimeout(updateViewport, 350);
+    setTimeout(applyScale, 350);
     return;
   }
 
@@ -1509,6 +1510,6 @@ window.addEventListener('load', applyScale);
 window.addEventListener('resize', applyScale);
   
 </script>
-</div>
+
 </body>
 </html>
