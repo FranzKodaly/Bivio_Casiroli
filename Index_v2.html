@@ -2,13 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" id="vp" content="width=1400">
-<script>
-  var scale = screen.width / 1400;
-  document.getElementById('vp').setAttribute('content',
-    'width=1400, initial-scale=' + scale + ', minimum-scale=' + scale + ', maximum-scale=' + scale
-  );
-</script>
+<meta name="viewport" id="vp" content="width=device-width, initial-scale=1">
 
 <title>Bivio Casiroli — nucleo storico Valle di Muggio</title>
 
@@ -588,18 +582,25 @@ nav {
   pointer-events: none;
 }
 
+#site-wrapper {
+  width: 1400px;
+  transform-origin: top left;
+}
+
+  
 </style>
 </head>
 <body data-lang="it">
 
+<div class="orientation-blackout" id="orientation-blackout"></div>
 <div class="rotate-overlay">
-  <div class="orientation-blackout" id="orientation-blackout"></div>
   <img src="images/ruota1.jpg">
   <img id="ruota2" src="images/ruota2.png" style="animation:rotate-hint 2.5s ease-in-out infinite;">
   <img id="ruota3" src="images/ruota3.png" style="display:none;">
 </div>
 
-
+<div id="site-wrapper">
+  
 <nav>
   <div class="nav-inner">
     <div class="nav-l"></div>
@@ -1376,6 +1377,16 @@ function setLang(lang) {
 
 // ── ROTATE OVERLAY ──
 // ── ROTATE OVERLAY ──
+
+
+function applyScale() {
+  var scale = window.innerWidth / 1400;
+  var wrapper = document.getElementById('site-wrapper');
+  wrapper.style.transform = 'scale(' + scale + ')';
+  wrapper.style.transformOrigin = 'top left';
+  wrapper.style.height = (window.innerHeight / scale) + 'px';
+}
+  
 function checkRotate() {
   var overlay = document.querySelector('.rotate-overlay');
   if (!overlay) return;
@@ -1391,18 +1402,7 @@ function checkRotate() {
   }
 }
 
-function updateViewport() {
-  var w = screen.width;
-  var h = screen.height;
-  // In landscape la dimensione maggiore è la larghezza
-  var landscapeWidth = Math.max(w, h);
-  var portraitWidth = Math.min(w, h);
-  var isPortrait = window.outerHeight > window.outerWidth;
-  var physicalWidth = isPortrait ? portraitWidth : landscapeWidth;
-  var scale = physicalWidth / 1400;
-  document.getElementById('vp').setAttribute('content',
-    'width=1400, initial-scale=' + scale + ', minimum-scale=' + scale
-  );
+
 }
 
 
@@ -1465,7 +1465,7 @@ window.addEventListener('orientationchange', function() {
   }, 450);
 });
   
-updateViewport(); // esegui subito
+applyScale(); // esegui subito
 
 
 window.addEventListener('resize', checkRotate);
@@ -1505,8 +1505,10 @@ function anchorChapterTags() {
 window.addEventListener('load', anchorChapterTags);
 window.addEventListener('resize', function() { setTimeout(anchorChapterTags, 100); });
 window.addEventListener('orientationchange', function() { setTimeout(anchorChapterTags, 350); });
+window.addEventListener('load', applyScale);
+window.addEventListener('resize', applyScale);
   
 </script>
-
+</div>
 </body>
 </html>
