@@ -1408,6 +1408,7 @@ function updateViewport() {
 
 
 window.addEventListener('orientationchange', function() {
+  console.log('OC fired — screen:', screen.width, screen.height, '| outer:', window.outerWidth, window.outerHeight);
   var blackout = document.getElementById('orientation-blackout');
   var scale = screen.width / 1400;
   var isMobile = scale <= 0.7;
@@ -1420,8 +1421,8 @@ window.addEventListener('orientationchange', function() {
   // Mostra blackout immediatamente — copre il flicker di iOS
   blackout.style.display = 'block';
 
-  setTimeout(function() {
-    // iOS ha finito il suo zoom, ora calcoliamo lo scale corretto
+ setTimeout(function() {
+  console.log('OC timeout — screen:', screen.width, screen.height, '| outer:', window.outerWidth, window.outerHeight, '| isPortrait:', window.outerHeight > window.outerWidth);
     var isPortrait = window.outerHeight > window.outerWidth;
     var physicalWidth = isPortrait ? Math.min(screen.width, screen.height) : Math.max(screen.width, screen.height);
     var newScale = physicalWidth / 1400;
