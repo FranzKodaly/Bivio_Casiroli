@@ -2,13 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" id="vp" content="width=1400">
-<script>
-  var scale = screen.width / 1400;
-  document.getElementById('vp').setAttribute('content',
-    'width=1400, initial-scale=' + scale + ', minimum-scale=' + scale
-  );
-</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Bivio Casiroli — nucleo storico Valle di Muggio</title>
 
@@ -525,6 +519,103 @@ nav {
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+
+  /* griglia: colonna singola, altezza auto */
+  .grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    gap: 20px;
+  }
+  .c1, .c2, .c3, .c4, .c5 { grid-column: span 1; }
+  .r2, .r3, .r4 { grid-row: span 1; }
+
+  /* immagini: altezza fissa senza dipendere dalla riga */
+  .img-slot {
+    height: 280px;
+  }
+
+  /* blocco apertura: rimuovi offset hardcoded */
+  .grid > div[style*="top:250px"] {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    margin-bottom: 0 !important;
+    width: 100% !important;
+  }
+
+  /* container: padding compatto */
+  .container {
+    padding: 80px 20px 40px 20px;
+  }
+
+  /* frasi overlay: diventano testo scorrevole */
+  .overlay-frase {
+    position: static;
+    display: block;
+    width: 100%;
+    font-size: clamp(22px, 7vw, 36px);
+    margin: 32px 0;
+    padding: 0 20px;
+  }
+  .grid-wrapper {
+    position: static;
+  }
+
+  /* chapter-tag: nascosti su mobile, troppo legati alla geometria desktop */
+  .chapter-tag {
+    display: none;
+  }
+
+  /* navbar: impila link e lingua */
+  .nav-inner {
+    padding: 14px 20px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .nav-links {
+    display: none;
+  }
+  .nav-r {
+    justify-content: flex-end;
+  }
+  .lang-switcher {
+    margin-left: 0;
+  }
+
+  /* portrait e overflow: immagini a larghezza piena */
+  .portrait img,
+  .portrait-overflow img,
+  .flexible-overflow img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* disegni: rimuovi overflow visibile su mobile */
+  .drawing .overlay {
+    display: none;
+  }
+
+  /* testo: reset trasformazione verticale */
+  .testo {
+    transform: none;
+  }
+  .bottom-align {
+    transform: none;
+  }
+
+  /* numeri leggenda: nascosti (posizioni hardcoded non funzionano) */
+  .legend-num {
+    display: none;
+  }
+
+  /* hero video */
+  .hero-video {
+    height: 56vw;
+  }
 }
 </style>
 </head>
