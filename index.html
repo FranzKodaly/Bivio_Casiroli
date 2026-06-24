@@ -1618,6 +1618,8 @@ if (window.innerWidth < 768) {
 }
 
 if (window.matchMedia('(max-width: 767px)').matches) {
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
   window.addEventListener('load', function() {
     setTimeout(function() {
       var beige = document.getElementById('beige');
@@ -1626,7 +1628,7 @@ if (window.matchMedia('(max-width: 767px)').matches) {
         var scrollY = window.scrollY + rect.top + rect.height / 2 - window.innerHeight / 2;
         window.scrollTo({ top: Math.max(0, scrollY), behavior: 'instant' });
       }
-    }, 200);
+    }, 300);
   });
 }
 
