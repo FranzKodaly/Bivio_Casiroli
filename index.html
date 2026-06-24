@@ -2,12 +2,14 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" id="vp" content="width=1400">
+<meta name="viewport" id="vp" content="width=device-width, initial-scale=1">
 <script>
-  var scale = screen.width / 1400;
-  document.getElementById('vp').setAttribute('content',
-    'width=1400, initial-scale=' + scale + ', minimum-scale=' + scale
-  );
+  if (!window.matchMedia('(max-width: 767px)').matches) {
+    var scale = screen.width / 1400;
+    document.getElementById('vp').setAttribute('content',
+      'width=1400, initial-scale=' + scale + ', minimum-scale=' + scale
+    );
+  }
 </script>
 
 <title>Bivio Casiroli — nucleo storico Valle di Muggio</title>
@@ -399,7 +401,7 @@ h1 {
   color: var(--ink);
   z-index: 999;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 10px;
+  font-size: 8.2px;
   line-height: 1.6;
   border: 1px dashed rgba(28, 27, 26, 0.18);
 }
@@ -433,15 +435,15 @@ h1 {
 }
 
 .chapter-tag-scorci {
-  top: calc(var(--container-top) + 36.4 * (var(--row) + var(--gap)));
+  top: calc(var(--container-top) + 35.4 * (var(--row) + var(--gap)));
 }
 
 .chapter-tag-scorci2 {
-  top: calc(var(--container-top) + 40.4 * (var(--row) + var(--gap)));
+  top: calc(var(--container-top) + 39.4 * (var(--row) + var(--gap)));
 }
 
 .chapter-tag-scorci3 {
-  top: calc(var(--container-top) + 47.20 * (var(--row) + var(--gap)));
+  top: calc(var(--container-top) + 46.20 * (var(--row) + var(--gap)));
 }
 
 
@@ -526,13 +528,130 @@ nav {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
+
+/* Su desktop il wrapper img-mob-num è trasparente alla griglia */
+@media (min-width: 768px) {
+  .img-mob-num { display: contents; }
+}
+
+/* ── HAMBURGER ── */
+.hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px 4px 4px 0; }
+.hamburger span { display: block; width: 22px; height: 2px; background: var(--ink); flex-shrink: 0; }
+.mobile-menu { display: none; flex-direction: column; padding: 12px 20px 16px; border-top: 1px dashed rgba(28,27,26,0.18); }
+.mobile-menu a { font-size: 13px; color: var(--ink); text-decoration: none; padding: 10px 0; border-bottom: 1px dashed rgba(28,27,26,0.1); letter-spacing: 0.01em; }
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu.open { display: flex; }
+.show-mobile { display: none; }
+.mob-num { display: none; }
+
+/* ── MOBILE ── */
+@media (max-width: 767px) {
+  .container { padding: 50px 16px 40px; }
+  .nav-inner { padding: 14px 16px; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  nav, .mobile-menu { max-width: 100vw; overflow-x: hidden; }
+  html, body { overflow-x: clip; }
+  .grid { overflow: visible; }
+  .mob-r3 { grid-row: span 3; }
+
+  .mob-ramarro { margin-top:-585px; position:relative; z-index:2; }
+
+  .asph-r3 {
+    grid-row: span 3;
+    overflow: visible;
+    position: relative;
+    z-index: 5;
+    transform: translateX(180px); /* ← sposta a destra, cambia questo valore */
+  }
+  .asph-r3 img {
+    width: calc(100% + 25px);
+    height: 480px;
+    object-fit: cover;
+    display: block;
+  }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 20px; grid-auto-rows: 160px; }
+  .grid > * { min-width: 0; outline: 1px dashed rgba(255, 0, 0, 0.3); }
+  .c3, .c4, .c5 { grid-column: span 2; }
+  .r3 { grid-row: span 2; }
+  .r4 { grid-row: span 2; }
+  .logo-apertura { top: 450px !important; left: 150px !important; margin-bottom: 0 !important; }
+  .logo-inner { width: 50% !important; }
+  .testo { transform: translateY(-4px); align-self: start; padding-top: 0; }
+  .testo p { margin: 0; text-align: justify; hyphens: auto; hyphenate-limit-chars: 6 3 3; hyphenate-limit-lines: 3; overflow-wrap: break-word; }
+  .has-mob-num { position: relative; overflow: visible; }
+  .has-mob-num .img-slot { width: 100%; height: 100%; }
+  .img-slot { border-radius: 0; }
+
+  .mob-num {
+    display: block;
+    position: absolute;
+    font-family: Helvetica, Arial;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink);
+    z-index: 10;
+  }
+  .capitolo-shift { grid-column: span 2; }
+  .donna-mobile { margin-left: auto; }
+  .legend-num span { display: none; }
+  .hide-mobile { display: none; }
+  .show-mobile { display: block; }
+  .overlay-frase, .chapter-tag, .rotate-overlay { display: none; }
+
+  .progetto-img2 {
+    grid-row: span 2;
+    overflow: visible;
+    position: relative;
+    z-index: 5;
+  }
+  .progetto-img2 img {
+    width: calc(100% + 325px);
+    margin-left: -325px;
+    height: 420px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .mob-ct {
+    grid-column: span 2;
+    background: rgba(241, 240, 237, 0.96);
+    border: none;
+    box-shadow: 0 0 0 0.5px rgba(28, 27, 26, 1);
+    padding: 10px 16px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 9px;
+    line-height: 1.6;
+    align-self: start;
+  }
+  .mob-ct .ch-entry { display: flex; gap: 0.3em; }
+  .mob-ct .ch-num { font-weight: 700; flex-shrink: 0; min-width: 1.8em; text-align: right; }
+  .mob-ct .ch-text { flex: 1; }
+
+  .mob-overlay {
+    font-size: clamp(20px, 5.5vw, 32px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    color: #007BFF;
+    opacity: 0.5;
+    pointer-events: none;
+    user-select: none;
+  }
+
+}
+
 </style>
 </head>
 <body data-lang="it">
 
 <nav>
   <div class="nav-inner">
-    <div class="nav-l"></div>
+    <div class="nav-l">
+      <button class="hamburger" onclick="document.querySelector('.mobile-menu').classList.toggle('open')" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
     <div class="nav-r">
       <div class="nav-links">
         <a href="#Casiroli" class="t" data-it="Casiroli" data-de="Casiroli" data-en="Casiroli" data-fr="Casiroli">Casiroli</a>&nbsp;&nbsp;-&nbsp;&nbsp;
@@ -553,6 +672,13 @@ nav {
       </div>
     </div>
   </div>
+  <div class="mobile-menu">
+    <a href="#Casiroli" class="t" data-it="Casiroli" data-de="Casiroli" data-en="Casiroli" data-fr="Casiroli" onclick="document.querySelector('.mobile-menu').classList.remove('open')">Casiroli</a>
+    <a href="#Il-progetto" class="t" data-it="Il progetto" data-de="Das Projekt" data-en="The project" data-fr="Le projet" onclick="document.querySelector('.mobile-menu').classList.remove('open')">Il progetto</a>
+    <a href="#La-visione" class="t" data-it="La visione" data-de="Die Vision" data-en="The vision" data-fr="La vision" onclick="document.querySelector('.mobile-menu').classList.remove('open')">La visione</a>
+    <a href="#Lassociazione" class="t" data-it="L'associazione" data-de="Der Verein" data-en="The association" data-fr="L'association" onclick="document.querySelector('.mobile-menu').classList.remove('open')">L'associazione</a>
+    <a href="#Sostieni-Casiroli" class="t" data-it="Sostieni Casiroli" data-de="Unterstütze" data-en="Support Casiroli" data-fr="Soutenir Casiroli" onclick="document.querySelector('.mobile-menu').classList.remove('open')">Sostieni Casiroli</a>
+  </div>
 </nav>
 
 <!-- CHAPTER TAG CASIROLI -->
@@ -568,7 +694,7 @@ nav {
 <div class="chapter-tag chapter-tag-progetto chapter-tag-left">
   <strong>5.</strong>&nbsp;<span class="t" data-it="Terrazzamenti incolti invasi dalla vegetazione, veduta Est-Ovest" data-de="Brachliegende Terrassen, Blick von Ost nach West" data-en="Unused terraces, view from east to west" data-fr="Terrasses en friche, vue d'est en ouest">Terrazzamenti incolti invasi dalla vegetazione, veduta Est-Ovest</span><br>
   <strong>6.</strong>&nbsp;<span class="t" data-it="Terrazzamenti incolti invasi dalla vegetazione, veduta Ovest-Est" data-de="Brachliegende Terrassen, Blick von West nach Ost" data-en="Unused terraces, view from west to east" data-fr="Terrasses en friche, vue d'ouest en est">Terrazzamenti incolti invasi dalla vegetazione, veduta Ovest-Est</span><br>
-  <strong>7.</strong>&nbsp;<span class="t" data-it="Uovo di Circaetus gallicus – Biancone,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specie vulnerabile osservata nella regione" data-de="Ei des Circaetus gallicus – Schlangenadler,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eine in der Region gefährdeten Art" data-en="Egg of the Circaetus gallicus – short-toed snake eagle,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a species endangered in the region" data-fr="Œuf du Circaetus gallicus – Circaète Jean-le-Blanc,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;espèce vulnérable observée dans la région">Uovo di <em>Circaetus gallicus</em> – Biancone,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specie vulnerabile osservata nella regione</span><br>
+  <strong>7.</strong>&nbsp;<span class="t" data-it="Uovo di Circaetus gallicus – Biancone<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specie vulnerabile osservata nella regione" data-de="Ei des Circaetus gallicus – Schlangenadler,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eine in der Region gefährdeten Art" data-en="Egg of the Circaetus gallicus – short-toed snake eagle,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a species endangered in the region" data-fr="Œuf du Circaetus gallicus – Circaète Jean-le-Blanc,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;espèce vulnérable observée dans la région">Uovo di <em>Circaetus gallicus</em> – Biancone<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specie vulnerabile osservata nella regione</span><br>
   <strong>8.</strong>&nbsp;<span class="t" data-it="Muro a secco degradato" data-de="Verfallene Trockenbauwand" data-en="Deteriorated dry stone wall" data-fr="Mur en pierre sèche dégradé">Muro a secco degradato</span>
 </div>
 
@@ -669,15 +795,17 @@ nav {
   <div class="grid">
 
     <!-- ═══ APERTURA ═══ -->
-    <div class="c2 cell r1" style="position:relative; top:250px; left:200px; z-index:2; margin-bottom:-80px;">
-      <div style="position:relative; width:80%; opacity:1;">
-        <img src="images/l2.png" style="width:100%; opacity:0; height:auto; display:block; animation:fadeIn 0.4s ease forwards 1s;">
-        <img src="images/l3.png" style="position:absolute; top:0; left:0; width:100%; opacity:0; height:auto; display:block; animation:fadeIn 0.4s ease forwards 1.5s;">
-        <img src="images/l1.png" style="position:absolute; top:0; right:100%; height:100%; opacity:0; width:auto; display:block; animation:fadeIn 0.4s ease forwards 0.5s;">
+    <div class="c2 cell r1 logo-apertura" style="position:relative; top:250px; left:200px; z-index:2; margin-bottom:-80px;">
+      <div class="logo-inner" style="position:relative; width:80%; opacity:1;">
+        <img src="images/l1.svg" class="logo-l1" style="position:absolute; top:0; right:100%; height:100%; opacity:0; width:auto; display:block; animation:fadeIn 0.4s ease forwards 0.5s;">
+        <div class="logo-l23" style="position:relative;">
+          <img src="images/l2.svg" style="width:100%; opacity:0; height:auto; display:block; animation:fadeIn 0.4s ease forwards 1s;">
+          <img src="images/l3.svg" style="position:absolute; top:0; left:0; width:100%; opacity:0; height:auto; display:block; animation:fadeIn 0.05s ease forwards 1.8s;">
+        </div>
       </div>
     </div>
 
-    <div class="c3 cell r2" style="opacity:0; animation:fadeIn 0.4s ease forwards 1.5s;">
+    <div class="c3 cell r2" style="opacity:0; animation:fadeIn 0.05s ease forwards 1.8s;">
       <div class="img-slot has-image">
         <img src="images/casi-beige.jpg">
       </div>
@@ -692,7 +820,7 @@ nav {
       </div>
     </div>
 
-    <div class="c1 cell"></div>
+    <div class="c1 cell hide-mobile"></div>
     <div class="c1 cell testo">
       <p><span class="t"
         data-it="Casiroli è un piccolo nucleo storico in Valle di Muggio: un insediamento minimo, poche case raccolte e celate dalla faggeta vicino a Scudellate, proprio nel punto in cui il bosco s'apre improvvisamente alla Valle. È un luogo residuo. Un luogo in cui l'architettura vernacolare, i prati da sfalcio e i pendii terrazzati s'intessono con l'ambiente formando un sistema coerente, capace ancora oggi di raccontare la storia d'un abitare rurale, oramai diradatosi, forse dimenticato. A Casiroli, come in molte altre regioni di montagna, l'esaurirsi delle civiltà contadine ha innescato una profonda trasformazione ecologica e paesaggistica. Il bosco riconquista i terrazzamenti, le superfici aperte si chiudono, i margini ecotonali si riducono e le strutture architettoniche – un tempo scenario di vita quotidiana – si deteriorano e crollano. Con l'avanzare del bosco e il degradarsi del nucleo s'erodono così anche la memoria e la conoscenza di quelle pratiche che, una pietra posata e un colpo di falce alla volta, hanno nei secoli modellato uno dei più importanti e suggestivi paesaggi svizzeri."
@@ -702,32 +830,48 @@ nav {
       A Casiroli, come in molte altre regioni di montagna, l'esaurirsi delle civiltà contadine ha innescato una profonda trasformazione ecologica e paesaggistica. Il bosco riconquista i terrazzamenti, le superfici aperte si chiudono, i margini ecotonali si riducono e le strutture architettoniche – un tempo scenario di vita quotidiana – si deteriorano e crollano. Con l'avanzare del bosco e il degradarsi del nucleo s'erodono così anche la memoria e la conoscenza di quelle pratiche che, una pietra posata e un colpo di falce alla volta, hanno nei secoli modellato uno dei più importanti e suggestivi paesaggi svizzeri.</span>
       </p>
     </div>
-    <div class="img-slot has-image">
-      <img src="images/casiroli_old.jpg">
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell img-mob-num has-mob-num">
+      <div class="img-slot has-image">
+        <img src="images/casiroli_old.jpg">
+      </div>
+      <span class="mob-num" style="top:-24px; left:-2px;">1.</span>
     </div>
-    <div class="c1 cell legend-num top-left">
+    <div class="c1 cell legend-num top-left hide-mobile">
       <span style="top:-4px; left:px;">1.</span>
     </div>
-    <div class="c1 cell legend-num bottom-left">
+    <div class="c1 cell legend-num bottom-left hide-mobile">
       <span style="top:255px; left:0;">3.</span>
     </div>
 
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="img-slot has-image bn">
-      <img src="images/casiroli_oggi.png">
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell img-mob-num has-mob-num">
+      <div class="img-slot has-image bn">
+        <img src="images/casiroli_oggi.png">
+      </div>
+      <span class="mob-num" style="bottom:-24px; left:-2px;">2.</span>
     </div>
-    <div class="c1 cell legend-num top-left">
+    <div class="c1 cell legend-num top-left hide-mobile">
       <span style="top:-4px; left:px;">2.</span>
     </div>
 
-    <div class="c1 cell" style="display:flex; align-items:flex-end;">
-      <img src="images/donna_casiroli.png" style="width:50%; height:auto; display:block;">
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell" style="display:flex; align-items:flex-end; position:relative;">
+      <img src="images/donna_casiroli.png" class="donna-mobile" style="width:50%; height:auto; display:block;">
+      <span class="mob-num" style="top:6px; right:6px;">3.</span>
     </div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
 
     <div class="c1 cell testo">
       <p><span class="t"
@@ -739,30 +883,51 @@ nav {
       Qui la fitta e fragile rete di relazioni ecoculturali, oggi sedimentate, ci invita all'esplorazione dei nostri luoghi e della nostra storia, lungo vie in cui il paesaggio si rivela memoria collettiva, e la memoria collettiva, paesaggio.</span>
       </p>
     </div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell legend-num bottom-left">
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell legend-num bottom-left hide-mobile">
       <span style="top:0; left:-35px;">4.</span>
     </div>
     <div class="c1 cell"></div>
-    <div class="c1 cell">
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell has-mob-num">
       <div class="img-slot has-image contain bn">
         <img src="images/microcosmo_.png">
       </div>
       <div class="legend-num top-left"><span></span></div>
+      <span class="mob-num" style="top:18px; left:-2px;">4.</span>
+      <div class="show-mobile mob-ct" style="position:absolute; top:calc(100% + 180px); left:-30px; width:calc(100vw - 82px); z-index:2;">
+        <div class="ch-entry"><span class="ch-num">1.</span><span class="ch-text t" data-it="Veduta aerea di Casiroli, 1950" data-de="Luftaufnahme von Casiroli, 1950" data-en="Aerial view of Casiroli, 1950" data-fr="Vue aérienne de Casiroli, 1950">Veduta aerea di Casiroli, 1950</span></div>
+        <div class="ch-entry"><span class="ch-num">2.</span><span class="ch-text t" data-it="Veduta aerea di Casiroli, 2026" data-de="Luftaufnahme von Casiroli, 2026" data-en="Aerial view of Casiroli, 2026" data-fr="Vue aérienne de Casiroli, 2026">Veduta aerea di Casiroli, 2026</span></div>
+        <div class="ch-entry"><span class="ch-num">3.</span><span class="ch-text t" data-it="Abitante di Casiroli, fotografia rinvenuta in loco" data-de="Einwohner von Casiroli, vor Ort gefundene Fotografie" data-en="Residents of Casiroli, photograph found on site" data-fr="Habitant de Casiroli, photographie trouvée sur place">Abitante di Casiroli, fotografia rinvenuta in loco</span></div>
+        <div class="ch-entry"><span class="ch-num">4.</span><span class="ch-text t" data-it="Tracce animali e manufatti agricoli" data-de="Tierspuren und landwirtschaftliche Artefakte" data-en="Animal traces and agricultural artefacts" data-fr="Traces animales et artefacts agricoles">Tracce animali e manufatti agricoli</span></div>
+        <div class="ch-entry"><span class="ch-num">5.</span><span class="ch-text"><em>Asphodelus albus</em> — <span class="t" data-it="specie endemica, minacciata e protetta" data-de="eine endemische, bedrohte und geschützte Art" data-en="an endemic, endangered, and protected species" data-fr="une espèce endémique, menacée et protégée">specie endemica, minacciata e protetta</span></span></div>
+      </div>
     </div>
     <div class="c1 cell"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
 
-    <div class="c2 cell img-big portrait-overflow" style="pointer-events:none;">
+    <div class="c2 cell img-big portrait-overflow asph-mobile hide-mobile" style="pointer-events:none;">
       <img src="images/asph2.png">
     </div>
+    <div class="c1 cell show-mobile asph-r3 has-mob-num" style="pointer-events:none;">
+      <img src="images/asph2.png">
+      <span class="mob-num" style="bottom:360px; left:73px;">5.</span>
+      <div class="mob-overlay" style="position:absolute; top:276px; left:-130px; width:calc(100vw - 60px); min-height:320px; pointer-events:none;">
+        <span class="t" data-it="Un nucleo storico in Valle di Muggio. Fragile testimonianza d'un abitare quasi&nbsp;scomparso," data-de="Ein historischer Ort im Muggiotal. Dokument einer fast verschwundenen Lebensweise," data-en="A historic site in the Muggio Valley. A testament to a way of life that has almost disappeared," data-fr="Un noyau historique dans la Vallée de Muggio. Témoignage fragile d'un habiter presque disparu,">Un nucleo storico in Valle di Muggio. Fragile testimonianza d'un abitare quasi&nbsp;scomparso,</span>
+      </div>
+    </div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
 
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
 
     <!-- ═══ IL PROGETTO ═══ -->
     <div class="c1 cell capitolo-shift">
@@ -779,32 +944,53 @@ nav {
         >Il progetto mira alla valorizzazione e alla rigenerazione del nucleo, dapprima indirizzando gli sforzi all'edificio centrale, il più grande e in miglior condizione, e dedicandosi in seguito al resto dell'insediamento. L'associazione intende orientare il proprio operato sulla traccia delle pratiche sospese, per cui ambisce a immaginare e proporre un proseguimento.</span>
       </p>
     </div>
-    <div class="img-slot has-image bn">
-      <img src="images/DSC00107.jpg">
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell img-mob-num has-mob-num">
+      <div class="img-slot has-image bn">
+        <img src="images/DSC00107.jpg">
+      </div>
+      <span class="mob-num" style="top:-23px; left:0;">6.</span>
     </div>
     <div class="c1 cell legend-num top-left">
       <span style="top:-4px; left:px;">5.</span>
     </div>
-    <div class="c1 cell"></div>
+    <div class="c1 cell hide-mobile"></div>
 
-    <div class="c1 cell flexible-overflow">
+    <div class="c1 cell has-mob-num show-mobile">
+      <div class="img-slot has-image bn" style="width:100%;height:100%;">
+        <img src="images/DSC00136.jpg">
+      </div>
+      <span class="mob-num" style="bottom:-24px; left:0;">7.</span>
+    </div>
+    <div class="c2 cell show-mobile mob-overlay" style="pointer-events:none; margin-top:400px; z-index:10; position:relative; max-width:55%;">
+      <span class="t" data-it="a cui l'associazione intende restituire cura," data-de="dem der Verein wieder Sorge widmen will," data-en="to which the association intends to return its care," data-fr="auquel l'association entend restituer son soin,">a cui l'associazione intende restituire cura,</span>
+    </div>
+    <div class="show-mobile mob-ct" style="margin-top:-100px; margin-bottom:-200px; margin-left:70px; margin-right:-70px;">
+      <div class="ch-entry"><span class="ch-num">6.</span><span class="ch-text t" data-it="Terrazzamenti incolti invasi dalla vegetazione, veduta Est-Ovest" data-de="Brachliegende Terrassen, Blick von Ost nach West" data-en="Unused terraces, view from east to west" data-fr="Terrasses en friche, vue d'est en ouest">Terrazzamenti incolti invasi dalla vegetazione, veduta Est-Ovest</span></div>
+      <div class="ch-entry"><span class="ch-num">7.</span><span class="ch-text t" data-it="Terrazzamenti incolti invasi dalla vegetazione, veduta Ovest-Est" data-de="Brachliegende Terrassen, Blick von West nach Ost" data-en="Unused terraces, view from west to east" data-fr="Terrasses en friche, vue d'ouest en est">Terrazzamenti incolti invasi dalla vegetazione, veduta Ovest-Est</span></div>
+      <div class="ch-entry"><span class="ch-num">8.</span><span class="ch-text t" data-it="Uovo di Circaetus gallicus – Biancone<br>specie vulnerabile osservata nella regione" data-de="Ei des Circaetus gallicus – Schlangenadler,<br>eine in der Region gefährdete Art" data-en="Egg of Circaetus gallicus – short-toed snake eagle,<br>a species endangered in the region" data-fr="Œuf du Circaetus gallicus – Circaète Jean-le-Blanc,<br>espèce vulnérable observée dans la région">Uovo di <em>Circaetus gallicus</em> – Biancone<br>specie vulnerabile osservata nella regione</span></div>
+      <div class="ch-entry"><span class="ch-num">9.</span><span class="ch-text t" data-it="Edificio centrale, planimetria" data-de="Hauptgebäude, Grundriss" data-en="Central building, plan" data-fr="Bâtiment central, plan">Edificio centrale, planimetria</span></div>
+    </div>
+    <div class="c1 cell flexible-overflow progetto-img2 has-mob-num">
       <div class="img-wrap">
         <img src="images/51220442671_e3cf48dd7d_o.png">
       </div>
+      <span class="mob-num" style="top:-23px; left:0;">8.</span>
     </div>
     <div class="c1 cell legend-num top-right">
       <span style="top:-3px; left:px;">6.</span>
     </div>
-    <div class="img-slot has-image bn">
+    <div class="img-slot has-image bn hide-mobile">
       <img src="images/DSC00136.jpg">
     </div>
     <div class="c1 cell testo">
       <p><span class="t"
-        data-it="L'acquisizione dell'immobile centrale costituisce il presupposto operativo per garantire l'accesso e il coordinamento degli interventi. Sebbene una parte significativa dei fondi destinati all'acquisto sia stata raccolta grazie al contributo dei membri dell'associazione, la vitalità del progetto dipende ancora dall'ottenimento dei finanziamenti necessari al suo sviluppo nel lungo periodo. Nelle fasi successive il progetto prevede la valorizzazione dei terrazzamenti, la manutenzione dei muri a secco, la gestione delle superfici aperte e la messa in sicurezza degli edifici esistenti. Gli interventi su acqua, smaltimento, impianti ed elementi costruttivi sono definiti in relazione alle particolari condizioni del luogo: accessibilità limitata, assenza di infrastrutture, vincoli legati alla protezione delle acque e allo statuto degli edifici fuori zona edificabile. L'obbiettivo non è ristabilire uno stato precedente ma mantenere operative le relazioni tra elementi al fine di rendere il sito nuovamente abitabile. Le modalità d'intervento previste privilegiano la combinazione di competenze e approcci diversi, con l'obiettivo di favorire presenze temporanee e la trasmissione di conoscenze. I gruppi di lavoro opereranno dunque su scala ridotta, in modo non continuativo, in base alle esigenze specifiche del sito."
+        data-it="L'acquisizione dell'immobile centrale costituisce il presupposto operativo per garantire l'accesso e il coordinamento degli interventi. Sebbene una parte significativa dei fondi destinati all'acquisto sia stata raccolta grazie al contributo dei membri dell'associazione, la vitalità del progetto dipende ancora dall'ottenimento dei finanziamenti necessari al suo sviluppo nel lungo periodo. Nelle fasi successive il progetto prevede la valorizzazione dei terrazzamenti, la manutenzione dei muri a secco, la gestione delle superfici aperte e la messa in sicurezza degli edifici esistenti. Gli interventi su acqua, smaltimento, impianti ed elementi costruttivi sono definiti in relazione alle particolari condizioni del luogo: accessi&shy;bilità limitata, assenza di infrastrutture, vincoli legati alla protezione delle acque e allo statuto degli edifici fuori zona edificabile. L'obbiettivo non è ristabilire uno stato precedente ma mantenere operative le relazioni tra elementi al fine di rendere il sito nuovamente abitabile. Le modalità d'intervento previste privilegiano la combinazione di competenze e approcci diversi, con l'obiettivo di favorire presenze temporanee e la trasmissione di conoscenze. I gruppi di lavoro opereranno dunque su scala ridotta, in modo non continuativo, in base alle esigenze specifiche del sito."
         data-de="Der Erwerb des zentralen Gebäudes bildet die operative Voraussetzung, um die Vorstellungen des Vereins umsetzen zu können. Ein großer Teil der für den Kauf vorgesehenen Mittel wird durch die Vereinsmitglieder aufgebracht. Dennoch hängt die Zukunftsfähigkeit und langfristige Entwicklung des Projektes davon ab, dass weitere Finanzmittel akquiriert werden. In den nachfolgenden Phasen sieht das Projekt die Aufwertung der Terrassen, die Instandhaltung der Trockenmauern, die Pflege der Freiflächen und die Sicherung der anderen bestehenden Gebäude vor. Die weiteren baulichen Arbeiten werden unter Berücksichtigung der besonderen örtlichen Gegebenheiten festgelegt. Dazu gehören eine eingeschränkte Zugänglichkeit, fehlende Infrastruktur, Auflagen im Zusammenhang mit dem Gewässerschutz und dem Bebauungsplan. Das Ziel besteht darin, den Ort wieder bewohnbar zu machen. Die Vorgehensweisen innerhalb des Vereins verknüpft verschiedene Kompetenzen und Ansätze mit dem Ziel eine Wissensvermittlung zu fördern."
         data-en="The acquisition of the central building is the operative prerequisite for ensuring access and coordinating interventions. Although a significant portion of the funds earmarked for the purchase has been raised through the association's members, the project's long-term viability still depends on securing the necessary financing. In the subsequent phases, the project plans to upgrade the terraces, maintain the dry stone walls, manage the open surfaces, and secure the existing buildings. Work on water, drainage, infrastructure, and structural elements is defined in relation to the particular conditions of the site: limited accessibility, absence of infrastructure, constraints related to water protection, and the status of buildings outside the building zone. The goal is not to restore a previous state but to keep the relationships between elements operational, so as to make the site habitable again. The planned modes of intervention favour combining different competencies and approaches, with the aim of encouraging temporary presences and the transmission of knowledge. Working groups will therefore operate on a reduced scale, in a non-continuous manner, according to the specific needs of the site." data-fr="L'acquisition du bâtiment central constitue le préalable opérationnel pour garantir l'accès et la coordination des interventions. Bien qu'une part significative des fonds destinés à l'achat ait été réunie grâce à la contribution des membres de l'association, la vitalité du projet dépend encore de l'obtention des financements nécessaires à son développement sur le long terme. Dans les phases suivantes, le projet prévoit la valorisation des terrasses, l'entretien des murs en pierre sèche, la gestion des surfaces ouvertes et la mise en sécurité des bâtiments existants. Les interventions sur l'eau, l'assainissement, les installations et les éléments constructifs sont définies en relation avec les conditions particulières du lieu : accessibilité limitée, absence d'infrastructures, contraintes liées à la protection des eaux et au statut des bâtiments hors zone constructible. L'objectif n'est pas de rétablir un état antérieur mais de maintenir opérationnelles les relations entre éléments afin de rendre le site à nouveau habitable. Les modes d'intervention prévus privilégient la combinaison de compétences et d'approches différentes, dans le but de favoriser des présences temporaires et la transmission des savoirs. Les groupes de travail opéreront donc à petite échelle, de manière non continue, en fonction des besoins spécifiques du site."
         >L'acquisizione dell'immobile centrale costituisce il presupposto operativo per garantire l'accesso e il coordinamento degli interventi. Sebbene una parte significativa dei fondi destinati all'acquisto sia stata raccolta grazie al contributo dei membri dell'associazione, la vitalità del progetto dipende ancora dall'ottenimento dei finanziamenti necessari al suo sviluppo nel lungo periodo. <br>
-      Nelle fasi successive il progetto prevede la valorizzazione dei terrazzamenti, la manutenzione dei muri a secco, la gestione delle superfici aperte e la messa in sicurezza degli edifici esistenti. Gli interventi su acqua, smaltimento, impianti ed elementi costruttivi sono definiti in relazione alle particolari condizioni del luogo: accessibilità limitata, assenza di infrastrutture, vincoli legati alla protezione delle acque e allo statuto degli edifici fuori zona edificabile.<br>
+      Nelle fasi successive il progetto prevede la valorizzazione dei terrazzamenti, la manutenzione dei muri a secco, la gestione delle superfici aperte e la messa in sicurezza degli edifici esistenti. Gli interventi su acqua, smaltimento, impianti ed elementi costruttivi sono definiti in relazione alle particolari condizioni del luogo: accessi&shy;bilità limitata, assenza di infrastrutture, vincoli legati alla protezione delle acque e allo statuto degli edifici fuori zona edificabile.<br>
       L'obbiettivo non è ristabilire uno stato precedente ma mantenere operative le relazioni tra elementi al fine di rendere il sito nuovamente abitabile. Le modalità d'intervento previste privilegiano la combinazione di competenze e approcci diversi, con l'obiettivo di favorire presenze temporanee e la trasmissione di conoscenze. I gruppi di lavoro opereranno dunque su scala ridotta, in modo non continuativo, in base alle esigenze specifiche del sito.</span>
       </p>
     </div>
@@ -816,11 +1002,16 @@ nav {
     <div class="c1 cell"></div>
     <div class="c1 cell"></div>
     <div class="c1 cell"></div>
-    <div class="img-slot has-image bn">
+    <div class="img-slot has-image bn hide-mobile">
       <img src="images/DSC00122.jpg">
     </div>
 
-    <div class="c2 cell r1 drawing">
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c2 cell r1 drawing" style="position:relative;">
+      <span class="mob-num" style="top:46px; left:0;">9.</span>
       <div class="img-slot has-image base">
         <img src="images/disegno.png">
       </div>
@@ -829,16 +1020,16 @@ nav {
     <div class="c1 cell"></div>
     <div class="c1 cell"></div>
 
-    <div class="c1 cell legend-num top-right">
+    <div class="c1 cell legend-num top-right hide-mobile">
       <span style="top:-54px; left:px;">8.</span>
     </div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
 
-    <div class="c5 cell r2 drawing">
+    <div class="c5 cell r2 drawing hide-mobile">
       <div class="img-slot has-image base drawing">
         <img src="images/TL.png">
       </div>
@@ -850,13 +1041,13 @@ nav {
         <span class="t" data-it="La visione" data-de="Die Vision" data-en="The vision" data-fr="La vision">La visione</span>
       </div>
     </div>
-    <div class="c1 cell" style="position:relative; overflow:visible;">
+    <div class="c1 cell hide-mobile" style="position:relative; overflow:visible;">
       <div class="img-slot has-image contain" style="position:absolute; left:80%; width:60%; z-index:2; opacity:0.9;">
         <img src="images/mano.png">
       </div>
     </div>
 
-    <div class="img-slot has-image bn" onclick="
+    <div class="img-slot has-image bn hide-mobile" onclick="
       document.getElementById('video-modal').style.display='flex';
       document.querySelectorAll('.overlay-frase, .chapter-tag').forEach(el => el.style.visibility='hidden');
     " style="cursor:pointer;">
@@ -883,10 +1074,12 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
   </div>
 </div>
 
-    <div class="img-slot has-image bn"><img src="images/3.jpg"></div>
-    <div class="img-slot has-image bn"><img src="images/4.jpg"></div>
+    <div class="img-slot has-image bn hide-mobile"><img src="images/3.jpg"></div>
+    <div class="img-slot has-image bn hide-mobile"><img src="images/4.jpg"></div>
 
-    <div class="c1 cell testo r2">
+    <div class="c1 cell show-mobile"></div>
+    <div class="img-slot has-image bn show-mobile"><img src="images/2.jpg"></div>
+    <div class="c1 cell testo r2 mob-r3">
       <p><span class="t"
         data-it="Casiroli è uno spazio multiforme, un luogo in cui pratiche, processi ecologici e presenza umana coesistono e assumono nel tempo configurazioni variabili. Casiroli è uno spazio multispecie, un habitat condiviso in cui le relazioni tra umani e non umani concorrono a definire la mutevole identità del luogo. Casiroli è uno spazio collettivo, un luogo di permanenza temporanea che si rende accessibile a gruppi e a individui e in cui la partecipazione, nei suoi effetti cumulativi, garantisce la manutenzione e il perpetuarsi delle pratiche di gestione. Casiroli è anche ciò che ancora è da venire. L'associazione non definisce un esito formale ma una condizione operativa: mantenere il sito come spazio vivo e permettere il continuo rinnovarsi di Casiroli."
         data-de="Casiroli ist ein vielgestaltiger Raum — ein Ort, an dem Praktiken, ökologische Prozesse und menschliche Präsenz nebeneinander bestehen und im Laufe der Zeit unterschiedliche Formen annehmen. Casiroli ist ein multispezies Raum, ein gemeinsamer Lebensraum, in dem die Beziehungen zwischen Menschen und Nicht-Menschen die sich wandelnde Identität des Ortes mitbestimmen. Casiroli ist ein kollektiver Raum, ein Ort temporären Verweilens, der Gruppen und Einzelpersonen offensteht und in dem die Teilhabe, in ihren kumulativen Wirkungen, die Pflege und das Fortbestehen der Bewirtschaftungspraktiken sichert. Casiroli ist auch das, was noch kommen wird. Der Verein definiert kein formales Ergebnis, sondern eine operative Bedingung: den Ort als lebendigen Raum zu erhalten und das fortwährende Erneuern von Casiroli zu ermöglichen."
@@ -897,25 +1090,35 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
       Casiroli è anche ciò che ancora è da venire. L'associazione non definisce un esito formale ma una condizione operativa: mantenere il sito come spazio vivo e permettere il continuo rinnovarsi di Casiroli.</span>
       </p>
     </div>
+    <div class="img-slot has-image bn show-mobile"><img src="images/3.jpg"></div>
+    <div class="c1 cell img-mob-num has-mob-num show-mobile">
+      <div class="img-slot has-image bn"><img src="images/4.jpg"></div>
+      <span class="mob-num" style="bottom:-24px; left:0;">10.</span>
+    </div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
 
-    <div class="c2 cell r3 drawing">
+    <div class="c2 cell r3 drawing" style="position:relative; z-index:3;">
+      <span class="mob-num" style="bottom:-54px; left:330px;">11.</span>
       <div class="img-slot has-image base drawing">
         <img src="images/occhio.png">
       </div>
     </div>
+    <div class="c2 cell show-mobile mob-overlay" style="pointer-events:none; margin-top:-45px; z-index:4; position:relative; max-width:70%; margin-left:40px; margin-right:-40px;">
+      <span class="t" data-it="definendo uno spazio collettivo e multispecie in continuo cambiamento" data-de="um einen multispezies Gemeinschaftsraum im fortwährenden Wandel zu schaffen," data-en="to create a shared multispecies space in continuous change" data-fr="en définissant un espace collectif et multiespèce en continuel devenir">definendo uno spazio collettivo e multispecie in continuo cambiamento</span>
+    </div>
+    <div class="c1 cell hide-mobile"></div>
 
-    <div class="c1 cell"></div>
-
-    <div class="c1 cell legend-num top-right">
+    <div class="c1 cell legend-num top-right hide-mobile">
       <span style="top:-28px; left:221px;">9.</span>
     </div>
 
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
     <div class="c1 cell"></div>
 
-    <div class="c1 cell">
+    <div class="c1 cell mob-ramarro">
       <div class="img-slot has-image contain">
         <img src="images/ramarro.png">
       </div>
@@ -924,12 +1127,27 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
       </div>
     </div>
 
+    <div class="c2 cell show-mobile" style="overflow:hidden; position:relative; background:#000; margin-top:-180px; transform:translateY(100px);">
+      <iframe
+        src="https://player.vimeo.com/video/1198998450?autoplay=1&muted=1&loop=1&background=1&transparent=0"
+        style="position:absolute; top:50%; left:50%; width:100%; height:56.25vw; transform:translate(-50%,-50%) scale(1.8); border:0; transform-origin:center;"
+        allow="autoplay; fullscreen"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <div class="show-mobile mob-ct" style="margin-top:-450px; margin-left:-30px; margin-right:160px;">
+      <div class="ch-entry"><span class="ch-num">10.</span><span class="ch-text t" data-it="Casiroli, allargando lo sguardo" data-de="Casiroli, der Blick in die Weite" data-en="Casiroli, a view into the distance" data-fr="Casiroli, le regard qui s'élargit">Casiroli, allargando lo sguardo</span></div>
+      <div class="ch-entry"><span class="ch-num">11.</span><span class="ch-text"><em>Lacerta bilineata</em> – <span class="t" data-it="Ramarro" data-de="Smaragdeidechse" data-en="two-lined lizard" data-fr="Lézard à deux raies">Ramarro</span></span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num"></span><span class="ch-text t" data-it="specie endemica, minacciata e protetta" data-de="eine endemische, bedrohte und geschützte Art" data-en="an endemic, endangered and protected species" data-fr="espèce endémique, menacée et protégée">specie endemica, minacciata e protetta</span></div>
+    </div>
+
     <!-- ═══ L'ASSOCIAZIONE ═══ -->
-    <div class="c1 cell">
-      <div class="capitolo-titolo capitolo-shift" id="Lassociazione">
+    <div class="c1 cell capitolo-shift">
+      <div class="capitolo-titolo" id="Lassociazione">
         <span class="t" data-it="L'associazione" data-de="Der Verein" data-en="The association" data-fr="L'association">L'associazione</span>
       </div>
     </div>
+    <div class="c1 cell show-mobile"></div>
     <div class="c1 cell testo">
       <p><span class="t"
         data-it="L'associazione Bivio Casiroli nasce per contrastare l'abbandono del nucleo e promuoverne la rigenerazione attraverso un processo di manutenzione fondato sulla riadozione di pratiche collettive di cura e presenza."
@@ -939,18 +1157,20 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
       </p>
     </div>
 
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
 
-    <div class="c2 cell r1 drawing">
+    <div class="c2 cell r1 drawing" style="position:relative;">
       <div class="img-slot has-image base bn">
         <img src="images/bGIJz-bianco.png">
       </div>
+      <span class="mob-num" style="bottom:106px; left:340px;">12.</span>
     </div>
 
+    <div class="c1 cell show-mobile"></div>
     <div class="c1 cell testo">
       <p><span class="t"
         data-it="Il comitato promotore è composto da cinque persone tra i 30 e i 40 anni, con competenze multidisciplinari e un forte radicamento nel territorio. Il gruppo riunisce un'agronoma e agricoltrice della valle, una giovane regista, un ecologo e botanico, un operatore sociale e una coordinatrice di progetti con esperienza nelle ONG internazionali. Il gruppo, composto da tre ticinesi e due tedeschi, unisce una profonda conoscenza locale a uno sguardo internazionale. La diversità di profili consente un approccio integrato, attento alla rigenerazione ecologica e paesaggistica del sito così come alla dimensione sociale e alla narrazione culturale. Il gruppo consente dunque al progetto di radicarsi in un tessuto di relazioni già attive con associazioni agricole, enti di tutela del paesaggio, cooperative sociali e realtà culturali del Cantone."
@@ -968,18 +1188,29 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
       <span style="top:-60px; left:210px;">11.</span>
     </div>
 
-    <div class="c1 cell"></div>
+    <div class="c1 cell hide-mobile"></div>
 
-    <div class="c1 cell portrait-overflow img-legend-wrap" style="align-items:flex-end; margin-bottom:40px;">
+    <div class="c1 cell portrait-overflow img-legend-wrap" style="align-items:flex-end; margin-bottom:40px; transform:translateY(40px); position:relative;">
       <img src="images/picchio.png">
       <div class="legend-num top-left">
         <span style="top:-400px; left:-180px;">12.</span>
       </div>
+      <span class="mob-num" style="bottom:116px; left:50px;">13.</span>
     </div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
+    <div class="c2 cell show-mobile mob-overlay" style="pointer-events:none; margin-top:-60px; margin-left:85px; margin-right:-85px; max-width:55%;">
+      <span class="t" data-it="grazie all'integrazione di esperienze diverse." data-de="durch die Verbindung verschiedener Erfahrungen." data-en="through the integration of diverse experiences." data-fr="grâce à l'intégration d'expériences diverses.">grazie all'integrazione di esperienze diverse.</span>
+    </div>
+    <div class="show-mobile mob-ct" style="margin-left:120px; margin-right:-120px;">
+      <div class="ch-entry"><span class="ch-num">12.</span><span class="ch-text t" data-it="I proprietari attuali incontrano l'associazione" data-de="Die derzeitigen Eigentümer treffen sich mit dem Verein" data-en="The current owners are meeting with the association" data-fr="Les propriétaires actuels rencontrent l'association">I proprietari attuali incontrano l'associazione</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">13.</span><span class="ch-text t" data-it="Picchio rosso maggiore, abitante di Casiroli" data-de="Buntspecht, Bewohner von Casiroli" data-en="Great spotted woodpecker, a resident of Casiroli" data-fr="Pic épeiche, habitant de Casiroli">Picchio rosso maggiore, abitante di Casiroli</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">14.</span><span class="ch-text"><em>Doronicum pardalianches</em> – <span class="t" data-it="Doronico medicinale" data-de="Kriechende Gämswurz" data-en="Leopard's bane" data-fr="Doronic des montagnes">Doronico medicinale</span></span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num"></span><span class="ch-text t" data-it="specie endemica, minacciata e protetta." data-de="eine endemische, bedrohte und geschützte Art." data-en="an endemic, endangered and protected species." data-fr="espèce endémique, menacée et protégée.">specie endemica, minacciata e protetta.</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num"></span><span class="ch-text t" data-it="Osservata a Casiroli." data-de="In Casiroli beobachtet." data-en="Observed at Casiroli." data-fr="Observée à Casiroli.">Osservata a Casiroli.</span></div>
+    </div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
 
     <!-- ═══ SOSTIENI CASIROLI ═══ -->
     <div class="c1 cell capitolo-shift">
@@ -1010,37 +1241,38 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
       <span style="top:0px; left:200px;">13.</span>
     </div>
 
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
 
-    <div class="c1 cell portrait-overflow">
+    <div class="c1 cell portrait-overflow" style="position:relative;">
       <img src="images/Doronicum.png">
+      <span class="mob-num" style="bottom:106px; left:108px;">14.</span>
     </div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
+    <div class="c2 cell show-mobile mob-overlay" style="pointer-events:none; margin-top:-100px; margin-bottom:-160px; margin-left:100px; margin-right:-100px;">
+      <span class="t" data-it="E ci serve una mano." data-de="Wir brauchen eure Unterstützung." data-en="We need your support." data-fr="Et nous avons besoin d'aide.">E ci serve una mano.</span>
+    </div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
 
-    <div class="c1 cell"></div>
-    <div class="img-slot has-image qr-slot left-align">
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="img-slot has-image qr-slot left-align" style="margin-top:-20px;">
       <img src="images/QR.png">
     </div>
-    <div class="c1 cell testo bottom-align">
-      <p>Associazione Bivio Casiroli <p></p>IBAN: CH66 8080 8005 3949 6868 1</p>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell testo bottom-align" style="transform:translateY(-22px); white-space:nowrap; overflow:visible;">
+      <p>Associazione Bivio Casiroli <p></p>CH66 8080 8005 3949 6868 1</p>
     </div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
 
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
 
 
 <!-- ═══ SCORCI ═══ -->
@@ -1054,44 +1286,48 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
     </div>
     </div>
 
- <div class="c1 cell legend-num bottom-right span">
+ <div class="c1 cell legend-num bottom-right span hide-mobile">
       <span style="top:0px; left:237px;">15.</span>
     </div>
 
-<div class="c2 r2 cell">
+<div class="c2 r2 cell" style="position:relative;">
   <div class="img-slot bn">
     <img src="images/DSC00058.jpg">
   </div>
+  <span class="mob-num" style="top:-23px; left:0;">15.</span>
 </div>
 
-<div class="c1 cell legend-num bottom-right span">
+<div class="c1 cell legend-num bottom-right span hide-mobile">
       <span style="top:207px; left:212px;">16.</span>
     </div>
 
 
-<div class="c2 r3 cell">
+<div class="c2 r3 cell" style="position:relative;">
   <div class="img-slot bn">
     <img src="images/DSC00141.jpg">
   </div>
+  <span class="mob-num" style="bottom:-23px; right:0;">16.</span>
 </div>
 
 
 
-<div class="c1 r2 cell">
+<div class="c1 r2 cell" style="position:relative;">
+  <span class="mob-num" style="bottom:-23px; left:0;">17.</span>
   <div class="img-slot bn">
     <img src="images/DSC00155.jpg">
   </div>
 </div>
 
-<div class="c1 cell"></div>
-    <div class="c1 cell"></div>
+<div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
 
 
 <div class="c1 cell legend-num bottom-right span">
       <span style="top:0px; left:237px;">18.</span>
     </div>
 
-<div class="c1 r2 cell">
+<div class="c1 r2 cell" style="position:relative;">
+  <span class="mob-num" style="top:-23px; left:0;">18.</span>
   <div class="img-slot bn">
     <img src="images/DSC00013.jpg">
   </div>
@@ -1100,7 +1336,7 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
 
 
 
-<div class="c1 cell legend-num bottom-right span">
+<div class="c1 cell legend-num bottom-right span hide-mobile">
       <span style="top:207px; left:212px;">19.</span>
     </div>
 
@@ -1111,66 +1347,90 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
     </div>
 </div>
 
-<div class="c2 r2 cell">
+<div class="c2 r2 cell" style="position:relative;">
+  <span class="mob-num" style="top:-23px; left:0;">19.</span>
   <div class="img-slot bn">
     <img src="images/IMG_3578.jpg">
   </div>
 </div>
 
-<div class="c1 r4 cell">
+<div class="c1 r4 cell" style="position:relative;">
+  <span class="mob-num" style="bottom:-23px; left:0;">20.</span>
   <div class="img-slot bn">
     <img src="images/DSC00164.jpg">
   </div>
 </div>
 
-<div class="c1 cell"></div>
-<div class="c1 cell"></div>
-<div class="c1 cell legend-num bottom-right span">
+<div class="show-mobile mob-ct" style="margin-left:130px; margin-right:-130px;">
+      <div class="ch-entry"><span class="ch-num">15.</span><span class="ch-text t" data-it="Edificio centrale, sede dell'Associazione" data-de="Hauptgebäude, Sitz des Vereins" data-en="Central building, headquarters of the Association" data-fr="Bâtiment central, siège de l'Association">Edificio centrale, sede dell'Associazione</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">16.</span><span class="ch-text t" data-it="Rudere" data-de="Ruine" data-en="Ruin" data-fr="Ruine">Rudere</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">17.</span><span class="ch-text t" data-it="Dettaglio: finestra e facciata a calce" data-de="Detail: Fenster und Kalkputzfassade" data-en="Detail: window and lime-plastered facade" data-fr="Détail: fenêtre et façade à la chaux">Dettaglio: finestra e facciata a calce</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">18.</span><span class="ch-text t" data-it="Dettaglio: tetto e facciata a calce" data-de="Detail: Dach und Kalkputzfassade" data-en="Detail: roof and lime-plastered facade" data-fr="Détail: toit et façade à la chaux">Dettaglio: tetto e facciata a calce</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">19.</span><span class="ch-text t" data-it="Sentiero per Casiroli" data-de="Weg nach Casiroli" data-en="Path to Casiroli" data-fr="Sentier vers Casiroli">Sentiero per Casiroli</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">20.</span><span class="ch-text t" data-it="Tiglio monumentale sul sentiero per Casiroli" data-de="Monumentale Linde am Weg nach Casiroli" data-en="Monumental linden tree on the path to Casiroli" data-fr="Tilleul monumental sur le sentier vers Casiroli">Tiglio monumentale sul sentiero per Casiroli</span></div>
+    </div>
+<div class="c1 cell hide-mobile"></div>
+<div class="c1 cell hide-mobile"></div>
+<div class="c1 cell legend-num bottom-right span hide-mobile">
       <span style="top:207px; left:212px;">20.</span>
     </div>
-<div class="c1 cell"></div>
+<div class="c1 cell hide-mobile"></div>
 <div class="c1 cell"></div>
 
-<div class="c2 r2 cell">
+<div class="c2 r2 cell hide-mobile">
   <div class="img-slot bn">
     <img src="images/IMG_3548.jpg">
   </div>
 </div>
-<div class="c1 cell legend-num bottom-left span">
+<div class="c1 cell show-mobile" style="position:relative;">
+  <div class="img-slot bn">
+    <img src="images/IMG_3548.jpg">
+  </div>
+  <span class="mob-num" style="top:-23px; left:0;">21.</span>
+</div>
+<div class="c1 cell legend-num bottom-left span hide-mobile">
       <span style="top:207px; left:0px;">21.</span>
     </div>
-<div class="c1  r1 cell"></div>
-<div class="c3 r2 cell">
+<div class="c1  r1 cell hide-mobile"></div>
+<div class="c3 r2 cell" style="position:relative;">
+  <span class="mob-num" style="top:-23px; left:0;">22.</span>
   <div class="img-slot bn">
     <img src="images/DSC00167.jpg">
   </div>
 </div>
 
-<div class="c1 cell legend-num bottom-left span">
+<div class="c1 cell legend-num bottom-left span hide-mobile">
       <span style="top:207px; left:0px;">22.</span>
     </div>
 
-<div class="c2 r2 cell">
+<div class="c2 r2 cell hide-mobile">
+  <div class="img-slot bn">
+    <img src="images/IMG_3549.jpg">
+  </div>
+</div>
+<div class="c1 cell show-mobile" style="position:relative;">
+  <span class="mob-num" style="bottom:-23px; left:0;">23.</span>
   <div class="img-slot bn">
     <img src="images/IMG_3549.jpg">
   </div>
 </div>
 
 
-<div class="c1 cell"></div>
-<div class="c1 cell"></div>
-<div class="c1 cell"></div>
-<div class="c1 cell legend-num bottom-left span">
+<div class="c1 cell hide-mobile"></div>
+<div class="c1 cell hide-mobile"></div>
+<div class="c1 cell hide-mobile"></div>
+<div class="c1 cell legend-num bottom-left span hide-mobile">
       <span style="top:207px; left:0px;">23.</span>
     </div>
 
 
-<div class="c1 cell legend-num bottom-right span">
+<div class="c1 cell legend-num bottom-right span hide-mobile">
       <span style="top:0px; left:237px;">24.</span>
     </div>
 
 
-<div class="c1 r2 cell">
+<div class="c1 r2 cell" style="position:relative;">
+  <span class="mob-num" style="bottom:-23px; left:0;">24.</span>
   <div class="img-slot bn">
     <img src="images/IMG_3692.jpg">
   </div>
@@ -1179,33 +1439,44 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
 <div class="c1 cell"></div>
 <div class="c1 cell"></div>
 
-<div class="c2 r3 cell">
+<div class="c2 r3 cell" style="position:relative;">
+  <span class="mob-num" style="top:-23px; left:0;">25.</span>
   <div class="img-slot bn">
     <img src="images/DSC00066.jpg">
   </div>
 </div>
 
-<div class="c1 r2 cell">
+<div class="c1 r2 cell" style="position:relative;">
   <div class="img-slot bn">
     <img src="images/DSC00129.jpg">
   </div>
+  <span class="mob-num" style="top:1px; right:-20px;">26.</span>
 </div>
+<div class="show-mobile mob-ct" style="margin-left:210px; margin-right:-210px;">
+      <div class="ch-entry"><span class="ch-num">21.</span><span class="ch-text t" data-it="Interno" data-de="Innenraum" data-en="Interior" data-fr="Intérieur">Interno</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">22.</span><span class="ch-text t" data-it="Canopea" data-de="Baumkrone" data-en="Canopy" data-fr="Canopée">Canopea</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">23.</span><span class="ch-text t" data-it="Interno" data-de="Innenraum" data-en="Interior" data-fr="Intérieur">Interno</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">24.</span><span class="ch-text t" data-it="Rimanenze e artefatti" data-de="Überreste und Artefakte" data-en="Remains and artefacts" data-fr="Restes et artefacts">Rimanenze e artefatti</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">25.</span><span class="ch-text t" data-it="Porta massiccia" data-de="Massives Tor" data-en="Massive door" data-fr="Porte massive">Porta massiccia</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">26.</span><span class="ch-text t" data-it="Muro a secco" data-de="Trockenmauer" data-en="Dry stone wall" data-fr="Mur en pierre sèche">Muro a secco</span></div>
+    </div>
 
-<div class="c1 cell legend-num bottom-right span">
+<div class="c1 cell legend-num bottom-right span hide-mobile">
       <span style="top:-2px; left:-22px;">25.</span>
     </div>
 
 
 
-<div class="c1 cell"></div>
-<div class="c1 cell legend-num bottom-left">
+<div class="c1 cell hide-mobile"></div>
+<div class="c1 cell legend-num bottom-left hide-mobile">
   <span style="top:207px; left:0px;">26.</span>
 </div>
-<div class="c1 cell legend-num bottom-left">
+<div class="c1 cell legend-num bottom-left hide-mobile">
   <span style="top:207px; left:0px;">28.</span>
 </div>
-<div class="c1 cell"></div>
-<div class="c1 cell">
+<div class="c1 cell hide-mobile"></div>
+<div class="c1 cell" style="position:relative;">
+  <span class="mob-num" style="top:-23px; left:0;">27.</span>
   <div class="img-slot bn">
     <img src="images/RIV4049.jpg">
   </div>
@@ -1216,13 +1487,16 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
   <span style="top:-2px; left:235px;">27.</span>
 </div>
 
-<div class="c1 r2 cell">
+<div class="c1 cell show-mobile"></div>
+<div class="c1 r2 cell" style="position:relative;">
+  <span class="mob-num" style="top:-23px; left:0;">28.</span>
   <div class="img-slot bn">
     <img src="images/RIV4046.jpg">
   </div>
 </div>
 
-<div class="c1 r2  cell">
+<div class="c1 r2 cell" style="position:relative;">
+  <span class="mob-num" style="top:-23px; left:0;">29.</span>
   <div class="img-slot bn">
     <img src="images/RIV4035.jpg">
   </div>
@@ -1230,18 +1504,19 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
 
 
 
-<div class="c1 r1 cell">
+<div class="c1 r1 cell" style="position:relative;">
+  <span class="mob-num" style="bottom:-23px; left:0;">30.</span>
   <div class="img-slot bn">
     <img src="images/RIV4037.jpg">
   </div>
 </div>
 
-<div class="c1 cell legend-num bottom-right span">
+<div class="c1 cell legend-num bottom-right span hide-mobile">
       <span style="top:-2px; left:-22px;">29.</span>
     </div>
 
 
-<div class="c1 cell legend-num bottom-left">
+<div class="c1 cell legend-num bottom-left hide-mobile">
   <span style="top:207px; left:0px;">30.</span>
 </div>
 
@@ -1255,7 +1530,8 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
   <span style="top:207px; left:212px;">31.</span>
 </div>
 
-<div class="c2 r2 cell">
+<div class="c2 r2 cell" style="position:relative;">
+  <span class="mob-num" style="top:-23px; left:0;">31.</span>
   <div class="img-slot bn">
     <img src="images/RIV4060.jpg">
   </div>
@@ -1263,11 +1539,20 @@ style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; bac
 
 
 
-<div class="c2 r2 cell">
+<div class="c2 r2 cell" style="position:relative;">
+  <span class="mob-num" style="bottom:-23px; left:0;">32.</span>
   <div class="img-slot bn">
     <img src="images/RIV4061.jpg">
   </div>
 </div>
+<div class="show-mobile mob-ct" style="margin-left:210px; margin-right:-210px;">
+      <div class="ch-entry"><span class="ch-num">27.</span><span class="ch-text t" data-it="Tavolato" data-de="Dielenboden" data-en="Wooden floor" data-fr="Plancher">Tavolato</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">28.</span><span class="ch-text t" data-it="Dettaglio: ripiano" data-de="Detail: Regal" data-en="Detail: shelf" data-fr="Détail: étagère">Dettaglio: ripiano</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">29.</span><span class="ch-text t" data-it="Focolare aperto" data-de="Offene Feuerstelle" data-en="Open fireplace" data-fr="Foyer ouvert">Focolare aperto</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">30.</span><span class="ch-text t" data-it="Cucina" data-de="Küche" data-en="Kitchen" data-fr="Cuisine">Cucina</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">31.</span><span class="ch-text t" data-it="Pavimento in lastre di pietra" data-de="Steinplattenboden" data-en="Stone slab floor" data-fr="Sol en dalles de pierre">Pavimento in lastre di pietra</span></div>
+      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">32.</span><span class="ch-text t" data-it="Tavolato" data-de="Dielenboden" data-en="Wooden floor" data-fr="Plancher">Tavolato</span></div>
+    </div>
 
 
 
@@ -1302,6 +1587,31 @@ function setLang(lang) {
     if (btn.textContent.toLowerCase() === lang) {
       btn.classList.add('active');
     }
+  });
+}
+function scaleChapterTags() {
+  var scale = Math.max(screen.width, screen.height) / 1400;
+  var fontSize = Math.round(8.2 * scale);
+  document.querySelectorAll('.chapter-tag').forEach(function(tag) {
+    tag.style.fontSize = fontSize + 'px';
+  });
+}
+scaleChapterTags();
+window.addEventListener('resize', function() { setTimeout(scaleChapterTags, 100); });
+window.addEventListener('orientationchange', function() { setTimeout(scaleChapterTags, 350); });
+
+if (window.innerWidth < 768) {
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.style.transition = 'filter 0.6s ease';
+        entry.target.style.filter = 'grayscale(0%)';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.img-slot.bn').forEach(function(el) {
+    observer.observe(el);
   });
 }
 
