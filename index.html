@@ -1619,16 +1619,32 @@ if (window.innerWidth < 768) {
 
 if (window.matchMedia('(max-width: 767px)').matches) {
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-  window.scrollTo(0, 0);
+
+  function centerBeige() {
+    var beige = document.getElementById('beige');
+    if (beige) {
+      var rect = beige.getBoundingClientRect();
+      var scrollY = window.scrollY + rect.top + rect.height / 2 - window.innerHeight / 2;
+      window.scrollTo({ top: Math.max(0, scrollY), behavior: 'instant' });
+    }
+  }
+
   window.addEventListener('load', function() {
-    setTimeout(function() {
-      var beige = document.getElementById('beige');
-      if (beige) {
-        var rect = beige.getBoundingClientRect();
-        var scrollY = window.scrollY + rect.top + rect.height / 2 - window.innerHeight / 2;
-        window.scrollTo({ top: Math.max(0, scrollY), behavior: 'instant' });
-      }
-    }, 300);
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        centerBeige();
+      });
+    });
+  });
+
+  window.addEventListener('pageshow', function(e) {
+    if (e.persisted) {
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          centerBeige();
+        });
+      });
+    }
   });
 }
 
