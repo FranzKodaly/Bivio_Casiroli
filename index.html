@@ -807,7 +807,7 @@ nav {
       </div>
     </div>
 
-    <div class="c3 cell r2" style="opacity:0; animation:fadeIn 0.05s ease forwards 1.8s;">
+    <div id="beige" class="c3 cell r2" style="opacity:0; animation:fadeIn 0.05s ease forwards 1.8s;">
       <div class="img-slot has-image">
         <img src="images/casi-beige.jpg">
       </div>
@@ -1614,6 +1614,17 @@ if (window.innerWidth < 768) {
   }, { threshold: 0.3 });
   document.querySelectorAll('.img-slot.bn').forEach(function(el) {
     observer.observe(el);
+  });
+}
+
+if (window.innerWidth < 768) {
+  window.addEventListener('load', function() {
+    var beige = document.getElementById('beige');
+    if (beige) {
+      var rect = beige.getBoundingClientRect();
+      var scrollY = window.scrollY + rect.top + rect.height / 2 - window.innerHeight / 2;
+      window.scrollTo({ top: scrollY, behavior: 'instant' });
+    }
   });
 }
 
