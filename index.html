@@ -1617,14 +1617,16 @@ if (window.innerWidth < 768) {
   });
 }
 
-if (window.innerWidth < 768) {
+if (window.matchMedia('(max-width: 767px)').matches) {
   window.addEventListener('load', function() {
-    var beige = document.getElementById('beige');
-    if (beige) {
-      var rect = beige.getBoundingClientRect();
-      var scrollY = window.scrollY + rect.top + rect.height / 2 - window.innerHeight / 2;
-      window.scrollTo({ top: scrollY, behavior: 'instant' });
-    }
+    setTimeout(function() {
+      var beige = document.getElementById('beige');
+      if (beige) {
+        var rect = beige.getBoundingClientRect();
+        var scrollY = window.scrollY + rect.top + rect.height / 2 - window.innerHeight / 2;
+        window.scrollTo({ top: Math.max(0, scrollY), behavior: 'instant' });
+      }
+    }, 200);
   });
 }
 
