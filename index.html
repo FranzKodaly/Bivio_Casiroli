@@ -1619,6 +1619,7 @@ if (window.innerWidth < 768) {
 
 if (window.matchMedia('(max-width: 767px)').matches) {
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  document.documentElement.style.opacity = '0';
 
   function centerBeige() {
     var beige = document.getElementById('beige');
@@ -1627,22 +1628,20 @@ if (window.matchMedia('(max-width: 767px)').matches) {
       var scrollY = window.scrollY + rect.top + rect.height / 2 - window.innerHeight / 2;
       window.scrollTo({ top: Math.max(0, scrollY), behavior: 'instant' });
     }
+    document.documentElement.style.opacity = '1';
   }
 
-  window.addEventListener('load', function() {
+  document.addEventListener('DOMContentLoaded', function() {
     requestAnimationFrame(function() {
-      requestAnimationFrame(function() {
-        centerBeige();
-      });
+      centerBeige();
     });
   });
 
   window.addEventListener('pageshow', function(e) {
     if (e.persisted) {
+      document.documentElement.style.opacity = '0';
       requestAnimationFrame(function() {
-        requestAnimationFrame(function() {
-          centerBeige();
-        });
+        centerBeige();
       });
     }
   });
