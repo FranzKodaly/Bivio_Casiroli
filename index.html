@@ -58,7 +58,7 @@ body {
   display: flex;
   gap: 6px;
   align-items: center;
-  margin-left: 24px;
+  margin-right: 24px;
 }
 
 .lang-btn {
@@ -196,32 +196,41 @@ body {
 .footer-inner {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 28px 48px;
+  padding: 28px 48px 14px;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: var(--gap);
   align-items: center;
 }
 
-.footer-logo img {
-  height: 32px;
-  width: auto;
-  display: block;
+.footer-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
 }
 
-.footer-contact {
+.footer-labels {
+  flex: 0 0 auto;
   color: var(--ink);
   font-size: 13px;
   line-height: 1.5;
-  text-align: right;
+  text-align: left;
 }
 
-.footer-contact a {
+.footer-values {
+  flex: 0 0 auto;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.footer-values a {
   color: var(--ink);
   text-decoration: none;
 }
 
-.footer-contact a:hover {
+.footer-values a:hover {
   text-decoration: underline;
 }
 
@@ -231,10 +240,8 @@ body {
     padding: 40px 16px;
     row-gap: 24px;
   }
-  .footer-logo { grid-column: span 2; }
-  .footer-contact {
+  .footer-block {
     grid-column: span 2;
-    text-align: left;
   }
 }
 
@@ -511,6 +518,115 @@ body {
   object-fit: cover;
 }
 
+.donate-link {
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--ink);
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  color: var(--ink);
+  cursor: pointer;
+  padding: 0 0 1px 0;
+  letter-spacing: 0.02em;
+  pointer-events: auto;
+}
+
+.donate-link:hover {
+  color: var(--muted);
+  border-color: var(--muted);
+}
+
+#donate-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: rgba(28, 27, 26, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+#donate-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#donate-modal-inner {
+  position: relative;
+  cursor: auto;
+  background: var(--bg);
+  max-width: 480px;
+  width: 88%;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 40px 36px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: var(--ink);
+  transform: translateY(10px);
+  transition: transform 0.3s ease;
+}
+
+#donate-modal.open #donate-modal-inner {
+  transform: translateY(0);
+}
+
+#donate-modal-inner h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 18px 0;
+}
+
+#donate-modal-inner p {
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0 0 14px 0;
+}
+
+#donate-modal-inner p:last-child {
+  margin-bottom: 0;
+}
+
+#donate-modal-inner a {
+  color: var(--ink);
+}
+
+.donate-account {
+  margin: 18px 0 0 0;
+}
+
+/* selettore con ID per battere "#donate-modal-inner p", che imporrebbe 14px */
+#donate-modal-inner .donate-account p {
+  margin: 0 0 2px 0;
+}
+
+.donate-qr {
+  display: block;
+  width: 140px;
+  max-width: 100%;
+  height: auto;
+  margin: 12px 0 0 0;
+}
+
+.donate-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--ink);
+  cursor: pointer;
+  padding: 4px;
+}
+
 .drawing {
   align-self: start;
 }
@@ -641,6 +757,18 @@ h1 {
 .qr-slot img{
   object-fit: contain;
   object-position: center center;
+}
+
+/* didascalia sotto il QR. Era inline, ma serviva poterla spostare da media
+   query: gli stili inline avrebbero vinto sulla regola mobile. */
+.qr-caption {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  margin-top: 16px;
+  transform: none;
+  text-align: center;
 }
 
 .legend-num {
@@ -778,7 +906,7 @@ nav {
   top: 0;
   left: 0;
   width: 100%;
-  height: 54px;
+  height: 66px;
   background: rgba(241, 240, 237, 0.96);
   backdrop-filter: blur(12px);
   z-index: 1000;
@@ -790,11 +918,13 @@ nav {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 18px var(--nav-margin) 18px 0;
+  padding: 12px 48px 12px 0;
   height: 100%;
 }
 
-.nav-r { grid-column: span 3; text-align: right; font-size: 11px; color: var(--muted); display: flex; align-items: center; justify-content: flex-end; }
+.nav-r { grid-column: span 3; text-align: right; font-size: 11px; color: var(--muted); display: flex; flex-direction: column; align-items: flex-end; justify-content: center; gap: 4px; }
+
+.nav-r-row { display: flex; align-items: center; }
 
 /* anchored to nav itself (full viewport width), not nav-inner (which
    re-centers like the grid does past 1400px) -- otherwise the two
@@ -856,11 +986,18 @@ nav {
 .show-mobile { display: none; }
 .mob-num { display: none; }
 
+/* segmento che non deve spezzarsi al suo interno: serve a decidere DOVE va a
+   capo una riga quando lo spazio non basta, invece di lasciar decidere al browser */
+.nowrap { white-space: nowrap; }
+
 /* ── MOBILE ── */
 @media (max-width: 767px) {
   .container { padding: 50px 16px 40px; }
+  nav { height: 54px; }
   .nav-inner { padding: 14px 16px; }
   .nav-links { display: none; }
+  /* i link sono nascosti: il separatore finale resterebbe orfano dopo "EN" */
+  .lang-sep-end { display: none; }
   .hamburger { display: flex; }
   nav, .mobile-menu { max-width: 100vw; overflow-x: hidden; }
   html, body { overflow-x: clip; }
@@ -882,7 +1019,7 @@ nav {
     object-fit: cover;
     display: block;
   }
-  .grid { grid-template-columns: repeat(2, 1fr); gap: 20px; grid-auto-rows: 160px; }
+  .grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; grid-auto-rows: 160px; }
   .grid > * { min-width: 0; }
   .c3, .c4, .c5 { grid-column: span 2; }
   .r3 { grid-row: span 2; }
@@ -925,6 +1062,9 @@ nav {
   .legend-num span { display: none; }
   .hide-mobile { display: none; }
   .show-mobile { display: block; }
+  /* Sposta la cella 29 (RIV4035) su di una riga; lo spacer occupa la riga lasciata libera. */
+  .riv4035-cell { grid-row: 89 / span 2; grid-column: 2; }
+  .riv4035-filler { grid-row: 91; grid-column: 2; }
   .overlay-frase, .chapter-tag, .rotate-overlay { display: none; }
   #percorso-svg, #percorso-svg-front { display: none; }
 
@@ -951,11 +1091,40 @@ nav {
     padding: 10px 16px;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 9px;
-    line-height: 1.6;
+    line-height: 1.27;
     align-self: start;
     white-space: nowrap;
     width: max-content;
   }
+  /* blocchi in colonna 2: di base sono width:max-content + nowrap, quindi le
+     righe più lunghe sforerebbero il bordo destro. Li facciamo riempire la
+     colonna, così i numeri restano allineati al bordo colonna e le righe
+     lunghe vanno a capo invece di essere tagliate. */
+  .mob-ct-right {
+    justify-self: stretch;
+    width: auto;
+    white-space: normal;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  /* i numeri sono right-aligned dentro min-width:1.8em: le cifre singole
+     rientrerebbero di ~9px rispetto al bordo colonna. Qui li allineiamo a
+     sinistra, il min-width tiene comunque incolonnato il testo. */
+  .mob-ct.mob-ct-right .ch-num { text-align: left; }
+  /* disegno + numero "9." giù di una riga (160px di riga + 20px di gap).
+     Le righe hanno altezza fissa, quindi non sposta il resto della griglia. */
+  .drawing-down { margin-top: 180px; }
+  /* picchio + numero "13." giù di una riga (180px) solo su mobile: il div è
+     visibile anche su desktop con transform:translateY(40px) inline, quindi
+     qui sovrascriviamo solo dentro la media query mobile. */
+  .picchio-mob-down { transform: translateY(170px) !important; }
+  /* "Come donare" su di una riga (180px = riga + gap) più altri 200px, dai 16px originali */
+  /* allineato al bordo sinistro dell'overlay "E ci serve una mano." (x=116):
+     la cella parte da 205, quindi -89px */
+  .qr-caption { margin-top: -234px; transform: none; text-align: center; }
+  .qr-caption p { text-align: center; }
+  .donate-mob-center { grid-column: 1 / -1; display: flex; justify-content: center; }
+  .donate-mob-center .qr-caption { position: relative; z-index: 1; width: auto; }
   .mob-ct .ch-entry { display: flex; gap: 0.3em; }
   .mob-ct .ch-num { font-weight: 700; flex-shrink: 0; min-width: 1.8em; text-align: right; }
   .mob-ct .ch-text { flex: 1; }
@@ -985,22 +1154,24 @@ nav {
       </button>
     </div>
     <div class="nav-r">
-      <div class="nav-links">
-        <a href="#Casiroli" class="t" data-it="Casiroli" data-de="Casiroli" data-en="Casiroli" data-fr="Casiroli">Casiroli</a>&nbsp;&nbsp;-&nbsp;&nbsp;
-        <a href="#Il-progetto" class="t" data-it="Il progetto" data-de="Das Projekt" data-en="The project" data-fr="Le projet">Il progetto</a>&nbsp;&nbsp;-&nbsp;&nbsp;
-        <a href="#La-visione" class="t" data-it="La visione" data-de="Die Vision" data-en="The vision" data-fr="La vision">La visione</a>&nbsp;&nbsp;-&nbsp;&nbsp;
-        <a href="#Lassociazione" class="t" data-it="L'associazione" data-de="Der Verein" data-en="The association" data-fr="L'association">L'associazione</a>&nbsp;&nbsp;-&nbsp;&nbsp;
-        <a href="#Sostieni-Casiroli" class="t" data-it="Sostieni Casiroli" data-de="Unterstütze" data-en="Support Casiroli" data-fr="Soutenir Casiroli">Sostieni Casiroli</a>
-      </div>
-      <div class="lang-switcher">
-        <span class="lang-sep">|</span>
-        <button class="lang-btn active" onclick="setLang('it')">IT</button>
-        <span class="lang-sep">/</span>
-        <button class="lang-btn" onclick="setLang('de')">DE</button>
-        <span class="lang-sep">/</span>
-        <button class="lang-btn" onclick="setLang('fr')">FR</button>
-        <span class="lang-sep">/</span>
-        <button class="lang-btn" onclick="setLang('en')">EN</button>
+      <div class="nav-r-row">
+        <div class="lang-switcher">
+          <button class="lang-btn active" onclick="setLang('it')">IT</button>
+          <span class="lang-sep">/</span>
+          <button class="lang-btn" onclick="setLang('de')">DE</button>
+          <span class="lang-sep">/</span>
+          <button class="lang-btn" onclick="setLang('fr')">FR</button>
+          <span class="lang-sep">/</span>
+          <button class="lang-btn" onclick="setLang('en')">EN</button>
+          <span class="lang-sep lang-sep-end">|</span>
+        </div>
+        <div class="nav-links">
+          <a href="#Casiroli" class="t" data-it="Casiroli" data-de="Casiroli" data-en="Casiroli" data-fr="Casiroli">Casiroli</a>&nbsp;&nbsp;-&nbsp;&nbsp;
+          <a href="#Il-progetto" class="t" data-it="Il progetto" data-de="Das Projekt" data-en="The project" data-fr="Le projet">Il progetto</a>&nbsp;&nbsp;-&nbsp;&nbsp;
+          <a href="#La-visione" class="t" data-it="La visione" data-de="Die Vision" data-en="The vision" data-fr="La vision">La visione</a>&nbsp;&nbsp;-&nbsp;&nbsp;
+          <a href="#Lassociazione" class="t" data-it="L'associazione" data-de="Der Verein" data-en="The association" data-fr="L'association">L'associazione</a>&nbsp;&nbsp;-&nbsp;&nbsp;
+          <a href="#Sostieni-Casiroli" class="t" data-it="Sostieni Casiroli" data-de="Unterstütze" data-en="Support Casiroli" data-fr="Soutenir Casiroli">Sostieni Casiroli</a>
+        </div>
       </div>
     </div>
   </div>
@@ -1199,6 +1370,8 @@ nav {
     <div class="c1 cell show-mobile"></div>
     <div class="c1 cell show-mobile"></div>
     <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
     <div class="c1 cell" style="display:flex; align-items:flex-end; position:relative;">
       <img src="images/donna_casiroli.png" class="donna-mobile" style="width:50%; height:auto; display:block;">
       <span class="mob-num" style="top:6px; right:6px;">3.</span>
@@ -1302,10 +1475,10 @@ nav {
     <div class="c2 cell show-mobile mob-overlay" style="pointer-events:none; margin-top:400px; z-index:10; position:relative; max-width:55%;">
       <span class="t" data-it="a cui l'associazione intende restituire cura," data-de="dem der Verein wieder Sorge widmen will," data-en="to which the association intends to return its care," data-fr="auquel l'association entend restituer son soin,">a cui l'associazione intende restituire cura,</span>
     </div>
-    <div class="show-mobile mob-ct" style="grid-column: 2; margin-top:0px; margin-bottom:-300px;">
-      <div class="ch-entry"><span class="ch-num">6.</span><span class="ch-text t" data-it="Terrazzamenti incolti<br>veduta Est-Ovest" data-de="Brachliegende Terrassen, Blick von Ost nach West" data-en="Unused terraces, view from east to west" data-fr="Terrasses en friche, vue d'est en ouest">Terrazzamenti incolti<br>veduta Est-Ovest</span></div>
-      <div class="ch-entry"><span class="ch-num">7.</span><span class="ch-text t" data-it="Terrazzamenti incolti<br>veduta Ovest-Est" data-de="Brachliegende Terrassen, Blick von West nach Ost" data-en="Unused terraces, view from west to east" data-fr="Terrasses en friche, vue d'ouest en est">Terrazzamenti incolti<br>veduta Ovest-Est</span></div>
-      <div class="ch-entry"><span class="ch-num">8.</span><span class="ch-text t" data-it="Uovo di Circaetus gallicus – Biancone<br>specie vulnerabile,<br>osservata nella regione" data-de="Ei des Circaetus gallicus – Schlangenadler,<br>eine in der Region gefährdete Art" data-en="Egg of Circaetus gallicus – short-toed snake eagle,<br>a species endangered in the region" data-fr="Œuf du Circaetus gallicus – Circaète Jean-le-Blanc,<br>espèce vulnérable observée dans la région">Uovo di <em>Circaetus gallicus</em> – Biancone<br>specie vulnerabile,<br>osservata nella regione</span></div>
+    <div class="show-mobile mob-ct mob-ct-right" style="grid-column: 2; margin-top:-80px; margin-bottom:-300px;">
+      <div class="ch-entry"><span class="ch-num">6.</span><span class="ch-text t" data-it="Terrazzamenti incolti (Est-Ovest)" data-de="Brachliegende Terrassen (Ost-West)" data-en="Unused terraces (east-west)" data-fr="Terrasses en friche (est-ouest)">Terrazzamenti incolti (Est-Ovest)</span></div>
+      <div class="ch-entry"><span class="ch-num">7.</span><span class="ch-text t" data-it="Terrazzamenti incolti (Ovest-Est)" data-de="Brachliegende Terrassen (West-Ost)" data-en="Unused terraces (west-east)" data-fr="Terrasses en friche (ouest-est)">Terrazzamenti incolti (Ovest-Est)</span></div>
+      <div class="ch-entry"><span class="ch-num">8.</span><span class="ch-text t" data-it="<span class='nowrap'>Uovo di Biancone,</span> <span class='nowrap'>specie vulnerabile</span><br>osservata nella regione" data-de="Ei des Schlangenadlers,<br>eine in der Region gefährdete Art" data-en="Egg of the short-toed snake eagle,<br>a species endangered in the region" data-fr="Œuf du Circaète Jean-le-Blanc,<br>espèce vulnérable observée dans la région"><span class="nowrap">Uovo di Biancone,</span> <span class="nowrap">specie vulnerabile</span><br>osservata nella regione</span></div>
       <div class="ch-entry"><span class="ch-num">9.</span><span class="ch-text t" data-it="Edificio centrale, planimetria" data-de="Hauptgebäude, Grundriss" data-en="Central building, plan" data-fr="Bâtiment central, plan">Edificio centrale, planimetria</span></div>
     </div>
     <div class="c1 cell flexible-overflow progetto-img2 has-mob-num">
@@ -1346,7 +1519,7 @@ nav {
     <div class="c1 cell show-mobile"></div>
     <div class="c1 cell show-mobile"></div>
     <div class="c1 cell show-mobile"></div>
-    <div class="c2 cell r1 drawing" style="position:relative;">
+    <div class="c2 cell r1 drawing drawing-down" style="position:relative;">
       <span class="mob-num" style="top:46px; left:0;">9.</span>
       <div class="img-slot has-image base">
         <img src="images/disegno.png">
@@ -1489,7 +1662,7 @@ nav {
     <div class="show-mobile mob-ct" style="margin-top:-630px; margin-left:-18px; margin-right:0; width:calc(50vw - 8px);">
       <div class="ch-entry"><span class="ch-num">10.</span><span class="ch-text t" data-it="Casiroli, allargando lo sguardo" data-de="Casiroli, der Blick in die Weite" data-en="Casiroli, a view into the distance" data-fr="Casiroli, le regard qui s'élargit">Casiroli, allargando lo sguardo</span></div>
       <div class="ch-entry"><span class="ch-num">11.</span><span class="ch-text"><em>Lacerta bilineata</em> – <span class="t" data-it="Ramarro" data-de="Smaragdeidechse" data-en="two-lined lizard" data-fr="Lézard à deux raies">Ramarro</span></span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num"></span><span class="ch-text t" data-it="specie endemica, minacciata e protetta" data-de="eine endemische, bedrohte und geschützte Art" data-en="an endemic, endangered and protected species" data-fr="espèce endémique, menacée et protégée">specie endemica, minacciata e protetta</span></div>
+      <div class="ch-entry"><span class="ch-num"></span><span class="ch-text t" data-it="specie endemica<br>minacciata e protetta" data-de="eine endemische<br>bedrohte und geschützte Art" data-en="an endemic<br>endangered and protected species" data-fr="espèce endémique<br>menacée et protégée">specie endemica<br>minacciata e protetta</span></div>
     </div>
 
     <div class="c5 cell hide-mobile"></div>
@@ -1509,6 +1682,8 @@ nav {
         >L'associazione Bivio Casiroli nasce per contrastare l'abbandono del nucleo e promuoverne la rigenerazione attraverso un processo di manutenzione fondato sulla riadozione di pratiche collettive di cura e presenza.</span>
       </p>
     </div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
 
     <div class="c1 cell hide-mobile"></div>
     <div class="c1 cell hide-mobile"></div>
@@ -1520,7 +1695,7 @@ nav {
       <div class="img-slot has-image base bn">
         <img src="images/bGIJz-bianco.png">
       </div>
-      <span class="mob-num" style="bottom:106px; left:335px;">12.</span>
+      <span class="mob-num" style="bottom:106px; left:315px;">12.</span>
     </div>
 
     <div class="c1 cell show-mobile"></div>
@@ -1543,23 +1718,23 @@ nav {
 
     <div class="c1 cell hide-mobile"></div>
 
-    <div class="c1 cell portrait-overflow img-legend-wrap" style="align-items:flex-end; margin-bottom:40px; transform:translateY(40px); position:relative;">
+    <div class="c1 cell portrait-overflow img-legend-wrap picchio-mob-down" style="align-items:flex-end; margin-bottom:40px; transform:translateY(40px); position:relative;">
       <img src="images/picchio.png">
       <div class="legend-num top-left">
         <span style="top:-400px; left:-180px;">12.</span>
       </div>
       <span class="mob-num" style="bottom:116px; left:50px;">13.</span>
     </div>
-    <div class="c2 cell show-mobile mob-overlay" style="pointer-events:none; margin-top:-60px; margin-left:85px; margin-right:-85px; max-width:55%;">
+    <div class="c2 cell show-mobile mob-overlay" style="pointer-events:none; margin-top:70px; margin-left:85px; margin-right:-85px; max-width:55%;">
       <span class="t" data-it="grazie all'integrazione di esperienze diverse." data-de="durch die Verbindung verschiedener Erfahrungen." data-en="through the integration of diverse experiences." data-fr="grâce à l'intégration d'expériences diverses.">grazie all'integrazione di esperienze diverse.</span>
     </div>
-    <div class="show-mobile mob-ct" style="grid-column: 2; padding-left:13px;">
+    <div class="show-mobile mob-ct mob-ct-right" style="grid-column: 1; margin-top:20px;">
       <div class="ch-entry"><span class="ch-num">12.</span><span class="ch-text t" data-it="I proprietari incontrano l'associazione" data-de="Die Eigentümer treffen sich mit dem Verein" data-en="The owners are meeting with the association" data-fr="Les propriétaires rencontrent l'association">I proprietari incontrano l'associazione</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">13.</span><span class="ch-text t" data-it="Picchio rosso maggiore" data-de="Buntspecht" data-en="Great spotted woodpecker" data-fr="Pic épeiche">Picchio rosso maggiore</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num"></span><span class="ch-text t" data-it="abitante di Casiroli" data-de="Bewohner von Casiroli" data-en="a resident of Casiroli" data-fr="habitant de Casiroli">abitante di Casiroli</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">14.</span><span class="ch-text"><em>Doronicum pardalianches</em></span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num"></span><span class="ch-text t" data-it="specie minacciata e protetta." data-de="eine bedrohte und geschützte Art." data-en="an endangered and protected species." data-fr="espèce menacée et protégée.">specie minacciata e protetta.</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num"></span><span class="ch-text t" data-it="Osservata a Casiroli." data-de="In Casiroli beobachtet." data-en="Observed at Casiroli." data-fr="Observée à Casiroli.">Osservata a Casiroli.</span></div>
+      <div class="ch-entry"><span class="ch-num">13.</span><span class="ch-text t" data-it="Picchio rosso maggiore" data-de="Buntspecht" data-en="Great spotted woodpecker" data-fr="Pic épeiche">Picchio rosso maggiore</span></div>
+      <div class="ch-entry"><span class="ch-num"></span><span class="ch-text t" data-it="abitante di Casiroli" data-de="Bewohner von Casiroli" data-en="a resident of Casiroli" data-fr="habitant de Casiroli">abitante di Casiroli</span></div>
+      <div class="ch-entry"><span class="ch-num">14.</span><span class="ch-text"><em>Doronicum pardalianches</em></span></div>
+      <div class="ch-entry"><span class="ch-num"></span><span class="ch-text t" data-it="specie minacciata e protetta." data-de="eine bedrohte und geschützte Art." data-en="an endangered and protected species." data-fr="espèce menacée et protégée.">specie minacciata e protetta.</span></div>
+      <div class="ch-entry"><span class="ch-num"></span><span class="ch-text t" data-it="Osservata a Casiroli." data-de="In Casiroli beobachtet." data-en="Observed at Casiroli." data-fr="Observée à Casiroli.">Osservata a Casiroli.</span></div>
     </div>
     <div class="c1 cell hide-mobile"></div>
     <div class="c1 cell hide-mobile"></div>
@@ -1616,12 +1791,50 @@ nav {
 
     <div class="c1 cell hide-mobile"></div>
     <div class="c1 cell show-mobile"></div>
-    <div class="img-slot has-image qr-slot left-align" style="margin-top:-20px;">
-      <img src="images/Vero_QR.png">
+    <div class="c1 cell donate-mob-center" style="position:relative; overflow:visible;">
+      <!-- su mobile il QR sta nel modal "Come donare" -->
+      <div class="img-slot has-image qr-slot hide-mobile" style="margin-top:-20px;">
+        <img src="images/Vero_QR.png">
+      </div>
+      <div class="testo qr-caption">
+        <!-- su mobile intestatario e IBAN stanno nel modal "Come donare" -->
+        <p class="hide-mobile">Associazione Bivio Casiroli<br><span style="text-decoration:none; color:inherit; pointer-events:none; white-space:nowrap;">CH66 8080 8005 3949 6868 1</span></p>
+        <p style="margin-top:8px;"><button class="donate-link" onclick="openDonateModal();"><span class="t" data-it="Come donare" data-de="Wie spenden" data-en="How to donate" data-fr="Comment donner">Come donare</span></button></p>
+      </div>
     </div>
     <div class="c1 cell show-mobile"></div>
-    <div class="c1 cell testo bottom-align" style="transform:translateY(-22px); white-space:nowrap; overflow:visible; text-align:center;">
-      <p>Associazione Bivio Casiroli<br><span style="text-decoration:none; color:inherit; pointer-events:none;">CH66 8080 8005 3949 6868 1</span></p>
+    <div class="c1 cell"></div>
+
+    <!-- modal donazione -->
+    <div id="donate-modal" onclick="if(event.target===this){ closeDonateModal(); }">
+      <div id="donate-modal-inner">
+        <button class="donate-modal-close" onclick="closeDonateModal();" aria-label="Chiudi">&times;</button>
+        <h3 class="t" data-it="Come donare" data-de="Wie spenden" data-en="How to donate" data-fr="Comment donner">Come donare</h3>
+        <p class="t"
+          data-it="La donazione può essere effettuata tramite bonifico bancario, utilizzando il codice IBAN e il QR-code riportati qui accanto. La maggior parte delle app bancarie svizzere permette di scansionare direttamente il codice QR per compilare automaticamente i dati del pagamento."
+          data-de="Die Spende kann per Banküberweisung erfolgen, unter Verwendung der nebenstehenden IBAN und des QR-Codes. Die meisten Schweizer Banking-Apps ermöglichen es, den QR-Code direkt zu scannen, um die Zahlungsdaten automatisch auszufüllen."
+          data-en="The donation can be made by bank transfer, using the IBAN and QR code shown alongside. Most Swiss banking apps let you scan the QR code directly to automatically fill in the payment details."
+          data-fr="Le don peut être effectué par virement bancaire, en utilisant l'IBAN et le QR-code ci-contre. La plupart des applications bancaires suisses permettent de scanner directement le QR-code pour remplir automatiquement les données du paiement."
+          >La donazione può essere effettuata tramite bonifico bancario, utilizzando il codice IBAN e il QR-code riportati qui accanto. La maggior parte delle app bancarie svizzere permette di scansionare direttamente il codice QR per compilare automaticamente i dati del pagamento.</p>
+        <p class="t"
+          data-it="Nella causale del bonifico vi chiediamo di indicare il vostro nome e cognome, così da poter associare correttamente il contributo e, se lo desiderate, ringraziarvi personalmente."
+          data-de="Im Verwendungszweck der Überweisung bitten wir Sie, Ihren Vor- und Nachnamen anzugeben, damit wir den Beitrag richtig zuordnen und Ihnen, falls gewünscht, persönlich danken können."
+          data-en="In the payment reference, please include your first and last name, so that we can correctly attribute the contribution and, if you wish, thank you personally."
+          data-fr="Dans le motif du virement, nous vous prions d'indiquer votre nom et prénom, afin de pouvoir associer correctement la contribution et, si vous le souhaitez, vous remercier personnellement."
+          >Nella causale del bonifico vi chiediamo di indicare il vostro nome e cognome, così da poter associare correttamente il contributo e, se lo desiderate, ringraziarvi personalmente.</p>
+        <p class="t"
+          data-it='Per qualsiasi domanda o per ricevere conferma della donazione potete scriverci a <a href="mailto:biviocasiroli@etik.com">biviocasiroli@etik.com</a>.'
+          data-de='Bei Fragen oder für eine Bestätigung der Spende erreichen Sie uns unter <a href="mailto:biviocasiroli@etik.com">biviocasiroli@etik.com</a>.'
+          data-en='For any questions or to receive confirmation of your donation, you can write to us at <a href="mailto:biviocasiroli@etik.com">biviocasiroli@etik.com</a>.'
+          data-fr='Pour toute question ou pour recevoir une confirmation du don, vous pouvez nous écrire à <a href="mailto:biviocasiroli@etik.com">biviocasiroli@etik.com</a>.'
+          >Per qualsiasi domanda o per ricevere conferma della donazione potete scriverci a <a href="mailto:biviocasiroli@etik.com">biviocasiroli@etik.com</a>.</p>
+        <!-- solo mobile: in pagina intestatario e IBAN sono nascosti, qui è l'unico posto in cui compaiono -->
+        <div class="donate-account show-mobile">
+          <p>Associazione Bivio Casiroli</p>
+          <p><span style="white-space:nowrap;">CH66 8080 8005 3949 6868 1</span></p>
+          <img class="donate-qr" src="images/Vero_QR.png" alt="QR-code">
+        </div>
+      </div>
     </div>
 
     <div class="c1 cell hide-mobile"></div>
@@ -1717,13 +1930,13 @@ nav {
   </div>
 </div>
 
-<div class="show-mobile mob-ct" style="margin-left:auto; margin-right:-18px">
-      <div class="ch-entry"><span class="ch-num">15.</span><span class="ch-text t" data-it="Edificio centrale sede<br>dell'Associazione" data-de="Hauptgebäude, Sitz des Vereins" data-en="Central building, headquarters of the Association" data-fr="Bâtiment central, siège de l'Association">Edificio centrale sede<br>dell'Associazione</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">16.</span><span class="ch-text t" data-it="Rudere" data-de="Ruine" data-en="Ruin" data-fr="Ruine">Rudere</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">17.</span><span class="ch-text t" data-it="Dettaglio: finestra e facciata a calce" data-de="Detail: Fenster und Kalkputzfassade" data-en="Detail: window and lime-plastered facade" data-fr="Détail: fenêtre et façade à la chaux">Dettaglio: finestra e facciata a calce</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">18.</span><span class="ch-text t" data-it="Dettaglio: tetto e facciata a calce" data-de="Detail: Dach und Kalkputzfassade" data-en="Detail: roof and lime-plastered facade" data-fr="Détail: toit et façade à la chaux">Dettaglio: tetto e facciata a calce</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">19.</span><span class="ch-text t" data-it="Sentiero per Casiroli" data-de="Weg nach Casiroli" data-en="Path to Casiroli" data-fr="Sentier vers Casiroli">Sentiero per Casiroli</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">20.</span><span class="ch-text t" data-it="Tiglio monumentale" data-de="Monumentale Linde" data-en="Monumental linden tree" data-fr="Tilleul monumental">Tiglio monumentale</span></div>
+<div class="show-mobile mob-ct mob-ct-right" style="grid-column: 2; margin-top: -14px;">
+      <div class="ch-entry"><span class="ch-num">15.</span><span class="ch-text t" data-it="Rudere" data-de="Ruine" data-en="Ruin" data-fr="Ruine">Rudere</span></div>
+      <div class="ch-entry"><span class="ch-num">16.</span><span class="ch-text t" data-it="Edificio centrale<br>sede dell'Associazione" data-de="Hauptgebäude, Sitz des Vereins" data-en="Central building, headquarters of the Association" data-fr="Bâtiment central, siège de l'Association">Edificio centrale<br>sede dell'Associazione</span></div>
+      <div class="ch-entry"><span class="ch-num">17.</span><span class="ch-text t" data-it="Finestra, facciata a calce" data-de="Fenster und Kalkputzfassade" data-en="Window and lime-plastered facade" data-fr="Fenêtre et façade à la chaux">Finestra, facciata a calce</span></div>
+      <div class="ch-entry"><span class="ch-num">18.</span><span class="ch-text t" data-it="Sentiero per Casiroli" data-de="Weg nach Casiroli" data-en="Path to Casiroli" data-fr="Sentier vers Casiroli">Sentiero per Casiroli</span></div>
+      <div class="ch-entry"><span class="ch-num">19.</span><span class="ch-text t" data-it="Tetto e facciata a calce" data-de="Dach und Kalkputzfassade" data-en="Roof and lime-plastered facade" data-fr="Toit et façade à la chaux">Tetto e facciata a calce</span></div>
+      <div class="ch-entry"><span class="ch-num">20.</span><span class="ch-text t" data-it="Tiglio monumentale" data-de="Monumentale Linde" data-en="Monumental linden tree" data-fr="Tilleul monumental">Tiglio monumentale</span></div>
     </div>
 <div class="c1 cell hide-mobile"></div>
 <div class="c1 cell hide-mobile"></div>
@@ -1738,11 +1951,11 @@ nav {
     <img src="images/IMG_3548.jpg">
   </div>
 </div>
-<div class="c1 cell show-mobile" style="position:relative;">
+<div class="c1 cell show-mobile" style="position:relative; grid-column: 2;">
   <div class="img-slot bn">
     <img src="images/IMG_3548.jpg">
   </div>
-  <span class="mob-num" style="top:-23px; left:0;">21.</span>
+  <span class="mob-num" style="top:-23px; right:0;">21.</span>
 </div>
 <div class="c1 cell legend-num bottom-left span hide-mobile">
       <span style="top:207px; left:0px;">21.</span>
@@ -1808,13 +2021,13 @@ nav {
   </div>
   <span class="mob-num" style="top:1px; right:-20px;">26.</span>
 </div>
-<div class="show-mobile mob-ct" style="margin-left:auto; margin-right:-18px">
+<div class="show-mobile mob-ct mob-ct-right" style="grid-column: 1; margin-top: -865px;">
       <div class="ch-entry"><span class="ch-num">21.</span><span class="ch-text t" data-it="Interno" data-de="Innenraum" data-en="Interior" data-fr="Intérieur">Interno</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">22.</span><span class="ch-text t" data-it="Canopea" data-de="Baumkrone" data-en="Canopy" data-fr="Canopée">Canopea</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">23.</span><span class="ch-text t" data-it="Interno" data-de="Innenraum" data-en="Interior" data-fr="Intérieur">Interno</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">24.</span><span class="ch-text t" data-it="Rimanenze e artefatti" data-de="Überreste und Artefakte" data-en="Remains and artefacts" data-fr="Restes et artefacts">Rimanenze e artefatti</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">25.</span><span class="ch-text t" data-it="Porta massiccia" data-de="Massives Tor" data-en="Massive door" data-fr="Porte massive">Porta massiccia</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">26.</span><span class="ch-text t" data-it="Muro a secco" data-de="Trockenmauer" data-en="Dry stone wall" data-fr="Mur en pierre sèche">Muro a secco</span></div>
+      <div class="ch-entry"><span class="ch-num">22.</span><span class="ch-text t" data-it="Canopea" data-de="Baumkrone" data-en="Canopy" data-fr="Canopée">Canopea</span></div>
+      <div class="ch-entry"><span class="ch-num">23.</span><span class="ch-text t" data-it="Interno" data-de="Innenraum" data-en="Interior" data-fr="Intérieur">Interno</span></div>
+      <div class="ch-entry"><span class="ch-num">24.</span><span class="ch-text t" data-it="Rimanenze e artefatti" data-de="Überreste und Artefakte" data-en="Remains and artefacts" data-fr="Restes et artefacts">Rimanenze e artefatti</span></div>
+      <div class="ch-entry"><span class="ch-num">25.</span><span class="ch-text t" data-it="Porta massiccia" data-de="Massives Tor" data-en="Massive door" data-fr="Porte massive">Porta massiccia</span></div>
+      <div class="ch-entry"><span class="ch-num">26.</span><span class="ch-text t" data-it="Muro a secco" data-de="Trockenmauer" data-en="Dry stone wall" data-fr="Mur en pierre sèche">Muro a secco</span></div>
     </div>
 
 <div class="c1 cell legend-num bottom-right span hide-mobile">
@@ -1843,7 +2056,7 @@ nav {
   <span style="top:-2px; left:235px;">27.</span>
 </div>
 
-<div class="c1 cell show-mobile"></div>
+<div class="c1 cell show-mobile riv4035-filler"></div>
 <div class="c1 r2 cell" style="position:relative;">
   <span class="mob-num" style="top:-23px; left:0;">28.</span>
   <div class="img-slot bn">
@@ -1851,8 +2064,8 @@ nav {
   </div>
 </div>
 
-<div class="c1 r2 cell" style="position:relative;">
-  <span class="mob-num" style="top:-23px; left:0;">29.</span>
+<div class="c1 r2 cell riv4035-cell" style="position:relative;">
+  <span class="mob-num" style="top:-3px; left:-20px;">29.</span>
   <div class="img-slot bn">
     <img src="images/RIV4035.jpg">
   </div>
@@ -1901,13 +2114,13 @@ nav {
     <img src="images/RIV4061.jpg">
   </div>
 </div>
-<div class="show-mobile mob-ct" style="margin-left:auto; margin-right:-18px">
+<div class="show-mobile mob-ct mob-ct-right" style="grid-column: 2;">
       <div class="ch-entry"><span class="ch-num">27.</span><span class="ch-text t" data-it="Tavolato" data-de="Dielenboden" data-en="Wooden floor" data-fr="Plancher">Tavolato</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">28.</span><span class="ch-text t" data-it="Dettaglio: ripiano" data-de="Detail: Regal" data-en="Detail: shelf" data-fr="Détail: étagère">Dettaglio: ripiano</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">29.</span><span class="ch-text t" data-it="Focolare aperto" data-de="Offene Feuerstelle" data-en="Open fireplace" data-fr="Foyer ouvert">Focolare aperto</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">30.</span><span class="ch-text t" data-it="Cucina" data-de="Küche" data-en="Kitchen" data-fr="Cuisine">Cucina</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">31.</span><span class="ch-text t" data-it="Pavimento in lastre di pietra" data-de="Steinplattenboden" data-en="Stone slab floor" data-fr="Sol en dalles de pierre">Pavimento in lastre di pietra</span></div>
-      <div class="ch-entry" style="margin-top:-3px;"><span class="ch-num">32.</span><span class="ch-text t" data-it="Tavolato" data-de="Dielenboden" data-en="Wooden floor" data-fr="Plancher">Tavolato</span></div>
+      <div class="ch-entry"><span class="ch-num">28.</span><span class="ch-text t" data-it="Dettaglio: ripiano" data-de="Detail: Regal" data-en="Detail: shelf" data-fr="Détail: étagère">Dettaglio: ripiano</span></div>
+      <div class="ch-entry"><span class="ch-num">29.</span><span class="ch-text t" data-it="Focolare aperto" data-de="Offene Feuerstelle" data-en="Open fireplace" data-fr="Foyer ouvert">Focolare aperto</span></div>
+      <div class="ch-entry"><span class="ch-num">30.</span><span class="ch-text t" data-it="Cucina" data-de="Küche" data-en="Kitchen" data-fr="Cuisine">Cucina</span></div>
+      <div class="ch-entry"><span class="ch-num">31.</span><span class="ch-text t" data-it="Pavimento in lastre di pietra" data-de="Steinplattenboden" data-en="Stone slab floor" data-fr="Sol en dalles de pierre">Pavimento in lastre di pietra</span></div>
+      <div class="ch-entry"><span class="ch-num">32.</span><span class="ch-text t" data-it="Tavolato" data-de="Dielenboden" data-en="Wooden floor" data-fr="Plancher">Tavolato</span></div>
     </div>
 
 
@@ -1920,17 +2133,18 @@ nav {
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <div class="footer-logo c1 cell">
-      <img src="images/logo-full.png" alt="Bivio Casiroli">
+    <div class="footer-block c2 cell">
+      <div class="footer-labels">
+        Sede dell'associazione<br><br><br>
+        Mail
+      </div>
+      <div class="footer-values">
+        Via Santa Croce 1B<br>
+        6826 Riva San Vitale<br><br>
+        <a href="mailto:xyz@casiroli.ch">xyz@casiroli.ch</a>
+      </div>
     </div>
-    <div class="c2 cell"></div>
-    <div class="footer-contact c2 cell">
-      <a href="mailto:xyz@casiroli.ch">xyz@casiroli.ch</a>
-      <br><br>
-      <!-- PROVVISORIO: sostituire con l'indirizzo reale -->
-      Sede dell'associazione<br>
-      Via da definire, CAP Località
-    </div>
+    <div class="c3 cell"></div>
   </div>
 </footer>
 
@@ -2665,6 +2879,19 @@ function closeVideoLightbox() {
   videoEl.pause();
   document.querySelectorAll('.overlay-frase, .chapter-tag').forEach(function(el) { el.style.visibility = 'visible'; });
 }
+
+// ── DONATE MODAL ──
+function openDonateModal() {
+  document.getElementById('donate-modal').classList.add('open');
+}
+
+function closeDonateModal() {
+  document.getElementById('donate-modal').classList.remove('open');
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeDonateModal();
+});
 
 // Cursor-following label on the video thumbnail ("Vola su Casiroli")
 (function() {
