@@ -5,12 +5,20 @@
 <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no">
 <meta name="viewport" id="vp" content="width=device-width, initial-scale=1">
 <script>
-  if (!window.matchMedia('(max-width: 767px)').matches) {
+  // On some iPads Safari hasn't settled screen.width/orientation yet when
+  // this inline script runs at parse time, so the very first scale can be
+  // wrong (leaving a blank strip on one side). Recompute once things have
+  // settled (load) and again on any orientation/size change.
+  function applyViewportScale() {
+    if (window.matchMedia('(max-width: 767px)').matches) return;
     var scale = screen.width / 1400;
     document.getElementById('vp').setAttribute('content',
       'width=1400, initial-scale=' + scale + ', minimum-scale=' + scale
     );
   }
+  applyViewportScale();
+  window.addEventListener('load', applyViewportScale);
+  window.addEventListener('orientationchange', function() { setTimeout(applyViewportScale, 150); });
 </script>
 
 <title>Bivio Casiroli — nucleo storico Valle di Muggio</title>
