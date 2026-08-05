@@ -24,6 +24,25 @@
   applyViewportScale();
   window.addEventListener('load', applyViewportScale);
   window.addEventListener('orientationchange', function() { setTimeout(applyViewportScale, 150); });
+
+  // TEMP DIAGNOSTIC — remove once the iPad scaling issue is confirmed fixed.
+  function showViewportDebug() {
+    var box = document.getElementById('vp-debug');
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'vp-debug';
+      box.style.cssText = 'position:fixed;top:0;left:0;z-index:999999;background:red;color:#fff;font:11px/1.4 monospace;padding:4px 6px;white-space:pre;pointer-events:none;';
+      document.body.appendChild(box);
+    }
+    box.textContent =
+      'screen ' + screen.width + 'x' + screen.height +
+      '  inner ' + window.innerWidth + 'x' + window.innerHeight +
+      '  dpr ' + window.devicePixelRatio +
+      '\nvp: ' + document.getElementById('vp').getAttribute('content');
+  }
+  window.addEventListener('load', function() { setTimeout(showViewportDebug, 50); });
+  window.addEventListener('resize', showViewportDebug);
+  window.addEventListener('orientationchange', function() { setTimeout(showViewportDebug, 200); });
 </script>
 
 <title>Bivio Casiroli — nucleo storico Valle di Muggio</title>
