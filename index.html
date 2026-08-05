@@ -5,13 +5,18 @@
 <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no">
 <meta name="viewport" id="vp" content="width=device-width, initial-scale=1">
 <script>
-  // On some iPads Safari hasn't settled screen.width/orientation yet when
-  // this inline script runs at parse time, so the very first scale can be
-  // wrong (leaving a blank strip on one side). Recompute once things have
-  // settled (load) and again on any orientation/size change.
+  // screen.width alone is unreliable on iPad: it doesn't say which of its
+  // two values (width/height) applies to the CURRENT orientation, and can
+  // be read before Safari settles it, giving a scale that's too small
+  // (blank strip) or too large (content cropped). Instead pick between
+  // screen.width/screen.height using the actual current aspect ratio from
+  // innerWidth/innerHeight, which stays correct even after we've already
+  // scaled once (the ratio is preserved by the scaling).
   function applyViewportScale() {
     if (window.matchMedia('(max-width: 767px)').matches) return;
-    var scale = screen.width / 1400;
+    var isPortrait = window.innerHeight > window.innerWidth;
+    var w = isPortrait ? Math.min(screen.width, screen.height) : Math.max(screen.width, screen.height);
+    var scale = w / 1400;
     document.getElementById('vp').setAttribute('content',
       'width=1400, initial-scale=' + scale + ', minimum-scale=' + scale
     );
