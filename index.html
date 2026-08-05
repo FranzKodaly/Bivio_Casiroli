@@ -8,11 +8,14 @@
   // screen.width/height are unreliable: they reflect the physical monitor
   // in Chrome DevTools responsive/freeform mode (not the emulated
   // viewport), and can be stale on real iPad Safari at parse time. The one
-  // number that's always correct is window.innerWidth while the viewport
-  // is in plain "width=device-width" mode — so we reset to that, wait a
-  // beat for the browser to actually apply it, measure, then apply our
-  // own scale. setTimeout (not requestAnimationFrame) so this still runs
-  // if the page loads in a background tab.
+  // number that's always correct is documentElement.clientWidth while the
+  // viewport is in plain "width=device-width" mode — so we reset to that,
+  // wait a beat for the browser to actually apply it, measure, then apply
+  // our own scale. clientWidth (not window.innerWidth) excludes the
+  // vertical scrollbar's own width, otherwise the scale comes out a touch
+  // too large and the right edge gets clipped. setTimeout (not
+  // requestAnimationFrame) so this still runs if the page loads in a
+  // background tab.
   var vpMeta = document.getElementById('vp');
   var applyingScale = false;
   function applyViewportScale() {
@@ -24,7 +27,7 @@
     applyingScale = true;
     vpMeta.setAttribute('content', 'width=device-width, initial-scale=1');
     setTimeout(function() {
-      var w = window.innerWidth;
+      var w = document.documentElement.clientWidth;
       var scale = w / 1400;
       vpMeta.setAttribute('content',
         'width=1400, initial-scale=' + scale + ', minimum-scale=' + scale
