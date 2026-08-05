@@ -2,12 +2,14 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" id="vp" content="width=1400">
+<meta name="viewport" id="vp" content="width=device-width, initial-scale=1">
 <script>
-  var scale = screen.width / 1400;
-  document.getElementById('vp').setAttribute('content',
-    'width=1400, initial-scale=' + scale + ', minimum-scale=' + scale
-  );
+  if (screen.width >= 768) {
+    var scale = screen.width / 1400;
+    document.getElementById('vp').setAttribute('content',
+      'width=1400, initial-scale=' + scale + ', minimum-scale=' + scale
+    );
+  }
 </script>
 
 <title>Bivio Casiroli — nucleo storico Valle di Muggio</title>
@@ -574,6 +576,40 @@ nav {
   100% { transform: rotate(0deg); }
 }
 
+/* ── HAMBURGER ── */
+.hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px 4px 4px 0; }
+.hamburger span { display: block; width: 22px; height: 2px; background: var(--ink); flex-shrink: 0; }
+.mobile-menu { display: none; flex-direction: column; padding: 12px 20px 16px; border-top: 1px dashed rgba(28,27,26,0.18); }
+.mobile-menu a { font-size: 13px; color: var(--ink); text-decoration: none; padding: 10px 0; border-bottom: 1px dashed rgba(28,27,26,0.1); letter-spacing: 0.01em; }
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu.open { display: flex; }
+.show-mobile { display: none; }
+
+/* ── MOBILE ── */
+@media (max-width: 767px) {
+  .container { padding: 50px 16px 40px; }
+  .nav-inner { padding: 14px 16px; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  nav, .mobile-menu { max-width: 100vw; overflow-x: hidden; }
+  .grid-wrapper, .container { overflow-x: hidden; }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; grid-auto-rows: 160px; }
+  .grid > * { min-width: 0; }
+  .c3, .c4, .c5 { grid-column: span 2; }
+  .r3 { grid-row: span 2; }
+  .r4 { grid-row: span 2; }
+  .logo-apertura { top: 450px !important; left: 150px !important; margin-bottom: 0 !important; }
+  .logo-inner { width: 50% !important; }
+  .testo { transform: translateY(-4px); align-self: start; padding-top: 0; }
+  .testo p { margin: 0; }
+  .legend-num { display: none; }
+  .capitolo-shift { grid-column: span 2; }
+  .donna-mobile { margin-left: auto; }
+  .hide-mobile { display: none; }
+  .show-mobile { display: block; }
+  .overlay-frase, .chapter-tag, .rotate-overlay { display: none; }
+}
+
 </style>
 </head>
 <body data-lang="it">
@@ -586,7 +622,11 @@ nav {
 
 <nav>
   <div class="nav-inner">
-    <div class="nav-l"></div>
+    <div class="nav-l">
+      <button class="hamburger" onclick="document.querySelector('.mobile-menu').classList.toggle('open')" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
     <div class="nav-r">
       <div class="nav-links">
         <a href="#Casiroli" class="t" data-it="Casiroli" data-de="Casiroli" data-en="Casiroli" data-fr="Casiroli">Casiroli</a>&nbsp;&nbsp;-&nbsp;&nbsp;
@@ -606,6 +646,13 @@ nav {
         <button class="lang-btn" onclick="setLang('fr')">FR</button>
       </div>
     </div>
+  </div>
+  <div class="mobile-menu">
+    <a href="#Casiroli" class="t" data-it="Casiroli" data-de="Casiroli" data-en="Casiroli" data-fr="Casiroli" onclick="document.querySelector('.mobile-menu').classList.remove('open')">Casiroli</a>
+    <a href="#Il-progetto" class="t" data-it="Il progetto" data-de="Das Projekt" data-en="The project" data-fr="Le projet" onclick="document.querySelector('.mobile-menu').classList.remove('open')">Il progetto</a>
+    <a href="#La-visione" class="t" data-it="La visione" data-de="Die Vision" data-en="The vision" data-fr="La vision" onclick="document.querySelector('.mobile-menu').classList.remove('open')">La visione</a>
+    <a href="#Lassociazione" class="t" data-it="L'associazione" data-de="Der Verein" data-en="The association" data-fr="L'association" onclick="document.querySelector('.mobile-menu').classList.remove('open')">L'associazione</a>
+    <a href="#Sostieni-Casiroli" class="t" data-it="Sostieni Casiroli" data-de="Unterstütze" data-en="Support Casiroli" data-fr="Soutenir Casiroli" onclick="document.querySelector('.mobile-menu').classList.remove('open')">Sostieni Casiroli</a>
   </div>
 </nav>
 
@@ -663,8 +710,8 @@ nav {
   <strong> 26.</strong> &nbsp;&nbsp; Tavolato <br> <span> </span>
   <strong> 27.</strong> &nbsp;&nbsp; Dettaglio: ripiano <br> <span> </span>
   <strong> 28.</strong> &nbsp;&nbsp; Focolare aperto <br> <span> </span>
-  <strong> 28.</strong> &nbsp;&nbsp; Pavimento in lastre di pietra <br> <span> </span>
-  <strong> 28.</strong> &nbsp;&nbsp; Tavolato <br> <span> </span>
+  <strong> 29.</strong> &nbsp;&nbsp; Pavimento in lastre di pietra <br> <span> </span>
+  <strong> 30.</strong> &nbsp;&nbsp; Tavolato <br> <span> </span>
 </div>
 
 <div class="container">
@@ -722,15 +769,17 @@ nav {
   <div class="grid">
 
     <!-- ═══ APERTURA ═══ -->
-    <div class="c2 cell r1" style="position:relative; top:250px; left:200px; z-index:2; margin-bottom:-80px;">
-      <div style="position:relative; width:80%; opacity:1;">
-        <img src="images/l2.png" style="width:100%; opacity:0; height:auto; display:block; animation:fadeIn 0.4s ease forwards 1s;">
-        <img src="images/l3.png" style="position:absolute; top:0; left:0; width:100%; opacity:0; height:auto; display:block; animation:fadeIn 0.4s ease forwards 1.5s;">
-        <img src="images/l1.png" style="position:absolute; top:0; right:100%; height:100%; opacity:0; width:auto; display:block; animation:fadeIn 0.4s ease forwards 0.5s;">
+    <div class="c2 cell r1 logo-apertura" style="position:relative; top:250px; left:200px; z-index:2; margin-bottom:-80px;">
+      <div class="logo-inner" style="position:relative; width:80%; opacity:1;">
+        <img src="images/l1.svg" class="logo-l1" style="position:absolute; top:0; right:100%; height:100%; opacity:0; width:auto; display:block; animation:fadeIn 0.4s ease forwards 0.5s;">
+        <div class="logo-l23" style="position:relative;">
+          <img src="images/l2.svg" style="width:100%; opacity:0; height:auto; display:block; animation:fadeIn 0.4s ease forwards 1s;">
+          <img src="images/l3.svg" style="position:absolute; top:0; left:0; width:100%; opacity:0; height:auto; display:block; animation:fadeIn 0.05s ease forwards 1.8s;">
+        </div>
       </div>
     </div>
 
-    <div class="c3 cell r2" style="opacity:0; animation:fadeIn 0.4s ease forwards 1.5s;">
+    <div class="c3 cell r2" style="opacity:0; animation:fadeIn 0.05s ease forwards 1.8s;">
       <div class="img-slot has-image">
         <img src="images/casi-beige.jpg">
       </div>
@@ -745,7 +794,7 @@ nav {
       </div>
     </div>
 
-    <div class="c1 cell"></div>
+    <div class="c1 cell hide-mobile"></div>
     <div class="c1 cell testo">
       <p><span class="t"
         data-it="Casiroli è un piccolo nucleo storico in Valle di Muggio: un insediamento minimo, poche case raccolte e celate dalla faggeta vicino a Scudellate, proprio nel punto in cui il bosco s'apre improvvisamente alla Valle. È un luogo residuo. Un luogo in cui l'architettura vernacolare, i prati da sfalcio e i pendii terrazzati s'intessono con l'ambiente formando un sistema coerente, capace ancora oggi di raccontare la storia d'un abitare rurale, oramai diradatosi, forse dimenticato. A Casiroli, come in molte altre regioni di montagna, l'esaurirsi delle civiltà contadine ha innescato una profonda trasformazione ecologica e paesaggistica. Il bosco riconquista i terrazzamenti, le superfici aperte si chiudono, i margini ecotonali si riducono e le strutture architettoniche – un tempo scenario di vita quotidiana – si deteriorano e crollano. Con l'avanzare del bosco e il degradarsi del nucleo s'erodono così anche la memoria e la conoscenza di quelle pratiche che, una pietra posata e un colpo di falce alla volta, hanno nei secoli modellato uno dei più importanti e suggestivi paesaggi svizzeri."
@@ -755,27 +804,33 @@ nav {
       A Casiroli, come in molte altre regioni di montagna, l'esaurirsi delle civiltà contadine ha innescato una profonda trasformazione ecologica e paesaggistica. Il bosco riconquista i terrazzamenti, le superfici aperte si chiudono, i margini ecotonali si riducono e le strutture architettoniche – un tempo scenario di vita quotidiana – si deteriorano e crollano. Con l'avanzare del bosco e il degradarsi del nucleo s'erodono così anche la memoria e la conoscenza di quelle pratiche che, una pietra posata e un colpo di falce alla volta, hanno nei secoli modellato uno dei più importanti e suggestivi paesaggi svizzeri.</span>
       </p>
     </div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
     <div class="img-slot has-image">
       <img src="images/casiroli_old.jpg">
     </div>
-    <div class="c1 cell legend-num top-left">
+    <div class="c1 cell legend-num top-left hide-mobile">
       <span style="top:-4px; left:px;">1.</span>
     </div>
-    <div class="c1 cell legend-num bottom-left">
+    <div class="c1 cell legend-num bottom-left hide-mobile">
       <span style="top:255px; left:0;">3.</span>
     </div>
 
-    <div class="c1 cell"></div>
-    <div class="c1 cell"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell hide-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
     <div class="img-slot has-image bn">
       <img src="images/casiroli_oggi.png">
     </div>
-    <div class="c1 cell legend-num top-left">
+    <div class="c1 cell legend-num top-left hide-mobile">
       <span style="top:-4px; left:px;">2.</span>
     </div>
 
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
     <div class="c1 cell" style="display:flex; align-items:flex-end;">
-      <img src="images/donna_casiroli.png" style="width:50%; height:auto; display:block;">
+      <img src="images/donna_casiroli.png" class="donna-mobile" style="width:50%; height:auto; display:block;">
     </div>
     <div class="c1 cell"></div>
     <div class="c1 cell"></div>
@@ -1418,7 +1473,7 @@ checkRotate();
 // ── ANCHOR CHAPTER TAGS ──
 function anchorChapterTags() {
  var scale = Math.max(screen.width, screen.height) / 1400;
-  var fontSize = Math.round(10 * scale); // 10px è il font-size base
+  var fontSize = Math.min(Math.round(10 * scale), 11); // sempre sotto il testo normale (13px)
 
   document.querySelectorAll('.chapter-tag').forEach(function(tag) {
     tag.style.fontSize = fontSize + 'px';
@@ -1448,7 +1503,22 @@ function anchorChapterTags() {
 window.addEventListener('load', anchorChapterTags);
 window.addEventListener('resize', function() { setTimeout(anchorChapterTags, 100); });
 window.addEventListener('orientationchange', function() { setTimeout(anchorChapterTags, 350); });
-  
+
+if (window.innerWidth < 768) {
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.style.transition = 'filter 0.6s ease';
+        entry.target.style.filter = 'grayscale(0%)';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.img-slot.bn').forEach(function(el) {
+    observer.observe(el);
+  });
+}
+
 </script>
 
 </body>

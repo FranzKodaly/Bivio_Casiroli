@@ -190,13 +190,24 @@ body {
 .site-footer {
   background: var(--bg);
   width: 100%;
-  border-top: 1px solid var(--ink); /* same line weight as the timeline */
+  position: relative;
+  padding-top: 12px;
+}
+
+.site-footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(48px + max(0px, (100vw - 1400px) / 2));
+  right: calc(48px + max(0px, (100vw - 1400px) / 2));
+  height: 12px;
+  background: var(--ink);
 }
 
 .footer-inner {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 28px 48px 14px;
+  padding: 28px 48px;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: var(--gap);
@@ -204,44 +215,56 @@ body {
 }
 
 .footer-block {
-  display: flex;
-  align-items: flex-start;
-  gap: 30px;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 30px;
+  row-gap: 28px;
 }
 
-.footer-labels {
-  flex: 0 0 auto;
+.footer-row {
+  display: contents;
+}
+
+.footer-label {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.footer-value {
   color: var(--ink);
   font-size: 13px;
   line-height: 1.5;
   text-align: left;
 }
 
-.footer-values {
-  flex: 0 0 auto;
-  color: var(--ink);
-  font-size: 13px;
-  line-height: 1.5;
-  text-align: left;
-}
-
-.footer-values a {
+.footer-value a {
   color: var(--ink);
   text-decoration: none;
 }
 
-.footer-values a:hover {
+.footer-value a:hover {
   text-decoration: underline;
 }
 
 @media (max-width: 767px) {
+  .site-footer::before {
+    left: 16px;
+    right: 16px;
+  }
   .footer-inner {
     grid-template-columns: repeat(2, 1fr);
-    padding: 40px 16px;
-    row-gap: 24px;
+    padding: 20px 16px;
+    row-gap: 6px;
   }
   .footer-block {
     grid-column: span 2;
+    row-gap: 20px;
+  }
+  .footer-label, .footer-value {
+    font-size: 9.2px;
   }
 }
 
@@ -979,10 +1002,22 @@ nav {
 /* ── HAMBURGER ── */
 .hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px 4px 4px 0; }
 .hamburger span { display: block; width: 22px; height: 2px; background: var(--ink); flex-shrink: 0; }
-.mobile-menu { display: none; flex-direction: column; padding: 12px 20px 16px; border-top: 1px dashed rgba(28,27,26,0.18); }
-.mobile-menu a { font-size: 13px; color: var(--ink); text-decoration: none; padding: 10px 0; border-bottom: 1px dashed rgba(28,27,26,0.1); letter-spacing: 0.01em; }
+.mobile-menu { display: none; flex-direction: column; padding: 12px 20px 16px; border-top: 1px dashed rgba(28,27,26,0.18); background: rgba(241, 240, 237, 0.96); backdrop-filter: blur(12px); }
+.mobile-menu a { font-size: 13px; color: var(--ink); text-decoration: none; padding: 10px 0; border-bottom: 1px dashed rgba(28,27,26,0.1); letter-spacing: 0.01em; opacity: 0; }
 .mobile-menu a:last-child { border-bottom: none; }
 .mobile-menu.open { display: flex; }
+/* Apertura a cascata: ogni link entra con un lieve ritardo dal precedente
+   invece di comparire tutti insieme. */
+.mobile-menu.open a { animation: mobileMenuLinkIn 0.5s ease forwards; }
+.mobile-menu.open a:nth-child(1) { animation-delay: 0.08s; }
+.mobile-menu.open a:nth-child(2) { animation-delay: 0.17s; }
+.mobile-menu.open a:nth-child(3) { animation-delay: 0.26s; }
+.mobile-menu.open a:nth-child(4) { animation-delay: 0.35s; }
+.mobile-menu.open a:nth-child(5) { animation-delay: 0.44s; }
+@keyframes mobileMenuLinkIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 .show-mobile { display: none; }
 .mob-num { display: none; }
 
@@ -992,6 +1027,13 @@ nav {
 
 /* ── MOBILE ── */
 @media (max-width: 767px) {
+  .debug-grid {
+    background-image: repeating-linear-gradient(to bottom, rgba(255,0,0,0.4) 0, rgba(255,0,0,0.4) 1px, transparent 1px, transparent 180px);
+  }
+  .debug-grid-cols {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
   .container { padding: 50px 16px 40px; }
   nav { height: 54px; }
   .nav-inner { padding: 14px 16px; }
@@ -999,7 +1041,12 @@ nav {
   /* i link sono nascosti: il separatore finale resterebbe orfano dopo "EN" */
   .lang-sep-end { display: none; }
   .hamburger { display: flex; }
-  nav, .mobile-menu { max-width: 100vw; overflow-x: hidden; }
+  /* overflow-x:hidden su nav (che ha height fissa) farebbe diventare
+     overflow-y implicitamente "auto" invece di "visible" (particolarità
+     CSS), tagliando il menu a tendina all'altezza della barra: qui si
+     applica overflow-x solo a .mobile-menu, non a nav. */
+  nav { max-width: 100vw; }
+  .mobile-menu { max-width: 100vw; overflow-x: hidden; }
   html, body { overflow-x: clip; }
   .grid { overflow: visible; }
   .mob-r3 { grid-row: span 3; }
@@ -1011,12 +1058,25 @@ nav {
     overflow: visible;
     position: relative;
     z-index: 5;
-    transform: translateX(180px); /* ← sposta a destra, cambia questo valore */
   }
+  /* Bleed "a vivo" esatto e proporzionale, indipendente dal telefono:
+     - height fissa + width:auto (niente object-fit:cover) = l'immagine non
+       viene mai ritagliata in verticale, si vede sempre tutta l'altezza.
+     - right: calc(-50vw - 10px) porta il bordo destro dell'immagine esatta-
+       mente sul bordo vivo dello schermo (stessa formula usata per il box
+       nella versione precedente: colonna 1, padding 16px e gap 20px fissi).
+     - transform: translateX(25%) sposta poi l'immagine di un quarto della
+       SUA propria larghezza oltre il bordo dello schermo, sempre uguale
+       qualunque sia la larghezza reale del telefono (percentuale relativa
+       alla larghezza dell'immagine stessa, non al viewport). */
   .asph-r3 img {
-    width: calc(100% + 25px);
+    position: absolute;
+    top: 0;
+    right: calc(-50vw - 10px);
+    transform: translateX(10%); /* un decimo della larghezza propria fuori dal bordo */
+    width: auto;
     height: 480px;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
   }
   .grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; grid-auto-rows: 160px; }
@@ -1024,6 +1084,7 @@ nav {
   .c3, .c4, .c5 { grid-column: span 2; }
   .r3 { grid-row: span 2; }
   .r4 { grid-row: span 2; }
+  .footer-spacer { grid-row: span 1; }
   .logo-apertura { top: 450px !important; left: 150px !important; margin-bottom: 0 !important; }
   .logo-inner { width: 50% !important; }
   .occhio-ramarro-combo { top: 0 !important; left: -15px !important; }
@@ -1074,9 +1135,19 @@ nav {
     position: relative;
     z-index: 5;
   }
+  /* Bleed "a vivo" esatto, indipendente dal telefono: la colonna 1 inizia
+     sempre a 16px dal bordo (padding fisso del container), quindi left:-16px
+     porta il bordo sinistro dell'immagine esattamente sul bordo vivo dello
+     schermo (0 di margine). Poi translateX(-50%) sposta l'immagine di metà
+     della SUA propria larghezza, così il centro combacia col bordo dello
+     schermo: sempre "metà fuori", qualunque sia lo schermo. height fissa +
+     width:auto = altezza sempre intera, mai ritagliata. */
   .progetto-img2 img {
-    width: calc(100% + 325px);
-    margin-left: -325px;
+    position: absolute;
+    top: 0;
+    left: -16px;
+    transform: translateX(-50%);
+    width: auto;
     height: 340px;
     object-fit: contain;
     display: block;
@@ -1090,7 +1161,7 @@ nav {
     box-shadow: none;
     padding: 10px 16px;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 9px;
+    font-size: 9.2px;
     line-height: 1.27;
     align-self: start;
     white-space: nowrap;
@@ -1118,11 +1189,40 @@ nav {
      visibile anche su desktop con transform:translateY(40px) inline, quindi
      qui sovrascriviamo solo dentro la media query mobile. */
   .picchio-mob-down { transform: translateY(170px) !important; }
+
+  /* ── Correzioni layout mobile solo per il tedesco ──
+     Le frasi overlay in tedesco occupano più righe (testo più lungo),
+     quindi qui si compensa lo spazio in eccesso/difetto rispetto
+     alle altre lingue. Una riga = 180px (160px riga + 20px gap). */
+  body[data-lang="de"] .progetto-gap-de { display: block !important; }
+  body[data-lang="de"] .chtag-1-5-de { top: calc(100% + 380px) !important; }
+  body[data-lang="de"] .asph-de-down { transform: translateY(180px); }
+  body[data-lang="de"] .disegno-de-extra { margin-top: 360px; }
+  body[data-lang="de"] .disegno-gap-de { display: block !important; }
+  body[data-lang="de"] .overlay-multispecies-de { margin-top: -310px !important; }
+  body[data-lang="de"] .bgijz-de-up { transform: translateY(-180px); }
+  body[data-lang="de"] .testo-de-up { transform: translateY(-180px); }
+  body[data-lang="de"] .picchio-mob-down { transform: translateY(170px) !important; }
+  body[data-lang="de"] .verein-overlay-de { max-width: 90% !important; }
+  body[data-lang="de"] .erfahrungen-overlay-de { max-width: calc(100vw - 120px) !important; }
+  body[data-lang="de"] .unterstuetzung-overlay-de { max-width: calc(100vw - 40px) !important; }
+
+  /* ── Correzioni layout mobile solo per l'inglese ── */
+  body[data-lang="en"] .storico-overlay-de { left: -180px !important; }
+  body[data-lang="en"] .bgijz-gap-en { display: none !important; }
+  body[data-lang="de"] .storico-overlay-de { width: calc(100vw - 30px) !important; left: -110px !important; }
   /* "Come donare" su di una riga (180px = riga + gap) più altri 200px, dai 16px originali */
   /* allineato al bordo sinistro dell'overlay "E ci serve una mano." (x=116):
      la cella parte da 205, quindi -89px */
   .qr-caption { margin-top: -234px; transform: none; text-align: center; }
   .qr-caption p { text-align: center; }
+  /* Testo "E ci serve una mano." e disegno Doronicum (con etichetta "14."):
+     centrati sull'intera larghezza pagina, uno sopra l'altro (il testo è
+     stato spostato prima nell'HTML). width:calc(50% - 10px) mantiene
+     all'immagine circa la stessa dimensione che aveva da dentro una singola
+     colonna, ma centrata invece che ancorata a sinistra. */
+  .unterstuetzung-overlay-de { grid-column: 1 / -1; text-align: center; margin-top: 300px; transform: translateY(-60px); }
+  .doronicum-de-down { grid-column: 1 / -1; width: calc(50% - 10px); margin: 20px auto 0; transform: translateY(50px); }
   .donate-mob-center { grid-column: 1 / -1; display: flex; justify-content: center; }
   .donate-mob-center .qr-caption { position: relative; z-index: 1; width: auto; }
   .mob-ct .ch-entry { display: flex; gap: 0.3em; }
@@ -1385,7 +1485,7 @@ nav {
     <div class="c1 cell testo">
       <p><span class="t"
         data-it="Se per ora Casiroli resiste – riuscendo, nelle dissimulate sembianze attuali, a restituire agli sporadici visitatori una testimonianza della sua storia – lo stato d'abbandono in cui versa ne minaccia severamente l'integrità. Eppure la sua natura e la sua storia, se conservate, possono ancora essere interpretate, comprese e trasmesse. In questo senso, il nucleo non rappresenta oggi un frammento relitto di un passato da proteggere, ma un insieme di relazioni vive e ancora capaci di dialogare con il presente. La fitta e fragile rete di relazioni ecoculturali, oggi sedimentate, non è sola rimanenza: è un invito all'esplorazione dei nostri luoghi e della nostra storia, lungo vie in cui il paesaggio si rivela memoria collettiva, e la memoria collettiva, paesaggio."
-        data-de="Noch hält Casiroli stand – in seinem gegenwärtigen, kaum kaschierten Zustand vermag es den gelegentlichen Besuchern noch immer ein Zeugnis seiner Geschichte zu vermitteln – doch der Zustand der Verwahrlosung, in dem es sich befindet, bedroht seine Integrität ernsthaft. Und doch können seine Natur und seine Geschichte, wenn sie bewahrt werden, weiterhin gedeutet, verstanden und weitergegeben werden. In diesem Sinne stellt der Ortskern heute kein bloßes Relikt einer zu schützenden Vergangenheit dar, sondern ein Geflecht lebendiger Beziehungen, die noch immer im Dialog mit der Gegenwart stehen. Das dichte und fragile Netz ökokultureller Beziehungen, heute sedimentiert, ist kein bloßer Überrest: Es ist eine Einladung zur Erkundung unserer Orte und unserer Geschichte, entlang von Wegen, auf denen sich die Landschaft als kollektives Gedächtnis offenbart, und das kollektive Gedächtnis als Landschaft."
+        data-de="Noch hält Casiroli stand – in seinem gegenwärtigen, kaum kaschierten Zustand vermag es den gelegentlichen Besuchern noch immer ein Zeugnis seiner Geschichte zu vermitteln – doch der Zustand der Verwahrlosung, in dem es sich befindet, bedroht seine Integrität ernsthaft. Und doch können seine Natur und seine Geschichte, wenn sie bewahrt werden, weiterhin gedeutet, verstanden und weitergegeben werden. In diesem Sinne stellt der Ortskern heute kein blosses Relikt einer zu schützenden Vergangenheit dar, sondern ein Geflecht lebendiger Beziehungen, die noch immer im Dialog mit der Gegenwart stehen. Das dichte und fragile Netz ökokultureller Beziehungen, heute sedimentiert, ist kein blosser Überrest: Es ist eine Einladung zur Erkundung unserer Orte und unserer Geschichte, entlang von Wegen, auf denen sich die Landschaft als kollektives Gedächtnis offenbart, und das kollektive Gedächtnis als Landschaft."
         data-en="For now, Casiroli endures – managing, in its present concealed guise, to give occasional visitors a testimony of its history – yet the state of neglect into which it has fallen severely threatens its integrity. And yet its nature and its history, if preserved, can still be interpreted, understood, and passed on. In this sense, the settlement today does not represent a relic fragment of a past to be protected, but a set of living relationships still capable of engaging with the present. The dense and fragile web of ecocultural relationships, now sedimented, is not mere remainder: it is an invitation to explore our places and our history, along paths where landscape reveals itself as collective memory, and collective memory, as landscape." data-fr="Si pour l'instant Casiroli résiste – parvenant, dans ses apparences actuelles dissimulées, à restituer aux visiteurs occasionnels un témoignage de son histoire – l'état d'abandon dans lequel il se trouve menace sévèrement son intégrité. Et pourtant sa nature et son histoire, si elles sont préservées, peuvent encore être interprétées, comprises et transmises. En ce sens, le noyau ne représente pas aujourd'hui un fragment relique d'un passé à protéger, mais un ensemble de relations vivantes encore capables de dialoguer avec le présent. Le réseau dense et fragile de relations écoculturelles, aujourd'hui sédimentées, n'est pas une simple rémanence : c'est une invitation à l'exploration de nos lieux et de notre histoire, le long de chemins où le paysage se révèle mémoire collective, et la mémoire collective, paysage."
         >Se per ora Casiroli resiste – riuscendo, nelle dissimulate sembianze attuali, a restituire agli sporadici visitatori una testimonianza della sua storia – lo stato d'abbandono in cui versa ne minaccia severamente l'integrità.
       Eppure la sua natura e la sua storia, se conservate, possono ancora essere interpretate, comprese e trasmesse. In questo senso, il nucleo non rappresenta oggi un frammento relitto di un passato da proteggere, ma un insieme di relazioni vive e ancora capaci di dialogare con il presente.
@@ -1406,7 +1506,7 @@ nav {
       </div>
       <div class="legend-num top-left"><span></span></div>
       <span class="mob-num" style="top:18px; left:-2px;">4.</span>
-      <div class="show-mobile mob-ct" style="position:absolute; top:calc(100% + 200px); left:-16px; width:calc((100vw - 52px) / 2 + 16px); padding-left:6px; z-index:2;">
+      <div class="show-mobile mob-ct chtag-1-5-de" style="position:absolute; top:calc(100% + 200px); left:-16px; width:calc((100vw - 52px) / 2 + 16px); padding-left:6px; z-index:2;">
         <div class="ch-entry"><span class="ch-num">1.</span><span class="ch-text t" data-it="Veduta aerea di Casiroli, 1950" data-de="Luftaufnahme von Casiroli, 1950" data-en="Aerial view of Casiroli, 1950" data-fr="Vue aérienne de Casiroli, 1950">Veduta aerea di Casiroli, 1950</span></div>
         <div class="ch-entry"><span class="ch-num">2.</span><span class="ch-text t" data-it="Veduta aerea di Casiroli, 2026" data-de="Luftaufnahme von Casiroli, 2026" data-en="Aerial view of Casiroli, 2026" data-fr="Vue aérienne de Casiroli, 2026">Veduta aerea di Casiroli, 2026</span></div>
         <div class="ch-entry"><span class="ch-num">3.</span><span class="ch-text t" data-it="Abitante di Casiroli<br>fotografia rinvenuta in loco" data-de="Einwohner von Casiroli<br>vor Ort gefundene Fotografie" data-en="Residents of Casiroli<br>photograph found on site" data-fr="Habitant de Casiroli<br>photographie trouvée sur place">Abitante di Casiroli<br>fotografia rinvenuta in loco</span></div>
@@ -1421,11 +1521,11 @@ nav {
     <div class="c2 cell img-big portrait-overflow asph-mobile hide-mobile" style="pointer-events:none;">
       <img src="images/asph2.png">
     </div>
-    <div class="c1 cell show-mobile asph-r3 has-mob-num" style="pointer-events:none;">
+    <div class="c1 cell show-mobile asph-r3 asph-de-down has-mob-num" style="pointer-events:none;">
       <img src="images/asph2.png">
-      <span class="mob-num" style="bottom:360px; left:73px;">5.</span>
-      <div class="mob-overlay" style="position:absolute; top:276px; left:-130px; width:calc(100vw - 60px); min-height:320px; pointer-events:none;">
-        <span class="t" data-it="Un nucleo storico in Valle di Muggio. Fragile testimonianza d'un abitare quasi&nbsp;scomparso," data-de="Ein historischer Ort im Muggiotal. Dokument einer fast verschwundenen Lebensweise," data-en="A historic site in the Muggio Valley. A testament to a way of life that has almost disappeared," data-fr="Un noyau historique dans la Vallée de Muggio. Témoignage fragile d'un habiter presque disparu,">Un nucleo storico in Valle di Muggio. Fragile testimonianza d'un abitare quasi&nbsp;scomparso,</span>
+      <span class="mob-num" style="bottom:360px; right:calc(-50vw + 115px);">5.</span>
+      <div class="mob-overlay storico-overlay-de" style="position:absolute; top:276px; left:50px; width:calc(100vw - 60px); min-height:320px; pointer-events:none;">
+        <span class="t" data-it="Un nucleo storico in Valle di Muggio. Fragile testimonianza d'un abitare quasi&nbsp;scomparso," data-de="Ein historischer Ort im<br>Muggiotal. Dokument einer<br>fast verschwundenen<br>Lebensweise," data-en="A historic site in the Muggio Valley. A testament to a way of life that has almost disappeared," data-fr="Un noyau historique dans la Vallée de Muggio. Témoignage fragile d'un habiter presque disparu,">Un nucleo storico in Valle di Muggio. Fragile testimonianza d'un abitare quasi&nbsp;scomparso,</span>
       </div>
     </div>
     <div class="c1 cell show-mobile"></div>
@@ -1439,6 +1539,7 @@ nav {
     <div class="c1 cell hide-mobile"></div>
 
     <!-- ═══ IL PROGETTO ═══ -->
+    <div class="c2 cell show-mobile progetto-gap-de" style="display:none;"></div>
     <div class="c1 cell capitolo-shift">
       <div class="capitolo-titolo" id="Il-progetto">
         <span class="t" data-it="Il progetto" data-de="Das Projekt" data-en="The project" data-fr="Le projet">Il progetto</span>
@@ -1448,7 +1549,7 @@ nav {
     <div class="c1 cell testo">
       <p><span class="t"
         data-it="Il progetto nasce con l'obbiettivo di valorizzare e rigenerare il nucleo, dapprima indirizzando gli sforzi all'edificio centrale, il più grande e in miglior condizione, per poi dedicarsi al resto dell'insediamento. L'associazione intende inserire il proprio operato nella traccia delle pratiche sospese: ne immagina il proseguimento e ne cura la realizzazione."
-        data-de="Das Projekt entsteht mit dem Ziel, den Ortskern aufzuwerten und zu regenerieren, wobei sich die Bemühungen zunächst auf das zentrale Gebäude richten – das größte und am besten erhaltene – bevor man sich dem Rest der Siedlung widmet. Der Verein beabsichtigt, sein Wirken in die Spur der ruhenden Praktiken einzuschreiben: Er erdenkt deren Fortsetzung und sorgt für deren Umsetzung."
+        data-de="Das Projekt entsteht mit dem Ziel, den Ortskern aufzuwerten und zu regenerieren, wobei sich die Bemühungen zunächst auf das zentrale Gebäude richten – das grösste und am besten erhaltene – bevor man sich dem Rest der Siedlung widmet. Der Verein beabsichtigt, sein Wirken in die Spur der ruhenden Praktiken einzuschreiben: Er erdenkt deren Fortsetzung und sorgt für deren Umsetzung."
         data-en="The project was born with the aim of enhancing and regenerating the settlement, first directing efforts toward the central building — the largest and in the best condition — before turning to the rest of the site. The association intends to place its work within the trace of suspended practices: it imagines their continuation and takes care of their realisation." data-fr="Le projet naît avec l'objectif de valoriser et de régénérer le noyau, en dirigeant d'abord les efforts vers le bâtiment central, le plus grand et en meilleur état, avant de se consacrer au reste de l'établissement. L'association entend inscrire son action dans la trace des pratiques suspendues : elle en imagine la poursuite et en assure la réalisation."
         >Il progetto nasce con l'obbiettivo di valorizzare e rigenerare il nucleo, dapprima indirizzando gli sforzi all'edificio centrale, il più grande e in miglior condizione, per poi dedicarsi al resto dell'insediamento. L'associazione intende inserire il proprio operato nella traccia delle pratiche sospese: ne immagina il proseguimento e ne cura la realizzazione.</span>
       </p>
@@ -1472,8 +1573,8 @@ nav {
       </div>
       <span class="mob-num" style="bottom:-24px; left:0;">7.</span>
     </div>
-    <div class="c2 cell show-mobile mob-overlay" style="pointer-events:none; margin-top:400px; z-index:10; position:relative; max-width:55%;">
-      <span class="t" data-it="a cui l'associazione intende restituire cura," data-de="dem der Verein wieder Sorge widmen will," data-en="to which the association intends to return its care," data-fr="auquel l'association entend restituer son soin,">a cui l'associazione intende restituire cura,</span>
+    <div class="c2 cell show-mobile mob-overlay verein-overlay-de" style="pointer-events:none; margin-top:400px; z-index:10; position:relative; max-width:55%;">
+      <span class="t" data-it="a cui l'associazione intende restituire cura," data-de="dem der Verein wieder<br>Sorge widmen will," data-en="to which the association intends to return its care," data-fr="auquel l'association entend restituer son soin,">a cui l'associazione intende restituire cura,</span>
     </div>
     <div class="show-mobile mob-ct mob-ct-right" style="grid-column: 2; margin-top:-80px; margin-bottom:-300px;">
       <div class="ch-entry"><span class="ch-num">6.</span><span class="ch-text t" data-it="Terrazzamenti incolti (Est-Ovest)" data-de="Brachliegende Terrassen (Ost-West)" data-en="Unused terraces (east-west)" data-fr="Terrasses en friche (est-ouest)">Terrazzamenti incolti (Est-Ovest)</span></div>
@@ -1496,7 +1597,7 @@ nav {
     <div class="c1 cell testo">
       <p><span class="t"
         data-it="L'acquisizione dell'immobile centrale costituisce il presupposto operativo per garantire l'accesso e il coordinamento degli interventi. Sebbene una parte significativa dei fondi destinati all'acquisto sia stata raccolta grazie al contributo dei membri dell'associazione, la vitalità del progetto dipende ancora dai finanziamenti necessari al suo sviluppo nel lungo periodo. Nelle fasi successive il progetto prevede la valorizzazione dei terrazzamenti, la manutenzione dei muri a secco, la gestione delle superfici aperte e la messa in sicurezza degli edifici esistenti. Gli interventi su acqua, smaltimento, impianti ed elementi costruttivi verranno definiti in relazione alle particolari condizioni del luogo: accessi&shy;bilità limitata, assenza di infrastrutture, vincoli legati alla protezione delle acque e allo statuto degli edifici fuori zona edificabile. Il progetto non è guidato dalla volontà di ristabilire uno stato precedente ma dalla necessità di mantenere operative le relazioni tra le sue parti, così da rendere il sito nuovamente abitabile. Le modalità d'intervento previste privilegiano la combinazione di competenze e approcci diversi, al fine di favorire lo scambio intergenerazionale e la trasmissione di conoscenze. I gruppi di lavoro opereranno dunque su scala ridotta, in modo non continuativo, in base alle esigenze specifiche del sito."
-        data-de="Der Erwerb des zentralen Gebäudes bildet die operative Voraussetzung, um den Zugang und die Koordination der Maßnahmen zu gewährleisten. Obwohl ein bedeutender Teil der für den Kauf vorgesehenen Mittel durch den Beitrag der Vereinsmitglieder aufgebracht wurde, hängt die Lebensfähigkeit des Projekts weiterhin von den Finanzmitteln ab, die für seine langfristige Entwicklung notwendig sind. In den folgenden Phasen sieht das Projekt die Aufwertung der Terrassen, die Instandhaltung der Trockenmauern, die Pflege der offenen Flächen und die Sicherung der bestehenden Gebäude vor. Die Maßnahmen zu Wasser, Entsorgung, Anlagen und baulichen Elementen werden in Bezug auf die besonderen Gegebenheiten des Ortes festgelegt: eingeschränkte Zugänglichkeit, fehlende Infrastruktur, Auflagen im Zusammenhang mit dem Gewässerschutz sowie dem Status der Gebäude außerhalb der Bauzone. Das Projekt wird nicht vom Wunsch geleitet, einen früheren Zustand wiederherzustellen, sondern von der Notwendigkeit, die Beziehungen zwischen seinen Teilen funktionsfähig zu halten, um den Ort wieder bewohnbar zu machen. Die vorgesehenen Vorgehensweisen bevorzugen die Kombination unterschiedlicher Kompetenzen und Ansätze, um den generationsübergreifenden Austausch und die Weitergabe von Wissen zu fördern. Die Arbeitsgruppen werden daher in kleinem Maßstab und nicht kontinuierlich, je nach den spezifischen Bedürfnissen des Ortes, tätig sein."
+        data-de="Der Erwerb des zentralen Gebäudes bildet die operative Voraussetzung, um den Zugang und die Koordination der Massnahmen zu gewährleisten. Obwohl ein bedeutender Teil der für den Kauf vorgesehenen Mittel durch den Beitrag der Vereinsmitglieder aufgebracht wurde, hängt die Lebensfähigkeit des Projekts weiterhin von den Finanzmitteln ab, die für seine langfristige Entwicklung notwendig sind. In den folgenden Phasen sieht das Projekt die Aufwertung der Terrassen, die Instandhaltung der Trockenmauern, die Pflege der offenen Flächen und die Sicherung der bestehenden Gebäude vor. Die Massnahmen zu Wasser, Entsorgung, Anlagen und baulichen Elementen werden in Bezug auf die besonderen Gegebenheiten des Ortes festgelegt: eingeschränkte Zugänglichkeit, fehlende Infrastruktur, Auflagen im Zusammenhang mit dem Gewässerschutz sowie dem Status der Gebäude ausserhalb der Bauzone. Das Projekt wird nicht vom Wunsch geleitet, einen früheren Zustand wiederherzustellen, sondern von der Notwendigkeit, die Beziehungen zwischen seinen Teilen funktionsfähig zu halten, um den Ort wieder bewohnbar zu machen. Die vorgesehenen Vorgehensweisen bevorzugen die Kombination unterschiedlicher Kompetenzen und Ansätze, um den generationsübergreifenden Austausch und die Weitergabe von Wissen zu fördern. Die Arbeitsgruppen werden daher in kleinem Massstab und nicht kontinuierlich, je nach den spezifischen Bedürfnissen des Ortes, tätig sein."
         data-en="The acquisition of the central building is the operative prerequisite for ensuring access and coordinating interventions. Although a significant portion of the funds earmarked for the purchase has been raised through the contribution of the association's members, the project's viability still depends on the financing needed for its long-term development. In the subsequent phases, the project envisages the enhancement of the terraces, the maintenance of the dry stone walls, the management of the open surfaces, and the securing of the existing buildings. Interventions on water, drainage, systems, and structural elements will be defined in relation to the particular conditions of the site: limited accessibility, absence of infrastructure, constraints related to water protection, and the status of buildings outside the building zone. The project is not guided by the will to restore a previous state but by the need to keep the relationships between its parts operational, so as to make the site habitable again. The planned modes of intervention favour the combination of different skills and approaches, in order to foster intergenerational exchange and the transmission of knowledge. The working groups will therefore operate on a small scale, in a non-continuous manner, according to the specific needs of the site." data-fr="L'acquisition du bâtiment central constitue le préalable opérationnel pour garantir l'accès et la coordination des interventions. Bien qu'une part significative des fonds destinés à l'achat ait été réunie grâce à la contribution des membres de l'association, la vitalité du projet dépend encore des financements nécessaires à son développement sur le long terme. Dans les phases suivantes, le projet prévoit la valorisation des terrasses, l'entretien des murs en pierre sèche, la gestion des surfaces ouvertes et la mise en sécurité des bâtiments existants. Les interventions sur l'eau, l'assainissement, les installations et les éléments constructifs seront définies en relation avec les conditions particulières du lieu : accessibilité limitée, absence d'infrastructures, contraintes liées à la protection des eaux et au statut des bâtiments hors zone constructible. Le projet n'est pas guidé par la volonté de rétablir un état antérieur mais par la nécessité de maintenir opérationnelles les relations entre ses parties, afin de rendre le site à nouveau habitable. Les modalités d'intervention prévues privilégient la combinaison de compétences et d'approches différentes, afin de favoriser l'échange intergénérationnel et la transmission des savoirs. Les groupes de travail opéreront donc à petite échelle, de manière non continue, en fonction des besoins spécifiques du site."
         >L'acquisizione dell'immobile centrale costituisce il presupposto operativo per garantire l'accesso e il coordinamento degli interventi. Sebbene una parte significativa dei fondi destinati all'acquisto sia stata raccolta grazie al contributo dei membri dell'associazione, la vitalità del progetto dipende ancora dai finanziamenti necessari al suo sviluppo nel lungo periodo. <br>
       Nelle fasi successive il progetto prevede la valorizzazione dei terrazzamenti, la manutenzione dei muri a secco, la gestione delle superfici aperte e la messa in sicurezza degli edifici esistenti. Gli interventi su acqua, smaltimento, impianti ed elementi costruttivi verranno definiti in relazione alle particolari condizioni del luogo: accessi&shy;bilità limitata, assenza di infrastrutture, vincoli legati alla protezione delle acque e allo statuto degli edifici fuori zona edificabile.<br>
@@ -1511,20 +1612,20 @@ nav {
     <div class="c1 cell"></div>
     <div class="c1 cell"></div>
     <div class="c1 cell"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile"></div>
     <div class="img-slot has-image bn hide-mobile">
       <img src="images/DSC00122.jpg">
     </div>
-
-    <div class="c1 cell show-mobile"></div>
-    <div class="c1 cell show-mobile"></div>
-    <div class="c1 cell show-mobile"></div>
-    <div class="c1 cell show-mobile"></div>
-    <div class="c2 cell r1 drawing drawing-down" style="position:relative;">
+    <div class="c2 cell r1 drawing drawing-down disegno-de-extra" style="position:relative;">
       <span class="mob-num" style="top:46px; left:0;">9.</span>
       <div class="img-slot has-image base">
         <img src="images/disegno.png">
       </div>
     </div>
+    <div class="c2 cell show-mobile disegno-gap-de" style="display:none;"></div>
 
     <div class="c1 cell"></div>
     <div class="c1 cell"></div>
@@ -1639,7 +1740,7 @@ nav {
         <img src="images/occhio_ramarro.png">
       </div>
     </div>
-    <div class="c2 cell show-mobile mob-overlay" style="pointer-events:none; margin-top:-280px; z-index:4; position:relative; left:60px; max-width:70%; margin-left:40px; margin-right:-40px;">
+    <div class="c2 cell show-mobile mob-overlay overlay-multispecies-de" style="pointer-events:none; margin-top:-280px; z-index:4; position:relative; left:60px; max-width:70%; margin-left:40px; margin-right:-40px;">
       <span class="t" data-it="definendo uno spazio collettivo e multispecie in continuo cambiamento" data-de="um einen multispezies Gemeinschaftsraum im fortwährenden Wandel zu schaffen," data-en="to create a shared multispecies space in continuous change" data-fr="en définissant un espace collectif et multiespèce en continuel devenir">definendo uno spazio collettivo e multispecie in continuo cambiamento</span>
     </div>
     <div class="c1 cell"></div>
@@ -1682,8 +1783,8 @@ nav {
         >L'associazione Bivio Casiroli nasce per contrastare l'abbandono del nucleo e promuoverne la rigenerazione attraverso un processo di manutenzione fondato sulla riadozione di pratiche collettive di cura e presenza.</span>
       </p>
     </div>
-    <div class="c1 cell show-mobile"></div>
-    <div class="c1 cell show-mobile"></div>
+    <div class="c1 cell show-mobile bgijz-gap-en"></div>
+    <div class="c1 cell show-mobile bgijz-gap-en"></div>
 
     <div class="c1 cell hide-mobile"></div>
     <div class="c1 cell hide-mobile"></div>
@@ -1691,7 +1792,7 @@ nav {
     <div class="c1 cell hide-mobile"></div>
     <div class="c1 cell hide-mobile"></div>
 
-    <div class="c2 cell r1 drawing" style="position:relative;">
+    <div class="c2 cell r1 drawing bgijz-de-up" style="position:relative;">
       <div class="img-slot has-image base bn">
         <img src="images/bGIJz-bianco.png">
       </div>
@@ -1699,7 +1800,7 @@ nav {
     </div>
 
     <div class="c1 cell show-mobile"></div>
-    <div class="c1 cell testo">
+    <div class="c1 cell testo testo-de-up">
       <p><span class="t"
         data-it="Il comitato promotore è composto da cinque persone tra i 30 e i 40 anni, con competenze multidisciplinari e un forte radicamento nel territorio: un'agronoma e agricoltrice della valle, una giovane regista, un ecologo e botanico, un operatore sociale e una coordinatrice di progetti con esperienza nelle ONG internazionali. Tre ticinesi e due tedeschi, che uniscono una profonda conoscenza locale a uno sguardo internazionale. La diversità dei profili permette un approccio integrato, attento tanto alla rigenerazione ecologica e paesaggistica del sito quanto alla sua dimensione sociale e culturale. Ciò consente al progetto di radicarsi in un tessuto di relazioni già attive: associazioni agricole, enti di tutela del paesaggio, cooperative sociali e realtà culturali del Cantone."
         data-de="Das Gründungskomitee besteht aus fünf Personen zwischen 30 und 40 Jahren, mit interdisziplinären Kompetenzen und starker Verwurzelung im Territorium: einer Agronomin und Landwirtin aus dem Tal, einer jungen Filmemacherin, einem Ökologen und Botaniker, einem Sozialarbeiter und einer Projektkoordinatorin mit Erfahrung in internationalen NGOs. Drei Tessiner*innen und zwei Deutsche, die eine profunde lokale Kenntnis mit einem internationalen Blick verbinden. Die Vielfalt der Profile ermöglicht einen integrierten Ansatz, der sowohl auf die ökologische und landschaftliche Regeneration des Ortes als auch auf seine soziale und kulturelle Dimension achtet. Dies erlaubt es dem Projekt, sich in ein bereits aktives Beziehungsgeflecht einzubinden: landwirtschaftliche Verbände, Landschaftsschutzorganisationen, soziale Genossenschaften und kulturelle Einrichtungen des Kantons."
@@ -1725,15 +1826,15 @@ nav {
       </div>
       <span class="mob-num" style="bottom:116px; left:50px;">13.</span>
     </div>
-    <div class="c2 cell show-mobile mob-overlay" style="pointer-events:none; margin-top:70px; margin-left:85px; margin-right:-85px; max-width:55%;">
-      <span class="t" data-it="grazie all'integrazione di esperienze diverse." data-de="durch die Verbindung verschiedener Erfahrungen." data-en="through the integration of diverse experiences." data-fr="grâce à l'intégration d'expériences diverses.">grazie all'integrazione di esperienze diverse.</span>
+    <div class="c2 cell show-mobile mob-overlay erfahrungen-overlay-de" style="pointer-events:none; margin-top:70px; margin-left:85px; margin-right:-85px; max-width:55%;">
+      <span class="t" data-it="grazie all'integrazione di esperienze diverse." data-de="durch die Verbindung<br>verschiedener Erfahrungen." data-en="through the integration of diverse experiences." data-fr="grâce à l'intégration d'expériences diverses.">grazie all'integrazione di esperienze diverse.</span>
     </div>
     <div class="show-mobile mob-ct mob-ct-right" style="grid-column: 1; margin-top:20px;">
-      <div class="ch-entry"><span class="ch-num">12.</span><span class="ch-text t" data-it="I proprietari incontrano l'associazione" data-de="Die Eigentümer treffen sich mit dem Verein" data-en="The owners are meeting with the association" data-fr="Les propriétaires rencontrent l'association">I proprietari incontrano l'associazione</span></div>
+      <div class="ch-entry"><span class="ch-num">12.</span><span class="ch-text t" data-it="Incontro con l'associazione" data-de="Treffen mit dem Verein" data-en="Meeting with the association" data-fr="Rencontre avec l'association">Incontro con l'associazione</span></div>
       <div class="ch-entry"><span class="ch-num">13.</span><span class="ch-text t" data-it="Picchio rosso maggiore" data-de="Buntspecht" data-en="Great spotted woodpecker" data-fr="Pic épeiche">Picchio rosso maggiore</span></div>
       <div class="ch-entry"><span class="ch-num"></span><span class="ch-text t" data-it="abitante di Casiroli" data-de="Bewohner von Casiroli" data-en="a resident of Casiroli" data-fr="habitant de Casiroli">abitante di Casiroli</span></div>
       <div class="ch-entry"><span class="ch-num">14.</span><span class="ch-text"><em>Doronicum pardalianches</em></span></div>
-      <div class="ch-entry"><span class="ch-num"></span><span class="ch-text t" data-it="specie minacciata e protetta." data-de="eine bedrohte und geschützte Art." data-en="an endangered and protected species." data-fr="espèce menacée et protégée.">specie minacciata e protetta.</span></div>
+      <div class="ch-entry"><span class="ch-num"></span><span class="ch-text t" data-it="specie minacciata e protetta." data-de="eine bedrohte und geschützte Art." data-en="Endangered, protected species." data-fr="espèce menacée et protégée.">specie minacciata e protetta.</span></div>
       <div class="ch-entry"><span class="ch-num"></span><span class="ch-text t" data-it="Osservata a Casiroli." data-de="In Casiroli beobachtet." data-en="Observed at Casiroli." data-fr="Observée à Casiroli.">Osservata a Casiroli.</span></div>
     </div>
     <div class="c1 cell hide-mobile"></div>
@@ -1752,7 +1853,7 @@ nav {
     <div class="c1 cell testo">
       <p><span class="t"
         data-it="È possibile contribuire al progetto attraverso una donazione libera, destinata all'acquisizione del primo immobile e all'avvio delle attività di recupero e gestione del nucleo. I fondi raccolti sosterranno gli interventi prioritari sul paesaggio e sugli edifici, la manutenzione delle superfici aperte e la realizzazione delle prime infrastrutture necessarie alla presenza sul sito. Ogni contributo rappresenta un sostegno concreto alla salvaguardia e alla valorizzazione di un fragile patrimonio paesaggistico e culturale della Valle di Muggio e concorre così a mantenere vivo un luogo in cui memoria, pratiche e dinamiche ecologiche continuano a intrecciarsi nello spazio e nel tempo."
-        data-de="Das Projekt kann mit einer Spende unterstützt werden, die für den Erwerb des ersten Gebäudes und den Beginn der Sanierungs- und Bewirtschaftungsarbeiten im Ortskern bestimmt ist. Die gesammelten Mittel fließen vorrangig in prioritäre Maßnahmen zur Landschafts- und Gebäudepflege, die Instandhaltung der offenen Flächen und die Errichtung der ersten vor Ort notwendigen Infrastrukturen. Jeder Beitrag ist eine konkrete Unterstützung für den Erhalt und die Aufwertung eines fragilen Landschafts- und Kulturerbes im Muggiotal — und trägt so dazu bei, einen Ort lebendig zu halten, an dem Erinnerung, ruhende Praktiken und ökologische Dynamiken sich im Raum und in der Zeit weiterhin verflechten."
+        data-de="Das Projekt kann mit einer Spende unterstützt werden, die für den Erwerb des ersten Gebäudes und den Beginn der Sanierungs- und Bewirtschaftungsarbeiten im Ortskern bestimmt ist. Die gesammelten Mittel fliessen vorrangig in prioritäre Massnahmen zur Landschafts- und Gebäudepflege, die Instandhaltung der offenen Flächen und die Errichtung der ersten vor Ort notwendigen Infrastrukturen. Jeder Beitrag ist eine konkrete Unterstützung für den Erhalt und die Aufwertung eines fragilen Landschafts- und Kulturerbes im Muggiotal — und trägt so dazu bei, einen Ort lebendig zu halten, an dem Erinnerung, ruhende Praktiken und ökologische Dynamiken sich im Raum und in der Zeit weiterhin verflechten."
         data-en="You can support the project through a free donation, intended for the acquisition of the first building and the start of recovery and management activities at the site. The funds raised will support priority interventions on the landscape and the buildings, the maintenance of open surfaces, and the creation of the first infrastructures necessary for presence on the site. Every contribution is a concrete act of support for the safeguarding and enhancement of a fragile landscape and cultural heritage of the Muggio Valley, and thereby helps keep alive a place where memory, practices, and ecological dynamics continue to interweave in space and time." data-fr="Il est possible de contribuer au projet par un don libre, destiné à l'acquisition du premier bâtiment et au lancement des activités de récupération et de gestion du noyau. Les fonds collectés soutiendront les interventions prioritaires sur le paysage et les bâtiments, l'entretien des surfaces ouvertes et la réalisation des premières infrastructures nécessaires à la présence sur le site. Chaque contribution représente un soutien concret à la sauvegarde et à la valorisation d'un fragile patrimoine paysager et culturel de la Vallée de Muggio, et concourt ainsi à maintenir vivant un lieu où mémoire, pratiques et dynamiques écologiques continuent de s'entrecroiser dans l'espace et dans le temps."
         >È possibile contribuire al progetto attraverso una donazione libera, destinata all'acquisizione del primo immobile e all'avvio delle attività di recupero e gestione del nucleo.
 
@@ -1777,11 +1878,11 @@ nav {
     <div class="c1 cell hide-mobile"></div>
     <div class="c1 cell hide-mobile"></div>
 
-    <div class="c1 cell portrait-overflow" style="position:relative;">
+    <div class="c1 cell portrait-overflow doronicum-de-down" style="position:relative;">
       <img src="images/Doronicum.png">
-      <span class="mob-num" style="bottom:106px; left:108px;">14.</span>
+      <span class="mob-num" style="bottom:100px; left:108px;">14.</span>
     </div>
-    <div class="c2 cell show-mobile mob-overlay" style="pointer-events:none; margin-top:-100px; margin-bottom:-160px; margin-left:100px; margin-right:-100px;">
+    <div class="c2 cell show-mobile mob-overlay unterstuetzung-overlay-de" style="pointer-events:none; margin:0;">
       <span class="t" data-it="E ci serve una mano." data-de="Wir brauchen eure Unterstützung." data-en="We need your support." data-fr="Et nous avons besoin d'aide.">E ci serve una mano.</span>
     </div>
     <div class="c1 cell hide-mobile"></div>
@@ -1790,7 +1891,6 @@ nav {
     <div class="c1 cell hide-mobile"></div>
 
     <div class="c1 cell hide-mobile"></div>
-    <div class="c1 cell show-mobile"></div>
     <div class="c1 cell donate-mob-center" style="position:relative; overflow:visible;">
       <!-- su mobile il QR sta nel modal "Come donare" -->
       <div class="img-slot has-image qr-slot hide-mobile" style="margin-top:-20px;">
@@ -1932,7 +2032,7 @@ nav {
 
 <div class="show-mobile mob-ct mob-ct-right" style="grid-column: 2; margin-top: -14px;">
       <div class="ch-entry"><span class="ch-num">15.</span><span class="ch-text t" data-it="Rudere" data-de="Ruine" data-en="Ruin" data-fr="Ruine">Rudere</span></div>
-      <div class="ch-entry"><span class="ch-num">16.</span><span class="ch-text t" data-it="Edificio centrale<br>sede dell'Associazione" data-de="Hauptgebäude, Sitz des Vereins" data-en="Central building, headquarters of the Association" data-fr="Bâtiment central, siège de l'Association">Edificio centrale<br>sede dell'Associazione</span></div>
+      <div class="ch-entry"><span class="ch-num">16.</span><span class="ch-text t" data-it="Edificio centrale<br>sede dell'Associazione" data-de="Hauptgebäude, Sitz des Vereins" data-en="Central building, association seat" data-fr="Bâtiment central de l'association">Edificio centrale<br>sede dell'Associazione</span></div>
       <div class="ch-entry"><span class="ch-num">17.</span><span class="ch-text t" data-it="Finestra, facciata a calce" data-de="Fenster und Kalkputzfassade" data-en="Window and lime-plastered facade" data-fr="Fenêtre et façade à la chaux">Finestra, facciata a calce</span></div>
       <div class="ch-entry"><span class="ch-num">18.</span><span class="ch-text t" data-it="Sentiero per Casiroli" data-de="Weg nach Casiroli" data-en="Path to Casiroli" data-fr="Sentier vers Casiroli">Sentiero per Casiroli</span></div>
       <div class="ch-entry"><span class="ch-num">19.</span><span class="ch-text t" data-it="Tetto e facciata a calce" data-de="Dach und Kalkputzfassade" data-en="Roof and lime-plastered facade" data-fr="Toit et façade à la chaux">Tetto e facciata a calce</span></div>
@@ -2073,8 +2173,8 @@ nav {
 
 
 
-<div class="c1 r1 cell" style="position:relative;">
-  <span class="mob-num" style="bottom:-23px; left:0;">30.</span>
+<div class="c1 r1 cell" style="position:relative; grid-column:2;">
+  <span class="mob-num" style="top:-23px; left:0;">30.</span>
   <div class="img-slot bn">
     <img src="images/RIV4037.jpg">
   </div>
@@ -2091,12 +2191,12 @@ nav {
 
 
 
-<div class="c1 cell"></div>
+<div class="c1 cell hide-mobile"></div>
 
 
 
-<div class="c1 cell legend-num bottom-right">
-  <span style="top:207px; left:212px;">31.</span>
+<div class="c1 cell legend-num bottom-right hide-mobile" style="transform: translateY(-211px);">
+  <span style="top:207px; left:235px;">31.</span>
 </div>
 
 <div class="c2 r2 cell" style="position:relative;">
@@ -2125,7 +2225,7 @@ nav {
 
 
 
-<div class="c5 r2 cell"></div>
+<div class="c5 r2 cell footer-spacer"></div>
 
   </div><!-- /grid -->
 </div><!-- /grid-wrapper -->
@@ -2134,14 +2234,13 @@ nav {
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-block c2 cell">
-      <div class="footer-labels">
-        Sede dell'associazione<br><br><br>
-        Mail
+      <div class="footer-row">
+        <div class="footer-label">Sede dell'associazione</div>
+        <div class="footer-value">Via Santa Croce 1B<br>6826 Riva San Vitale</div>
       </div>
-      <div class="footer-values">
-        Via Santa Croce 1B<br>
-        6826 Riva San Vitale<br><br>
-        <a href="mailto:xyz@casiroli.ch">xyz@casiroli.ch</a>
+      <div class="footer-row">
+        <div class="footer-label">Indirizzo mail</div>
+        <div class="footer-value"><a href="mailto:biviocasiroli@etik.com">biviocasiroli@etik.com</a></div>
       </div>
     </div>
     <div class="c3 cell"></div>
