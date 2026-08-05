@@ -5,23 +5,12 @@
 <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no">
 <meta name="viewport" id="vp" content="width=device-width, initial-scale=1">
 <script>
-  // Desktop/tablet layout is designed at a fixed 1400px width and scaled
-  // down to fit narrower screens (incl. iPad) via CSS zoom, driven by the
-  // real rendered viewport width rather than a meta-viewport initial-scale
-  // hack (which iPadOS Safari doesn't always honor, causing the 1400px
-  // grid to reflow at native width and desync from the absolutely
-  // positioned chapter-tag/overlay-frase elements).
-  function applyDesktopZoom() {
-    if (window.matchMedia('(max-width: 767px)').matches) {
-      document.documentElement.style.zoom = '';
-    } else {
-      document.documentElement.style.zoom = window.innerWidth / 1400;
-    }
+  if (!window.matchMedia('(max-width: 767px)').matches) {
+    var scale = screen.width / 1400;
+    document.getElementById('vp').setAttribute('content',
+      'width=1400, initial-scale=' + scale + ', minimum-scale=' + scale
+    );
   }
-  applyDesktopZoom();
-  window.addEventListener('load', applyDesktopZoom);
-  window.addEventListener('resize', applyDesktopZoom);
-  window.addEventListener('orientationchange', function() { setTimeout(applyDesktopZoom, 150); });
 </script>
 
 <title>Bivio Casiroli — nucleo storico Valle di Muggio</title>
