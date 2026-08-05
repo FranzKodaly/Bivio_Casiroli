@@ -5,44 +5,37 @@
 <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no">
 <meta name="viewport" id="vp" content="width=device-width, initial-scale=1">
 <script>
-  // screen.width alone is unreliable on iPad: it doesn't say which of its
-  // two values (width/height) applies to the CURRENT orientation, and can
-  // be read before Safari settles it, giving a scale that's too small
-  // (blank strip) or too large (content cropped). Instead pick between
-  // screen.width/screen.height using the actual current aspect ratio from
-  // innerWidth/innerHeight, which stays correct even after we've already
-  // scaled once (the ratio is preserved by the scaling).
+  // screen.width/height are unreliable: they reflect the physical monitor
+  // in Chrome DevTools responsive/freeform mode (not the emulated
+  // viewport), and can be stale on real iPad Safari at parse time. The one
+  // number that's always correct is window.innerWidth while the viewport
+  // is in plain "width=device-width" mode — so we reset to that, wait a
+  // beat for the browser to actually apply it, measure, then apply our
+  // own scale. setTimeout (not requestAnimationFrame) so this still runs
+  // if the page loads in a background tab.
+  var vpMeta = document.getElementById('vp');
+  var applyingScale = false;
   function applyViewportScale() {
-    if (window.matchMedia('(max-width: 767px)').matches) return;
-    var isPortrait = window.innerHeight > window.innerWidth;
-    var w = isPortrait ? Math.min(screen.width, screen.height) : Math.max(screen.width, screen.height);
-    var scale = w / 1400;
-    document.getElementById('vp').setAttribute('content',
-      'width=1400, initial-scale=' + scale + ', minimum-scale=' + scale
-    );
+    if (applyingScale) return;
+    if (window.matchMedia('(max-width: 767px)').matches) {
+      vpMeta.setAttribute('content', 'width=device-width, initial-scale=1');
+      return;
+    }
+    applyingScale = true;
+    vpMeta.setAttribute('content', 'width=device-width, initial-scale=1');
+    setTimeout(function() {
+      var w = window.innerWidth;
+      var scale = w / 1400;
+      vpMeta.setAttribute('content',
+        'width=1400, initial-scale=' + scale + ', minimum-scale=' + scale
+      );
+      setTimeout(function() { applyingScale = false; }, 200);
+    }, 50);
   }
   applyViewportScale();
   window.addEventListener('load', applyViewportScale);
+  window.addEventListener('resize', applyViewportScale);
   window.addEventListener('orientationchange', function() { setTimeout(applyViewportScale, 150); });
-
-  // TEMP DIAGNOSTIC — remove once the iPad scaling issue is confirmed fixed.
-  function showViewportDebug() {
-    var box = document.getElementById('vp-debug');
-    if (!box) {
-      box = document.createElement('div');
-      box.id = 'vp-debug';
-      box.style.cssText = 'position:fixed;top:0;left:0;z-index:999999;background:red;color:#fff;font:11px/1.4 monospace;padding:4px 6px;white-space:pre;pointer-events:none;';
-      document.body.appendChild(box);
-    }
-    box.textContent =
-      'screen ' + screen.width + 'x' + screen.height +
-      '  inner ' + window.innerWidth + 'x' + window.innerHeight +
-      '  dpr ' + window.devicePixelRatio +
-      '\nvp: ' + document.getElementById('vp').getAttribute('content');
-  }
-  window.addEventListener('load', function() { setTimeout(showViewportDebug, 50); });
-  window.addEventListener('resize', showViewportDebug);
-  window.addEventListener('orientationchange', function() { setTimeout(showViewportDebug, 200); });
 </script>
 
 <title>Bivio Casiroli — nucleo storico Valle di Muggio</title>
